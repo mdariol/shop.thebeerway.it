@@ -10,4 +10,9 @@ class Beer extends Model
     {
         return $this->belongsTo(Brewery::class);
     }
+
+    public function packaging()
+    {
+        return $this->belongsTo(Packaging::class);
+    }
 }

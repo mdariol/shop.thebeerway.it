@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBeersTable extends Migration
+class CreatePackagingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateBeersTable extends Migration
      */
     public function up()
     {
-        Schema::create('beers', function (Blueprint $table) {
+        Schema::create('packagings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('brewery_id');
-            $table->unsignedInteger('packaging_id');
+            $table->string('name');
+            $table->unsignedInteger('quantity');
+            $table->unsignedInteger('capacity');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateBeersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('beers');
+        Schema::dropIfExists('packagings');
     }
 }
