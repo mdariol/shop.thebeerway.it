@@ -15,4 +15,9 @@ class Beer extends Model
     {
         return $this->belongsTo(Packaging::class);
     }
+
+    public function style()
+    {
+        return $this->belongsTo(Style::class);
+    }
 }

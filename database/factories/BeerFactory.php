@@ -12,6 +12,9 @@ $factory->define(Beer::class, function (Faker $faker) {
         },
         'packaging_id' => function () {
             return factory(App\Packaging::class)->create();
+        },
+        'style_id' => function () {
+            return factory(App\Style::class)->create();
         }
     ];
 });

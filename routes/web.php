@@ -22,3 +22,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('beers', 'BeerController');
 Route::resource('breweries', 'BreweryController');
 Route::resource('packagings', 'PackagingController');
+Route::resource('styles', 'StyleController');
