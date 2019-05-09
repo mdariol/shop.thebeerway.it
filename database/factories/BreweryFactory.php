@@ -7,6 +7,6 @@ use Faker\Generator as Faker;
 
 $factory->define(Brewery::class, function (Faker $faker) {
     return [
-        'name' => $faker->sentence
+        'name' => $faker->company
     ];
 });
