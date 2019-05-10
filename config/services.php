@@ -44,4 +44,10 @@ return [
         ],
     ],
 
+    'fatture_in_cloud' => [
+        'url' => env('FIC_URL'),
+        'key' => env('FIC_KEY'),
+        'secret' => env('FIC_SECRET'),
+    ],
+
 ];
