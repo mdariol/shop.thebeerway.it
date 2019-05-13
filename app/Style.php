@@ -10,4 +10,9 @@ class Style extends Model
     {
         return $this->hasMany(Beer::class);
     }
+
+    public function area()
+    {
+        return $this->belongsTo(Area::class);
+    }
 }

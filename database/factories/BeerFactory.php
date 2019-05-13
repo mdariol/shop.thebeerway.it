@@ -7,6 +7,12 @@ use Faker\Generator as Faker;
 
 $factory->define(Beer::class, function (Faker $faker) {
     return [
+        'code' => $faker->unique()->randomDigit,
+        'name' => $faker->randomElement(['Apollo', 'Whale', 'Winternest']),
+        'description' => $faker->paragraph,
+        'abv' => $faker->numberBetween(2, 14),
+        'ibu' => $faker->numberBetween(2, 14),
+        'plato' => $faker->numberBetween(2, 14),
         'brewery_id' => function () {
             return factory(App\Brewery::class)->create();
         },

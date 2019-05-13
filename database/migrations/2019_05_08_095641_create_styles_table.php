@@ -15,8 +15,8 @@ class CreateStylesTable extends Migration
     {
         Schema::create('styles', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('area_id');
             $table->string('name');
-            $table->string('area');
             $table->timestamps();
         });
     }

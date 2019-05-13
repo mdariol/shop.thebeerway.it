@@ -20,4 +20,9 @@ class Beer extends Model
     {
         return $this->belongsTo(Style::class);
     }
+
+    public function price()
+    {
+        return $this->hasOne(Price::class);
+    }
 }

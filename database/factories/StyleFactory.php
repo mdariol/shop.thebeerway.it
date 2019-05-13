@@ -14,6 +14,8 @@ $factory->define(Style::class, function (Faker $faker) {
           'Kölsch', 'Lambic', 'Light Ale', 'Helles Bock', 'Malt liquor', 'Mild',
           'Marzen', 'Old Ale', 'American Pale Ale', 'Pilsner', 'Porter', 'Red Ale',
           'Saison', 'Scotch Ale', 'Stout', 'Schwarzbier', 'Weisse']),
-        'area' => $faker->country
+        'area_id' => function () {
+            return factory(App\Area::class)->create();
+        }
     ];
 });

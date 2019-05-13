@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBeersTable extends Migration
+class CreateAreasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,9 @@ class CreateBeersTable extends Migration
      */
     public function up()
     {
-        Schema::create('beers', function (Blueprint $table) {
+        Schema::create('areas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code');
             $table->string('name');
-            $table->text('description');
-            $table->float('abv');
-            $table->float('ibu');
-            $table->float('plato');
-            $table->unsignedInteger('brewery_id');
-            $table->unsignedInteger('packaging_id');
-            $table->unsignedInteger('style_id');
             $table->timestamps();
         });
     }
@@ -35,6 +27,6 @@ class CreateBeersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('beers');
+        Schema::dropIfExists('style_area');
     }
 }
