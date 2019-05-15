@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Style extends Model
 {
+    protected $fillable = ['name','area_id'];
+
     public function beers()
     {
         return $this->hasMany(Beer::class);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Area;
 use App\Style;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class StyleController extends Controller
      */
     public function index()
     {
-        //
+        return view('style.index')->with('styles', Style::all());
     }
 
     /**
@@ -24,7 +25,7 @@ class StyleController extends Controller
      */
     public function create()
     {
-        //
+        return view('style.create')->with('areas', Area::all());
     }
 
     /**
@@ -35,7 +36,9 @@ class StyleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Style::create(request(['name','area_id']));
+
+        return redirect('/styles');
     }
 
     /**
@@ -57,7 +60,10 @@ class StyleController extends Controller
      */
     public function edit(Style $style)
     {
-        //
+        return view('style.edit')->with([
+            'style' => $style,
+            'areas' => Area::all(),
+        ]);
     }
 
     /**

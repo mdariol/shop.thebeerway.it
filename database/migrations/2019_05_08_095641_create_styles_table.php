@@ -15,9 +15,12 @@ class CreateStylesTable extends Migration
     {
         Schema::create('styles', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('area_id');
+            $table->bigInteger('area_id')->nullable();
             $table->string('name');
             $table->timestamps();
+
+            $table->foreign('area_id')->references('id')->on('areas')
+                ->onDelete('set null');
         });
     }
 
