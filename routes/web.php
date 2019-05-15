@@ -23,6 +23,8 @@ Route::resource('beers', 'BeerController');
 Route::resource('breweries', 'BreweryController');
 Route::resource('packagings', 'PackagingController');
 Route::resource('styles', 'StyleController');
+Route::get('/styles/{style}/delete', 'StyleController@delete')
+    ->name('styles.delete');
 
 Route::resource('areas', 'AreaController');
 Route::get('/areas/{area}/delete', 'AreaController@delete')

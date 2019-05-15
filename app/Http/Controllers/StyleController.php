@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Area;
 use App\Style;
 use Illuminate\Http\Request;
 
@@ -25,7 +24,7 @@ class StyleController extends Controller
      */
     public function create()
     {
-        return view('style.create')->with('areas', Area::all());
+        return view('style.create')->with('styles', Style::all());
     }
 
     /**
@@ -36,7 +35,7 @@ class StyleController extends Controller
      */
     public function store(Request $request)
     {
-        Style::create(request(['name','area_id']));
+        Style::create(request(['name','style_id']));
 
         return redirect('/styles');
     }
@@ -62,7 +61,7 @@ class StyleController extends Controller
     {
         return view('style.edit')->with([
             'style' => $style,
-            'areas' => Area::all(),
+            'styles' => Style::all(),
         ]);
     }
 
@@ -78,6 +77,21 @@ class StyleController extends Controller
         //
     }
 
+
+    /**
+     * Show the form for deleting the specified resource.
+     *
+     * @param  \App\Style  $style
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function delete(Style $style)
+    {
+        return view('style.delete')->with('style', $style);
+    }
+
+
+
+
     /**
      * Remove the specified resource from storage.
      *
@@ -86,6 +100,8 @@ class StyleController extends Controller
      */
     public function destroy(Style $style)
     {
-        //
+        $style->delete();
+
+        return redirect('/styles');
     }
 }
