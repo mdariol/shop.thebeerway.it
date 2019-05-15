@@ -77,7 +77,6 @@ class StyleController extends Controller
         return redirect('/styles');
     }
 
-
     /**
      * Show the form for deleting the specified resource.
      *
