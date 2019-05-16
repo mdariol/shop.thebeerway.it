@@ -21,11 +21,17 @@ class CreateBeersTable extends Migration
             $table->float('abv');
             $table->float('ibu');
             $table->float('plato');
+
             $table->unsignedInteger('brewery_id');
             $table->unsignedInteger('packaging_id');
             $table->unsignedInteger('style_id')->nullable();
+
             $table->timestamps();
-            $table->foreign('style_id')->references('id')->on('styles')->onDelete('set null');
+
+            $table->foreign('style_id')->references('id')->on('styles')
+                ->onDelete('set null');
+            $table->foreign('packaging_id')->references('id')->on('packagings')
+                ->onDelete('set null');
         });
     }
 

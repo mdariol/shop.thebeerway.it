@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Beer;
+use App\Brewery;
+use App\Packaging;
+use App\Style;
 use Illuminate\Http\Request;
 
 class BeerController extends Controller
 {
+    protected $fillable = ['code', 'name', 'description', 'abv', 'ibu', 'plato',
+      'brewery_id', 'packaging_id', 'style_id'];
+
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +30,11 @@ class BeerController extends Controller
      */
     public function create()
     {
-        //
+        return view('beer.create')->with([
+            'packagings' => Packaging::all(),
+            'styles' => Style::all(),
+            'breweries' => Brewery::all()
+        ]);
     }
 
     /**
