@@ -66,7 +66,12 @@ class BeerController extends Controller
      */
     public function edit(Beer $beer)
     {
-        //
+        return view('beer.edit')->with([
+            'beer' => $beer,
+            'breweries' => Brewery::all(),
+            'styles' => Style::all(),
+            'packagings' => Packaging::all()
+        ]);
     }
 
     /**
