@@ -10,9 +10,6 @@ use Illuminate\Http\Request;
 
 class BeerController extends Controller
 {
-    protected $fillable = ['code', 'name', 'description', 'abv', 'ibu', 'plato',
-      'brewery_id', 'packaging_id', 'style_id'];
-
     /**
      * Display a listing of the resource.
      *
@@ -40,12 +37,14 @@ class BeerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        Beer::create(request(['code', 'name', 'description', 'abv', 'ibu',
+          'plato', 'brewery_id', 'packaging_id', 'style_id']));
+
+        return redirect('beers');
     }
 
     /**
