@@ -14,6 +14,7 @@ class PackagingController extends Controller
      */
     public function index()
     {
+        return view('packaging.index')->with('packagings', Packaging::all());
         //
     }
 
@@ -24,6 +25,7 @@ class PackagingController extends Controller
      */
     public function create()
     {
+        return view('packaging.create');
         //
     }
 
@@ -35,7 +37,11 @@ class PackagingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Packaging::create(request(['name','quantity','capacity'] )+ [
+                'is_bottle' => (bool) request()->get('is_bottle')]);
+
+
+        return redirect('/packagings');
     }
 
     /**
@@ -57,7 +63,10 @@ class PackagingController extends Controller
      */
     public function edit(Packaging $packaging)
     {
-        //
+        return view('packaging.edit')->with([
+            'packaging' => $packaging,
+            'packagings' => Packaging::all(),
+        ]);
     }
 
     /**
@@ -69,8 +78,25 @@ class PackagingController extends Controller
      */
     public function update(Request $request, Packaging $packaging)
     {
-        //
+        $packaging->update(request(['name','quantity','capacity'] )+ [
+                'is_bottle' => (bool) request()->get('is_bottle')]);
+
+        return redirect('/packagings');
     }
+
+
+    /**
+     * Show the form for deleting the specified resource.
+     *
+     * @param  \App\Packaging  $packaging
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function delete(Packaging $packaging)
+    {
+        return view('packaging.delete')->with('packaging', $packaging);
+    }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -80,6 +106,8 @@ class PackagingController extends Controller
      */
     public function destroy(Packaging $packaging)
     {
-        //
+        $packaging->delete();
+
+        return redirect('/packagings');
     }
 }

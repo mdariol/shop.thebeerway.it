@@ -21,7 +21,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('beers', 'BeerController');
 Route::resource('breweries', 'BreweryController');
+
 Route::resource('packagings', 'PackagingController');
+Route::get('/packagings/{packaging}/delete', 'PackagingController@delete')
+    ->name('packagings.delete');
+
 Route::resource('styles', 'StyleController');
 Route::get('/styles/{style}/delete', 'StyleController@delete')
     ->name('styles.delete');
