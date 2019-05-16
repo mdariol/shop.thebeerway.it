@@ -17,7 +17,7 @@ class BeerController extends Controller
      */
     public function index()
     {
-        //
+        return view('beer.index')->with('beers', Beer::all());
     }
 
     /**
@@ -66,7 +66,12 @@ class BeerController extends Controller
      */
     public function edit(Beer $beer)
     {
-        //
+        return view('beer.edit')->with([
+            'beer' => $beer,
+            'breweries' => Brewery::all(),
+            'styles' => Style::all(),
+            'packagings' => Packaging::all()
+        ]);
     }
 
     /**
