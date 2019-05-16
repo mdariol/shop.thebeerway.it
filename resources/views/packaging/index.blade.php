@@ -7,7 +7,7 @@
         @foreach($packagings as $packaging)
             <div class="card mb-2">
                 <div class="card-body">
-                    <p class="float-left">{{ $packaging->is_bottle }} {{ $packaging->name }} {{ $packaging->quantity }} {{ $packaging->capacity }}</p>
+                    <p class="float-left">{{ $packaging->is_bottle }} {{ $packaging->name }} {{ $packaging->quantity }} @ClToLt($packaging->capacity) </p>
                     <div class="float-right">
                         <a href="/packagings/{{ $packaging->id }}/edit" class="btn btn-primary">Edit</a>
                         <a href="/packagings/{{ $packaging->id }}/delete" class="btn btn-danger">Delete</a>

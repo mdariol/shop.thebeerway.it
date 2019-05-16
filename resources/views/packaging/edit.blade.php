@@ -25,8 +25,8 @@
                 <input type="number" name="quantity" id="quantity" value="{{ $packaging->quantity }}">
             </div>
             <div class="form-group">
-                <label for="capacity">Capacity</label>
-                <input type="number" name="capacity" id="capacity" value="{{ $packaging->capacity }}">
+                <label for="capacity">Unit Capacity Lt</label>
+                <input type="number" name="capacity" step=".01" id="capacity" value="{{ $packaging->capacity }}">
             </div>
 
             <button class="btn btn-primary">Update</button>

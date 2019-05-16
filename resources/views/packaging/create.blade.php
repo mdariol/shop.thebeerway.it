@@ -17,11 +17,11 @@
             </div>
             <div class="form-group">
                 <label for="quantity">Quantity</label>
-                <input type="number" name="quantity" id="quantity">
+                <input type="number" name="quantity" id="quantity" >
             </div>
             <div class="form-group">
-                <label for="capacity">Capacity</label>
-                <input type="number" name="capacity" id="capacity">
+                <label for="capacity">Unit Capacity Lt.</label>
+                <input type="number" step=".01" name="capacity" id="capacity">
             </div>
 
             <button class="btn btn-primary">Save</button>
