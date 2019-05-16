@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Beer extends Model
 {
+    protected $fillable = ['code', 'name', 'description', 'abv', 'ibu', 'plato',
+      'brewery_id', 'packaging_id', 'style_id'];
+
     public function brewery()
     {
         return $this->belongsTo(Brewery::class);
