@@ -14,7 +14,7 @@ class BreweryController extends Controller
      */
     public function index()
     {
-        //
+        return view('brewery.index')->with('breweries', Brewery::all());
     }
 
     /**
@@ -24,7 +24,7 @@ class BreweryController extends Controller
      */
     public function create()
     {
-        //
+        return view('brewery.create');
     }
 
     /**
@@ -35,7 +35,9 @@ class BreweryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Brewery::create(['name' => $request->name]);
+
+        return redirect('/breweries');
     }
 
     /**
@@ -57,7 +59,7 @@ class BreweryController extends Controller
      */
     public function edit(Brewery $brewery)
     {
-        //
+        return view('brewery.edit')->with('brewery', $brewery);
     }
 
     /**
@@ -69,8 +71,22 @@ class BreweryController extends Controller
      */
     public function update(Request $request, Brewery $brewery)
     {
-        //
+        $brewery->update(request(['name']));
+
+        return redirect('/breweries');
     }
+
+    /**
+     * Show the form for deleting the specified resource.
+     *
+     * @param  \App\Brewery  $brewery
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function delete(Brewery $brewery)
+    {
+        return view('brewery.delete')->with('brewery', $brewery);
+    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -80,6 +96,10 @@ class BreweryController extends Controller
      */
     public function destroy(Brewery $brewery)
     {
-        //
+
+        $brewery->delete();
+
+        return redirect('/breweries');
+
     }
 }
