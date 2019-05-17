@@ -20,10 +20,13 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('beers', 'BeerController');
+Route::get('/beers/{beer}/delete', 'BeerController@delete')
+    ->name('beers.delete');
 
 Route::resource('breweries', 'BreweryController');
 Route::get('/breweries/{brewery}/delete', 'BreweryController@delete')
     ->name('breweries.delete');
+
 Route::resource('packagings', 'PackagingController');
 Route::get('/packagings/{packaging}/delete', 'PackagingController@delete')
     ->name('packagings.delete');

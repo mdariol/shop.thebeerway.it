@@ -88,13 +88,28 @@ class BeerController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Show the form for editing the specified resource.
      *
      * @param  \App\Beer  $beer
      * @return \Illuminate\Http\Response
      */
+    public function delete(Beer $beer)
+    {
+        return view('beer.delete')->with('beer', $beer);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Beer  $beer
+     * @return \Illuminate\Http\Response
+     *
+     * @throws \Exception
+     */
     public function destroy(Beer $beer)
     {
-        //
+        $beer->delete();
+
+        return redirect('/beers');
     }
 }
