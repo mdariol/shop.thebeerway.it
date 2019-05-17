@@ -25,17 +25,17 @@
 
             <div class="form-group">
                 <label for="abv">ABV</label>
-                <input type="number" name="abv" id="abv" value="{{ $beer->abv }}" step=".01">
+                <input type="number" name="abv" id="abv" value="{{ $beer->abv }}" step=".1">
             </div>
 
             <div class="form-group">
                 <label for="ibu">IBU</label>
-                <input type="number" name="ibu" id="ibu" value="{{ $beer->ibu }}" step=".01">
+                <input type="number" name="ibu" id="ibu" value="{{ $beer->ibu }}" step=".1">
             </div>
 
             <div class="form-group">
                 <label for="plato">Plato</label>
-                <input type="number" name="plato" id="plato" value="{{ $beer->plato }}" step=".01">
+                <input type="number" name="plato" id="plato" value="{{ $beer->plato }}" step=".1">
             </div>
 
             <div class="form-group">
@@ -53,7 +53,7 @@
                 <select class="form-control" name="packaging_id" id="packaging-id">
                     <option value=" ">-- select an option --</option>
                     @foreach($packagings as $packaging)
-                        <option value="{{ $packaging->id }}" {{ $beer->packaging == $packaging ? 'selected' : '' }}>{{ $packaging->name }}</option>
+                        <option value="{{ $packaging->id }}" {{ $beer->packaging == $packaging ? 'selected' : '' }}>{{ $packaging->quantity }} {{ $packaging->name }} x @ClToLt($packaging->capacity)l</option>
                     @endforeach
                 </select>
             </div>
