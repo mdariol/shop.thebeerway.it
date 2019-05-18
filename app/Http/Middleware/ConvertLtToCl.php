@@ -16,6 +16,6 @@ class ConvertLtToCl extends TransformsRequest
      */
     public function transform($key, $value)
     {
-        return $key === 'capacity' ? (integer) $value * 100 : $value;
+        return $key === 'capacity' ? $value * 100 : $value;
     }
 }

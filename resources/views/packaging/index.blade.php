@@ -4,11 +4,43 @@
     <div class="container">
         <h1>Packagings</h1>
         <a class="btn btn-primary mb-2" href="/packagings/create">Add</a>
+
+        <div class="card">
+            <div class="card-body row">
+                <div class="col text-center">
+                    Is a Bottle
+                </div>
+                <div class="col">
+                    Name
+                </div>
+                <div class="col text-center">
+                    quantity
+                </div>
+                <div class="col text-center">
+                    capacity
+                </div>
+                <div class="col text-center">
+                    Operations
+                </div>
+            </div>
+        </div>
         @foreach($packagings as $packaging)
-            <div class="card mb-2">
-                <div class="card-body">
-                    <p class="float-left">{{ $packaging->is_bottle }} {{ $packaging->name }} {{ $packaging->quantity }} @ClToLt($packaging->capacity) </p>
-                    <div class="float-right">
+            <div class="card">
+                <div class="card-body row">
+                    <div class="col text-center">
+                        {{ $packaging->is_bottle == 1 ? 'Yes' : 'No'}}
+                    </div>
+                    <div class="col">
+                        {{ $packaging->name }}
+                    </div>
+                    <div class="col text-center">
+                        {{ $packaging->quantity }}
+                    </div>
+                    <div class="col text-center">
+                        {{$packaging->capacity/100}}
+                    </div>
+
+                    <div class="col text-center">
                         <a href="/packagings/{{ $packaging->id }}/edit" class="btn btn-primary">Edit</a>
                         <a href="/packagings/{{ $packaging->id }}/delete" class="btn btn-danger">Delete</a>
                     </div>
