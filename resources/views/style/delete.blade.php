@@ -2,14 +2,13 @@
 
 @section('content')
     <div class="container">
-        <h1>Delete <em>{{ $style->name }}</em></h1>
-        <p>This action cannot be undone.</p>
+        <h1>Elimina <em>{{ $style->name }}</em></h1>
         <form method="POST" action="/styles/{{ $style->id }}">
             @csrf
             @method('DELETE')
 
-            <button type="submit" class="btn btn-primary">Delete</button>
-            <a href="/styles" class="btn btn-link">Cancel</a>
+            <button type="submit" class="btn btn-primary">Conferma Elimina</button>
+            <a href="/styles" class="btn btn-link">Annulla</a>
         </form>
     </div>
 @endsection

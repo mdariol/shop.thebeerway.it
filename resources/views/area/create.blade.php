@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1>Create <em>new</em> Area</h1>
+        <h1>Nuova Area</h1>
 
         <form method="POST" action="/areas">
             @csrf
@@ -12,7 +12,7 @@
                 <input type="text" name="name" id="name">
             </div>
 
-            <button class="btn btn-primary">Save</button>
+            <button class="btn btn-primary">Memorizza</button>
         </form>
     </div>
 @endsection

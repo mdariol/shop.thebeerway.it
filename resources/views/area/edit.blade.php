@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1><em>Edit</em> Area</h1>
+        <h1><em>Modifica</em> Area</h1>
 
         <form method="POST" action="/areas/{{ $area->id }}">
             @csrf
@@ -13,7 +13,7 @@
                 <input type="text" name="name" id="name" value="{{ $area->name }}">
             </div>
 
-            <button class="btn btn-primary">Update</button>
+            <button class="btn btn-primary">Conferma</button>
         </form>
     </div>
 @endsection

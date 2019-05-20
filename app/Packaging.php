@@ -10,7 +10,7 @@ class Packaging extends Model
     protected $fillable = ['type','quantity','capacity'];
 
     public function getNameAttribute(){
-        return $this->type.' '.$this->quantity.'X'.$this->capacity/100;
+        return $this->type.' '.$this->quantity.'x'.$this->capacity/100;
     }
 
 

@@ -2,17 +2,17 @@
 
 @section('content')
     <div class="container">
-        <h1>Create <em>new</em> Brewery</h1>
+        <h1>Nuovo Birrificio</h1>
 
         <form method="POST" action="/breweries">
             @csrf
 
             <div class="form-group">
-                <label for="name">Brewery</label>
+                <label for="name">Birrificio</label>
                 <input type="text" name="name" id="name">
             </div>
 
-            <button class="btn btn-primary">Save</button>
+            <button class="btn btn-primary">Memorizza</button>
         </form>
     </div>
 @endsection
