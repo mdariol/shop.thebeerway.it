@@ -1897,15 +1897,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PriceForm",
+
+  /* ----------------------------------------------------------------------------------------------------------
+     Props
+     ---------------------------------------------------------------------------------------------------------- */
+  props: {
+    'packagings': Array,
+    'beer': Object
+  },
 
   /* ----------------------------------------------------------------------------------------------------------
      Data
      ---------------------------------------------------------------------------------------------------------- */
   data: function data() {
     return {
-      packaging: null
+      packaging: null,
+      purchase_price: null,
+      purchase_unit_price: null
     };
   },
 
@@ -1913,12 +1931,8 @@ __webpack_require__.r(__webpack_exports__);
      Methods
      ---------------------------------------------------------------------------------------------------------- */
   methods: {
-    getPackaging: function getPackaging(packaging_id) {
-      var _this = this;
-
-      axios.get('/api/packagings/' + packaging_id).then(function (response) {
-        return _this.packaging = response.data;
-      });
+    calculatePurchasePrice: function calculatePurchasePrice() {
+      this.purchase_price = this.purchase_unit_price * this.packaging.quantity;
     }
   },
 
@@ -1926,13 +1940,17 @@ __webpack_require__.r(__webpack_exports__);
      Callbacks
      ---------------------------------------------------------------------------------------------------------- */
   mounted: function mounted() {
-    var _this2 = this;
-
-    var select = document.querySelector('#packaging-id');
-    this.getPackaging(select.value);
-    select.addEventListener('change', function (event) {
-      _this2.getPackaging(event.target.value);
+    this.packaging = this.beer.packaging;
+    /*
+    axios.get('/api/packagings').then(response => {
+        this.packagings = response.data;
     });
+     const select = document.querySelector('#packaging-id');
+    this.getPackaging(select.value);
+     select.addEventListener('change', (event) => {
+        this.getPackaging(event.target.value);
+    });
+    */
   }
 });
 
@@ -37284,265 +37302,378 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "card mb-3" }, [
+    _c("div", { staticClass: "card-header" }, [_vm._v("Price")]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card-body" }, [
+      _c("div", { staticClass: "form-group" }, [
+        _c("label", { attrs: { for: "packaging-id" } }, [_vm._v("Packaging")]),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.packaging,
+                expression: "packaging"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { name: "packaging_id", id: "packaging-id" },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.packaging = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              }
+            }
+          },
+          [
+            _c("option", { attrs: { value: " " } }, [
+              _vm._v("-- select an option --")
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.packagings, function(packaging) {
+              return _c("option", { domProps: { value: packaging } }, [
+                _vm._v(
+                  _vm._s(packaging.quantity) +
+                    " " +
+                    _vm._s(packaging.name) +
+                    " x " +
+                    _vm._s(packaging.capacity / 100) +
+                    "l"
+                )
+              ])
+            })
+          ],
+          2
+        )
+      ]),
+      _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-row" }, [
+        _c("div", { staticClass: "form-group col-sm" }, [
+          _c("label", { attrs: { for: "purchase" } }, [_vm._v("Purchase")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.purchase_price,
+                  expression: "purchase_price"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "number",
+                name: "purchase",
+                id: "purchase",
+                min: "0",
+                step: ".01"
+              },
+              domProps: { value: _vm.purchase_price },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.purchase_price = $event.target.value
+                }
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group col-sm" }, [
+          _c("label", { attrs: { for: "purchase-unit" } }, [
+            _vm._v("Purchase / Unit")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.purchase_unit_price,
+                  expression: "purchase_unit_price"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "number",
+                name: "purchase_unit",
+                id: "purchase-unit",
+                min: "0",
+                step: ".01"
+              },
+              domProps: { value: _vm.purchase_unit_price },
+              on: {
+                change: _vm.calculatePurchasePrice,
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.purchase_unit_price = $event.target.value
+                }
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _vm._m(3)
+      ]),
+      _vm._v(" "),
+      _vm._m(4)
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header" }, [_vm._v("Price")]),
+    return _c("div", { staticClass: "form-row" }, [
+      _c("div", { staticClass: "form-group col-sm" }, [
+        _c("label", { attrs: { for: "horeca" } }, [_vm._v("Horeca")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "input-group" }, [
+          _c("div", { staticClass: "input-group-prepend" }, [
+            _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "number",
+              name: "horeca",
+              id: "horeca",
+              min: "0",
+              step: ".01"
+            }
+          })
+        ])
+      ]),
       _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("div", { staticClass: "form-row" }, [
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "horeca" } }, [_vm._v("Horeca")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "horeca",
-                  id: "horeca",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "horeca-unit" } }, [
-              _vm._v("Horeca / Unit")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "horeca_unit",
-                  id: "horeca-unit",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "horeca-liter" } }, [
-              _vm._v("Horeca / Liter")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "horeca_liter",
-                  id: "horeca-liter",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "discount" } }, [_vm._v("Discount")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "discount",
-                  id: "discount",
-                  min: "0",
-                  max: "100"
-                }
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "input-group-append" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("%")])
-              ])
-            ])
-          ])
+      _c("div", { staticClass: "form-group col-sm" }, [
+        _c("label", { attrs: { for: "horeca-unit" } }, [
+          _vm._v("Horeca / Unit")
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "form-row" }, [
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "purchase" } }, [_vm._v("Purchase")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "purchase",
-                  id: "purchase",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
+        _c("div", { staticClass: "input-group" }, [
+          _c("div", { staticClass: "input-group-prepend" }, [
+            _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "purchase-unit" } }, [
-              _vm._v("Purchase / Unit")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "purchase_unit",
-                  id: "purchase-unit",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "purchase-liter" } }, [
-              _vm._v("Purchase / Liter")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "purchase_liter",
-                  id: "purchase-liter",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
-          ])
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "number",
+              name: "horeca_unit",
+              id: "horeca-unit",
+              min: "0",
+              step: ".01"
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group col-sm" }, [
+        _c("label", { attrs: { for: "horeca-liter" } }, [
+          _vm._v("Horeca / Liter")
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "form-row" }, [
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "distribution" } }, [
-              _vm._v("Distribution")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "distribution",
-                  id: "distribution",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
+        _c("div", { staticClass: "input-group" }, [
+          _c("div", { staticClass: "input-group-prepend" }, [
+            _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "distribution-unit" } }, [
-              _vm._v("Distribution / Unit")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "distribution_unit",
-                  id: "distribution-unit",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "number",
+              name: "horeca_liter",
+              id: "horeca-liter",
+              min: "0",
+              step: ".01"
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group col-sm" }, [
+        _c("label", { attrs: { for: "discount" } }, [_vm._v("Discount")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "input-group" }, [
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "number",
+              name: "discount",
+              id: "discount",
+              min: "0",
+              max: "100"
+            }
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group-append" }, [
+            _c("span", { staticClass: "input-group-text" }, [_vm._v("%")])
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group col-sm" }, [
+      _c("label", { attrs: { for: "purchase-liter" } }, [
+        _vm._v("Purchase / Liter")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "input-group" }, [
+        _c("div", { staticClass: "input-group-prepend" }, [
+          _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
+        ]),
+        _vm._v(" "),
+        _c("input", {
+          staticClass: "form-control",
+          attrs: {
+            type: "number",
+            name: "purchase_liter",
+            id: "purchase-liter",
+            min: "0",
+            step: ".01"
+          }
+        })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-row" }, [
+      _c("div", { staticClass: "form-group col-sm" }, [
+        _c("label", { attrs: { for: "distribution" } }, [
+          _vm._v("Distribution")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "input-group" }, [
+          _c("div", { staticClass: "input-group-prepend" }, [
+            _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "distribution-liter" } }, [
-              _vm._v("Distribution / Liter")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "distribution_liter",
-                  id: "distribution-liter",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "number",
+              name: "distribution",
+              id: "distribution",
+              min: "0",
+              step: ".01"
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group col-sm" }, [
+        _c("label", { attrs: { for: "distribution-unit" } }, [
+          _vm._v("Distribution / Unit")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "input-group" }, [
+          _c("div", { staticClass: "input-group-prepend" }, [
+            _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "margin" } }, [_vm._v("Margin")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "margin",
-                  id: "margin",
-                  min: "0",
-                  max: "100"
-                }
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "input-group-append" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("%")])
-              ])
-            ])
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "number",
+              name: "distribution_unit",
+              id: "distribution-unit",
+              min: "0",
+              step: ".01"
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group col-sm" }, [
+        _c("label", { attrs: { for: "distribution-liter" } }, [
+          _vm._v("Distribution / Liter")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "input-group" }, [
+          _c("div", { staticClass: "input-group-prepend" }, [
+            _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "number",
+              name: "distribution_liter",
+              id: "distribution-liter",
+              min: "0",
+              step: ".01"
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group col-sm" }, [
+        _c("label", { attrs: { for: "margin" } }, [_vm._v("Margin")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "input-group" }, [
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "number",
+              name: "margin",
+              id: "margin",
+              min: "0",
+              max: "100"
+            }
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group-append" }, [
+            _c("span", { staticClass: "input-group-text" }, [_vm._v("%")])
           ])
         ])
       ])

@@ -57,16 +57,6 @@
                 </div>
 
                 <div class="form-group col-sm-4">
-                    <label for="packaging-id">Packaging</label>
-                    <select class="form-control" name="packaging_id" id="packaging-id">
-                        <option value=" ">-- select an option --</option>
-                        @foreach($packagings as $packaging)
-                            <option value="{{ $packaging->id }}" {{ $beer->packaging == $packaging ? 'selected' : '' }}>{{ $packaging->quantity }} {{ $packaging->name }} x @ClToLt($packaging->capacity)l</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-group col-sm-4">
                     <label for="style-id">Style</label>
                     <select class="form-control" name="style_id" id="style-id">
                         <option value=" ">-- select an option --</option>
@@ -77,7 +67,7 @@
                 </div>
             </div>
 
-            <price-form></price-form>
+            <price-form :packagings='@json($packagings)' :beer='@json($beer)'></price-form>
 
             <button class="btn btn-primary">Update</button>
         </form>

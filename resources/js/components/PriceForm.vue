@@ -1,7 +1,15 @@
 <template>
-    <div class="card">
+    <div class="card mb-3">
         <div class="card-header">Price</div>
         <div class="card-body">
+            <div class="form-group">
+                <label for="packaging-id">Packaging</label>
+                <select class="form-control" v-model="packaging" name="packaging_id" id="packaging-id">
+                    <option value=" ">-- select an option --</option>
+                    <option v-for="packaging in packagings" :value="packaging">{{ packaging.quantity }} {{ packaging.name }} x {{ packaging.capacity / 100 }}l</option>
+                </select>
+            </div>
+
             <div class="form-row">
                 <div class="form-group col-sm">
                     <label for="horeca">Horeca</label>
@@ -41,7 +49,7 @@
                     <label for="purchase">Purchase</label>
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text">€</span></div>
-                        <input class="form-control" type="number" name="purchase" id="purchase" min="0" step=".01">
+                        <input class="form-control" v-model="purchase_price" type="number" name="purchase" id="purchase" min="0" step=".01">
                     </div>
                 </div>
 
@@ -49,7 +57,7 @@
                     <label for="purchase-unit">Purchase / Unit</label>
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text">€</span></div>
-                        <input class="form-control" type="number" name="purchase_unit" id="purchase-unit" min="0" step=".01">
+                        <input class="form-control" v-on:change="calculatePurchasePrice" v-model="purchase_unit_price" type="number" name="purchase_unit" id="purchase-unit" min="0" step=".01">
                     </div>
                 </div>
 
@@ -104,12 +112,23 @@
         name: "PriceForm",
 
         /* ----------------------------------------------------------------------------------------------------------
+           Props
+           ---------------------------------------------------------------------------------------------------------- */
+
+        props: {
+            'packagings': Array,
+            'beer': Object,
+        },
+
+        /* ----------------------------------------------------------------------------------------------------------
            Data
            ---------------------------------------------------------------------------------------------------------- */
 
         data() {
             return {
                 packaging: null,
+                purchase_price: null,
+                purchase_unit_price: null,
             }
         },
 
@@ -118,10 +137,8 @@
            ---------------------------------------------------------------------------------------------------------- */
 
         methods: {
-            getPackaging(packaging_id) {
-                axios.get('/api/packagings/' + packaging_id).then(response => {
-                    return this.packaging = response.data;
-                });
+            calculatePurchasePrice() {
+                this.purchase_price = this.purchase_unit_price * this.packaging.quantity;
             }
         },
 
@@ -130,12 +147,20 @@
            ---------------------------------------------------------------------------------------------------------- */
 
         mounted() {
+            this.packaging = this.beer.packaging;
+
+            /*
+            axios.get('/api/packagings').then(response => {
+                this.packagings = response.data;
+            });
+
             const select = document.querySelector('#packaging-id');
             this.getPackaging(select.value);
 
             select.addEventListener('change', (event) => {
                 this.getPackaging(event.target.value);
             });
+            */
         }
     }
 </script>
