@@ -8,13 +8,17 @@
             @csrf
 
             <div class="form-group">
-                <label for="is-bottle">Is Bottle</label>
-                <input type="checkbox" name="is_bottle" id="is-bottle" unchecked>
+                <label for="type">Type</label>
+                <select class="form-control" name="type" id="type">
+                    <option label=" ">-- Select an option --</option>
+                    @foreach(\App\Packaging::TYPE as $type)
+                        <option value="{{ $type }}">
+                            {{ $type }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
-            <div class="form-group">
-                <label for="name">Packaging</label>
-                <input type="text" name="name" id="name">
-            </div>
+
             <div class="form-group">
                 <label for="quantity">Quantity</label>
                 <input type="number" name="quantity" id="quantity" >

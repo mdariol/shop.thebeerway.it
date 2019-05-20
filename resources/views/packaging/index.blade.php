@@ -7,9 +7,6 @@
 
         <div class="card">
             <div class="card-body row">
-                <div class="col text-center">
-                    Is a Bottle
-                </div>
                 <div class="col">
                     Name
                 </div>
@@ -27,9 +24,6 @@
         @foreach($packagings as $packaging)
             <div class="card">
                 <div class="card-body row">
-                    <div class="col text-center">
-                        {{ $packaging->is_bottle == 1 ? 'Yes' : 'No'}}
-                    </div>
                     <div class="col">
                         {{ $packaging->name }}
                     </div>

@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Packaging extends Model
 {
-    protected $fillable = ['is_bottle','name','quantity','capacity'];
+    const TYPE = ['bottiglie','lattine','fusti'];
+    protected $fillable = ['type','quantity','capacity'];
+
+    public function getNameAttribute(){
+        return $this->type.' '.$this->quantity.'X'.$this->capacity/100;
+    }
+
 
     public function beers()
     {

@@ -37,8 +37,7 @@ class PackagingController extends Controller
      */
     public function store(Request $request)
     {
-        Packaging::create(request(['name','quantity','capacity'] )+ [
-                'is_bottle' => (bool) request()->get('is_bottle')]);
+        Packaging::create(request(['type','quantity','capacity'] ));
 
 
         return redirect('/packagings');
@@ -78,8 +77,7 @@ class PackagingController extends Controller
      */
     public function update(Request $request, Packaging $packaging)
     {
-        $packaging->update(request(['name','quantity','capacity'] )+ [
-                'is_bottle' => (bool) request()->get('is_bottle')]);
+        $packaging->update(request(['type','quantity','capacity'] ));
 
         return redirect('/packagings');
     }
