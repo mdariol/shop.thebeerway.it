@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Packaging;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class PackagingController extends Controller
@@ -37,8 +38,13 @@ class PackagingController extends Controller
      */
     public function store(Request $request)
     {
-        Packaging::create(request(['type','quantity','capacity'] ));
 
+        try{
+            Packaging::create(request(['type','quantity','capacity'] ));
+        } catch(QueryException $exception) {
+            $exception->getCode() =='23000' ? $response='Errore di univocità: questo packaging è già presente nei dati' : $response=$exception->getMessage();
+            return back()->withErrors($response)->withInput();
+        }
 
         return redirect('/packagings');
     }
@@ -77,7 +83,13 @@ class PackagingController extends Controller
      */
     public function update(Request $request, Packaging $packaging)
     {
-        $packaging->update(request(['type','quantity','capacity'] ));
+
+        try{
+            $packaging->update(request(['type','quantity','capacity'] ));
+        } catch(QueryException $exception) {
+            $exception->getCode() =='23000' ? $response='Errore di univocità: questo packaging è già presente nei dati' : $response=$exception->getMessage();
+            return back()->withErrors($response);
+        }
 
         return redirect('/packagings');
     }

@@ -5,6 +5,8 @@
 
 
     <div class="container">
+
+
         <h1>Modifica Packaging <em>{{ $packaging->name }}</em> </h1>
 
 

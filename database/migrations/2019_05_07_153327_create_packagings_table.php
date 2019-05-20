@@ -19,6 +19,8 @@ class CreatePackagingsTable extends Migration
             $table->unsignedInteger('quantity');
             $table->unsignedInteger('capacity');
             $table->timestamps();
+
+            $table->unique(['type','quantity','capacity']);
         });
     }
 
