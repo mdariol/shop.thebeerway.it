@@ -1897,15 +1897,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PriceForm",
+
+  /* ----------------------------------------------------------------------------------------------------------
+     Props
+     ---------------------------------------------------------------------------------------------------------- */
+  props: {
+    'packagings': Array,
+    'beer': Object
+  },
+  computed: {
+    horecaLiter: function horecaLiter() {
+      return this.calculateLiterPrice(this.horeca);
+    },
+    purchaseLiter: function purchaseLiter() {
+      return this.calculateLiterPrice(this.purchase);
+    },
+    distributionLiter: function distributionLiter() {
+      return this.calculateLiterPrice(this.distribution);
+    }
+  },
 
   /* ----------------------------------------------------------------------------------------------------------
      Data
      ---------------------------------------------------------------------------------------------------------- */
   data: function data() {
     return {
-      packaging: null
+      packaging: null,
+      discount: null,
+      fixedMargin: null,
+      margin: null,
+      horeca: {
+        total: null,
+        unit: null
+      },
+      purchase: {
+        total: null,
+        unit: null
+      },
+      distribution: {
+        total: null,
+        unit: null
+      }
     };
   },
 
@@ -1913,12 +1950,101 @@ __webpack_require__.r(__webpack_exports__);
      Methods
      ---------------------------------------------------------------------------------------------------------- */
   methods: {
-    getPackaging: function getPackaging(packaging_id) {
-      var _this = this;
+    calculatePrices: function calculatePrices() {
+      if (this.horeca.total) {
+        this.calculateHorecaUnitPrice();
+        return;
+      }
 
-      axios.get('/api/packagings/' + packaging_id).then(function (response) {
-        return _this.packaging = response.data;
-      });
+      if (this.horeca.unit) {
+        this.calculateHorecaTotalPrice();
+        return;
+      }
+
+      if (this.purchase.total) {
+        this.calculatePurchaseUnitPrice();
+        return;
+      }
+
+      if (this.purchase.unit) {
+        this.calculatePurchaseTotalPrice();
+      }
+    },
+    calculateHorecaTotalPrice: function calculateHorecaTotalPrice() {
+      this.calculateTotalPrice(this.horeca);
+
+      if (this.discount) {
+        this.calculatePurchasePricesFromDiscount();
+      }
+    },
+    calculateHorecaUnitPrice: function calculateHorecaUnitPrice() {
+      this.calculateUnitPrice(this.horeca);
+
+      if (this.discount) {
+        this.calculatePurchasePricesFromDiscount();
+      }
+    },
+    calculatePurchasePricesFromDiscount: function calculatePurchasePricesFromDiscount() {
+      if (!this.horeca.total) {
+        return;
+      }
+
+      this.purchase.total = (this.horeca.total - this.horeca.total * this.discount / 100).toFixed(2);
+      this.calculatePurchaseUnitPrice();
+    },
+    calculatePurchaseTotalPrice: function calculatePurchaseTotalPrice() {
+      this.calculateTotalPrice(this.purchase);
+
+      if (this.fixedMargin) {
+        this.calculateDistributionPricesFromMargin();
+      }
+    },
+    calculatePurchaseUnitPrice: function calculatePurchaseUnitPrice() {
+      this.calculateUnitPrice(this.purchase);
+
+      if (this.fixedMargin) {
+        this.calculateDistributionPricesFromMargin();
+      }
+    },
+    calculateDistributionPricesFromMargin: function calculateDistributionPricesFromMargin() {
+      if (!this.purchase.total) {
+        return;
+      }
+
+      this.distribution.total = (this.purchase.total * 100 / (100 - this.margin)).toFixed(2);
+      this.calculateDistributionUnitPrice();
+    },
+    calculateDistributionTotalPrice: function calculateDistributionTotalPrice() {
+      this.calculateTotalPrice(this.distribution);
+
+      if (!this.fixedMargin) {
+        this.calculateMarginFromDistributionPrice();
+      }
+    },
+    calculateDistributionUnitPrice: function calculateDistributionUnitPrice() {
+      this.calculateUnitPrice(this.distribution);
+
+      if (!this.fixedMargin) {
+        this.calculateMarginFromDistributionPrice();
+      }
+    },
+    calculateMarginFromDistributionPrice: function calculateMarginFromDistributionPrice() {
+      this.margin = ((this.distribution.total - this.purchase.total) / this.distribution.total * 100).toFixed(2);
+    },
+
+    /* ----- Helper functions ----- */
+    calculateUnitPrice: function calculateUnitPrice(prices) {
+      prices.unit = (prices.total / this.packaging.quantity).toFixed(2);
+    },
+    calculateTotalPrice: function calculateTotalPrice(prices) {
+      prices.total = (prices.unit * this.packaging.quantity).toFixed(2);
+    },
+    calculateLiterPrice: function calculateLiterPrice(prices) {
+      if (!this.packaging) {
+        return 0.00;
+      }
+
+      return (prices.unit / (this.packaging.capacity / 100)).toFixed(2);
     }
   },
 
@@ -1926,13 +2052,8 @@ __webpack_require__.r(__webpack_exports__);
      Callbacks
      ---------------------------------------------------------------------------------------------------------- */
   mounted: function mounted() {
-    var _this2 = this;
-
-    var select = document.querySelector('#packaging-id');
-    this.getPackaging(select.value);
-    select.addEventListener('change', function (event) {
-      _this2.getPackaging(event.target.value);
-    });
+    this.packaging = this.beer.packaging;
+    this.fixedMargin = this.packaging.fixed_margin;
   }
 });
 
@@ -37284,268 +37405,522 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "card mb-3" }, [
+    _c("div", { staticClass: "card-header" }, [_vm._v("Price")]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card-body" }, [
+      _c("div", { staticClass: "form-group" }, [
+        _c("label", { attrs: { for: "packaging-id" } }, [_vm._v("Packaging")]),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.packaging,
+                expression: "packaging"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { name: "packaging_id", id: "packaging-id" },
+            on: {
+              change: [
+                function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.packaging = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                },
+                _vm.calculatePrices
+              ]
+            }
+          },
+          [
+            _c("option", { attrs: { value: " " } }, [
+              _vm._v("-- select an option --")
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.packagings, function(packaging) {
+              return _c("option", { domProps: { value: packaging } }, [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(packaging.quantity) +
+                    " " +
+                    _vm._s(packaging.type) +
+                    " x " +
+                    _vm._s(packaging.capacity / 100) +
+                    "l\n                "
+                )
+              ])
+            })
+          ],
+          2
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-row" }, [
+        _c("div", { staticClass: "form-group col-sm" }, [
+          _c("label", { attrs: { for: "horeca" } }, [_vm._v("Horeca")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.horeca.total,
+                  expression: "horeca.total"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "number",
+                name: "horeca",
+                id: "horeca",
+                min: "0",
+                step: ".01"
+              },
+              domProps: { value: _vm.horeca.total },
+              on: {
+                input: [
+                  function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.horeca, "total", $event.target.value)
+                  },
+                  _vm.calculateHorecaUnitPrice
+                ]
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group col-sm" }, [
+          _c("label", { attrs: { for: "horeca-unit" } }, [
+            _vm._v("Horeca / Unit")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.horeca.unit,
+                  expression: "horeca.unit"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "number",
+                name: "horeca_unit",
+                id: "horeca-unit",
+                min: "0",
+                step: ".01"
+              },
+              domProps: { value: _vm.horeca.unit },
+              on: {
+                input: [
+                  function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.horeca, "unit", $event.target.value)
+                  },
+                  _vm.calculateHorecaTotalPrice
+                ]
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("small", { staticClass: "form-text text-muted" }, [
+            _vm._v("Price per liter: € " + _vm._s(_vm.horecaLiter))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group col-sm" }, [
+          _c("label", { attrs: { for: "discount" } }, [_vm._v("Discount")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.discount,
+                  expression: "discount"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "number",
+                name: "discount",
+                id: "discount",
+                min: "0",
+                max: "100"
+              },
+              domProps: { value: _vm.discount },
+              on: {
+                input: [
+                  function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.discount = $event.target.value
+                  },
+                  _vm.calculatePurchasePricesFromDiscount
+                ]
+              }
+            }),
+            _vm._v(" "),
+            _vm._m(2)
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-row" }, [
+        _c("div", { staticClass: "form-group col-sm" }, [
+          _c("label", { attrs: { for: "purchase" } }, [_vm._v("Purchase")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group" }, [
+            _vm._m(3),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.purchase.total,
+                  expression: "purchase.total"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "number",
+                name: "purchase",
+                id: "purchase",
+                min: "0",
+                step: ".01"
+              },
+              domProps: { value: _vm.purchase.total },
+              on: {
+                input: [
+                  function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.purchase, "total", $event.target.value)
+                  },
+                  _vm.calculatePurchaseUnitPrice
+                ]
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group col-sm" }, [
+          _c("label", { attrs: { for: "purchase-unit" } }, [
+            _vm._v("Purchase / Unit")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group" }, [
+            _vm._m(4),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.purchase.unit,
+                  expression: "purchase.unit"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "number",
+                name: "purchase_unit",
+                id: "purchase-unit",
+                min: "0",
+                step: ".01"
+              },
+              domProps: { value: _vm.purchase.unit },
+              on: {
+                input: [
+                  function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.purchase, "unit", $event.target.value)
+                  },
+                  _vm.calculatePurchaseTotalPrice
+                ]
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("small", { staticClass: "form-text text-muted" }, [
+            _vm._v("Price per liter: € " + _vm._s(_vm.purchaseLiter))
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-row" }, [
+        _c("div", { staticClass: "form-group col-sm" }, [
+          _c("label", { attrs: { for: "distribution" } }, [
+            _vm._v("Distribution")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group" }, [
+            _vm._m(5),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.distribution.total,
+                  expression: "distribution.total"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                disabled: _vm.fixedMargin,
+                type: "number",
+                name: "distribution",
+                id: "distribution",
+                min: "0",
+                step: ".01"
+              },
+              domProps: { value: _vm.distribution.total },
+              on: {
+                input: [
+                  function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.distribution, "total", $event.target.value)
+                  },
+                  function($event) {
+                    return _vm.calculateDistributionUnitPrice()
+                  }
+                ]
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group col-sm" }, [
+          _c("label", { attrs: { for: "distribution-unit" } }, [
+            _vm._v("Distribution / Unit")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group" }, [
+            _vm._m(6),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.distribution.unit,
+                  expression: "distribution.unit"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                disabled: _vm.fixedMargin,
+                type: "number",
+                name: "distribution_unit",
+                id: "distribution-unit",
+                min: "0",
+                step: ".01"
+              },
+              domProps: { value: _vm.distribution.unit },
+              on: {
+                input: [
+                  function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.distribution, "unit", $event.target.value)
+                  },
+                  _vm.calculateDistributionTotalPrice
+                ]
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("small", { staticClass: "form-text text-muted" }, [
+            _vm._v("Price per liter: € " + _vm._s(_vm.distributionLiter))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group col-sm" }, [
+          _c("label", { attrs: { for: "margin" } }, [_vm._v("Margin")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group" }, [
+            _c("div", { staticClass: "input-group-prepend" }, [
+              _c("div", { staticClass: "input-group-text" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.fixedMargin,
+                      expression: "fixedMargin"
+                    }
+                  ],
+                  attrs: {
+                    type: "checkbox",
+                    name: "fixed_margin",
+                    id: "fixed-margin"
+                  },
+                  domProps: {
+                    checked: Array.isArray(_vm.fixedMargin)
+                      ? _vm._i(_vm.fixedMargin, null) > -1
+                      : _vm.fixedMargin
+                  },
+                  on: {
+                    change: function($event) {
+                      var $$a = _vm.fixedMargin,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = null,
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 && (_vm.fixedMargin = $$a.concat([$$v]))
+                        } else {
+                          $$i > -1 &&
+                            (_vm.fixedMargin = $$a
+                              .slice(0, $$i)
+                              .concat($$a.slice($$i + 1)))
+                        }
+                      } else {
+                        _vm.fixedMargin = $$c
+                      }
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.margin,
+                  expression: "margin"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "number",
+                disabled: !_vm.fixedMargin,
+                name: "margin",
+                id: "margin",
+                min: "0",
+                max: "100"
+              },
+              domProps: { value: _vm.margin },
+              on: {
+                input: [
+                  function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.margin = $event.target.value
+                  },
+                  _vm.calculateDistributionPricesFromMargin
+                ]
+              }
+            }),
+            _vm._v(" "),
+            _vm._m(7)
+          ])
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header" }, [_vm._v("Price")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("div", { staticClass: "form-row" }, [
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "horeca" } }, [_vm._v("Horeca")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "horeca",
-                  id: "horeca",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "horeca-unit" } }, [
-              _vm._v("Horeca / Unit")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "horeca_unit",
-                  id: "horeca-unit",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "horeca-liter" } }, [
-              _vm._v("Horeca / Liter")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "horeca_liter",
-                  id: "horeca-liter",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "discount" } }, [_vm._v("Discount")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "discount",
-                  id: "discount",
-                  min: "0",
-                  max: "100"
-                }
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "input-group-append" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("%")])
-              ])
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-row" }, [
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "purchase" } }, [_vm._v("Purchase")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "purchase",
-                  id: "purchase",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "purchase-unit" } }, [
-              _vm._v("Purchase / Unit")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "purchase_unit",
-                  id: "purchase-unit",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "purchase-liter" } }, [
-              _vm._v("Purchase / Liter")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "purchase_liter",
-                  id: "purchase-liter",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-row" }, [
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "distribution" } }, [
-              _vm._v("Distribution")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "distribution",
-                  id: "distribution",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "distribution-unit" } }, [
-              _vm._v("Distribution / Unit")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "distribution_unit",
-                  id: "distribution-unit",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "distribution-liter" } }, [
-              _vm._v("Distribution / Liter")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("div", { staticClass: "input-group-prepend" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "distribution_liter",
-                  id: "distribution-liter",
-                  min: "0",
-                  step: ".01"
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group col-sm" }, [
-            _c("label", { attrs: { for: "margin" } }, [_vm._v("Margin")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "number",
-                  name: "margin",
-                  id: "margin",
-                  min: "0",
-                  max: "100"
-                }
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "input-group-append" }, [
-                _c("span", { staticClass: "input-group-text" }, [_vm._v("%")])
-              ])
-            ])
-          ])
-        ])
-      ])
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-append" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("%")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("€")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-append" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("%")])
     ])
   }
 ]

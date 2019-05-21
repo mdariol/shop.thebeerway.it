@@ -9,6 +9,8 @@ class Beer extends Model
     protected $fillable = ['code', 'name', 'description', 'abv', 'ibu', 'plato',
       'brewery_id', 'packaging_id', 'style_id'];
 
+    protected $with = ['packaging', 'style', 'brewery'];
+
     public function brewery()
     {
         return $this->belongsTo(Brewery::class);
