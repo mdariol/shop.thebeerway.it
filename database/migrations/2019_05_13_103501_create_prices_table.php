@@ -16,14 +16,15 @@ class CreatePricesTable extends Migration
         Schema::create('prices', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('beer_id');
-            $table->integer('horeca_price')->nullable();
-            $table->integer('horeca_unit_price')->nullable();
-            $table->integer('purchase_price');
-            $table->integer('purchase_unit_price');
-            $table->float('purchase_discount')->nullable();
-            $table->integer('distribution_price')->nullable();
-            $table->integer('distribution_unit_price')->nullable();
-            $table->float('distribution_margin')->nullable();
+            $table->integer('horeca')->nullable();
+            $table->integer('horeca_unit')->nullable();
+            $table->integer('purchase');
+            $table->integer('purchase_unit');
+            $table->float('discount')->nullable();
+            $table->integer('distribution')->nullable();
+            $table->integer('distribution_unit')->nullable();
+            $table->float('margin')->nullable();
+            $table->boolean('fixed_margin')->default(false);
             $table->timestamps();
         });
     }
