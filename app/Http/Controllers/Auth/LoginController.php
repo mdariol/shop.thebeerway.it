@@ -40,14 +40,14 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function redirectToProvider()
+    public function redirectToProvider($provider)
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
-    public function handleProviderCallback()
+    public function handleProviderCallback($provider)
     {
-        $user = Socialite::driver('google')->user();
+        $user = Socialite::driver($provider)->user();
 
         $user = User::firstOrCreate([
             'google_id' => $user->getId(),

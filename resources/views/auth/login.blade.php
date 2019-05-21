@@ -11,6 +11,7 @@
                     <div class="row justify-content-center">
                         <div class="col-6">
                             <a href="/login/google" class="btn btn-danger btn-block">Google</a>
+                            <a href="/login/facebook" class="btn btn-primary btn-block">Facebook</a>
                         </div>
                     </div>
 
