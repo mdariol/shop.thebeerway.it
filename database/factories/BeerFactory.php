@@ -7,8 +7,8 @@ use Faker\Generator as Faker;
 
 $factory->define(Beer::class, function (Faker $faker) {
     return [
-        'code' => $faker->unique()->randomDigit,
-        'name' => $faker->randomElement(['Apollo', 'Whale', 'Winternest']),
+        'code' => $faker->numberBetween(1000000000, 9999999999),
+        'name' => $faker->name,
         'description' => $faker->paragraph,
         'abv' => $faker->numberBetween(2, 14),
         'ibu' => $faker->numberBetween(2, 14),
@@ -22,8 +22,5 @@ $factory->define(Beer::class, function (Faker $faker) {
         'style_id' => function () {
             return factory(App\Style::class)->create();
         },
-        'price_id' => function () {
-        return factory(App\Price::class)->create();
-        }
     ];
 });

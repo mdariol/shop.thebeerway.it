@@ -93,8 +93,8 @@
                             <label for="fixed-margin" hidden>Fixed margin</label>
                             <input type="checkbox" v-model="fixedMargin" name="fixed_margin" id="fixed-margin">
                         </div></div>
-                        <input class="form-control" @input="calculateDistributionPricesFromMargin" v-model="margin" type="number"
-                               :readonly=" ! fixedMargin" name="margin" id="margin" min="0" max="100" step=".01">
+                        <input class="form-control" @input="calculateDistributionPricesFromMargin" v-model="margin"
+                               type="number" :readonly=" ! fixedMargin" name="margin" id="margin" min="0" max="100" step=".01">
                         <div class="input-group-append"><span class="input-group-text">%</span></div>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
 
 <script>
     export default {
-        name: "PriceForm",
+        name: "PriceCreate",
 
         /* ----------------------------------------------------------------------------------------------------------
            Props
@@ -113,7 +113,6 @@
 
         props: {
             'packagings': Array,
-            'beer': Object,
         },
 
         computed: {
@@ -142,24 +141,24 @@
 
         data() {
             return {
-                packaging_id: this.beer.packaging.id,
-                discount: this.beer.price.discount,
-                fixedMargin: this.beer.price.fixed_margin,
-                margin: this.beer.price.discount,
+                packaging_id: null,
+                discount: 0,
+                fixedMargin: false,
+                margin: 0,
 
                 horeca: {
-                    total: this.beer.price.horeca,
-                    unit: this.beer.price.horeca_unit,
+                    total: 0,
+                    unit: 0,
                 },
 
                 purchase: {
-                    total: this.beer.price.purchase,
-                    unit: this.beer.price.purchase_unit,
+                    total: 0,
+                    unit: 0,
                 },
 
                 distribution: {
-                    total: this.beer.price.distribution,
-                    unit: this.beer.price.distribution_unit,
+                    total: 0,
+                    unit: 0,
                 }
             }
         },

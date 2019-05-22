@@ -67,7 +67,7 @@
                 </div>
             </div>
 
-            <price-form :packagings='@json($packagings)' :beer='@json($beer)'></price-form>
+            <price-edit :packagings='@json($packagings)' :beer='@json($beer)'></price-edit>
 
             <button class="btn btn-primary">Update</button>
         </form>

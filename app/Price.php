@@ -10,11 +10,11 @@ class Price extends Model
         'horeca', 'horeca_unit', 'discount',
         'purchase', 'purchase_unit',
         'distribution', 'distribution_unit',
-        'margin', 'fixed_margin'
+        'margin', 'fixed_margin', 'beer_id',
     ];
 
     public function beer()
     {
-        return $this->hasOne(Beer::class);
+        return $this->belongsTo(Beer::class);
     }
 }

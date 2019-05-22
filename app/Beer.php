@@ -6,10 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Beer extends Model
 {
-    protected $fillable = ['code', 'name', 'description', 'abv', 'ibu', 'plato',
-      'brewery_id', 'packaging_id', 'style_id', 'price_id'];
+    protected $fillable = [
+        'code', 'name', 'description',
+        'abv', 'ibu', 'plato',
+        'brewery_id', 'packaging_id',
+        'style_id', 'price_id'
+    ];
 
-    protected $with = ['packaging', 'style', 'brewery', 'price'];
+    protected $with = [
+        'packaging', 'style', 'brewery', 'price'
+    ];
 
     public function brewery()
     {
@@ -28,6 +34,6 @@ class Beer extends Model
 
     public function price()
     {
-        return $this->belongsTo(Price::class);
+        return $this->hasOne(Price::class);
     }
 }

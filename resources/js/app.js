@@ -20,7 +20,8 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('price-form', require('./components/PriceForm.vue').default);
+Vue.component('price-edit', require('./components/PriceEdit.vue').default);
+Vue.component('price-create', require('./components/PriceCreate.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

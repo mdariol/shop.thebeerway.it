@@ -15,7 +15,7 @@ class CreateBeersTable extends Migration
     {
         Schema::create('beers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->string('name');
             $table->text('description');
             $table->float('abv');
@@ -25,7 +25,6 @@ class CreateBeersTable extends Migration
             $table->unsignedInteger('brewery_id')->nullable();
             $table->unsignedInteger('packaging_id')->nullable();
             $table->unsignedInteger('style_id')->nullable();
-            $table->unsignedInteger('price_id')->nullable();
 
             $table->timestamps();
 
@@ -34,8 +33,6 @@ class CreateBeersTable extends Migration
             $table->foreign('packaging_id')->references('id')->on('packagings')
                 ->onDelete('set null');
             $table->foreign('brewery_id')->references('id')->on('breweries')
-                ->onDelete('set null');
-            $table->foreign('price_id')->references('id')->on('prices')
                 ->onDelete('set null');
         });
     }
