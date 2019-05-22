@@ -63,7 +63,7 @@ class LoginController extends Controller
     {
         $user = Socialite::driver($provider)->user();
 
-        $user = User::firstOrCreate([
+        $user = User::updateOrCreate([
             'email' => $user->getEmail()
         ], [
           $provider . '_id' => $user->getId(),
