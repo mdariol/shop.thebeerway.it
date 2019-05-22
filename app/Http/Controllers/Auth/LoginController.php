@@ -31,6 +31,16 @@ class LoginController extends Controller
     protected $redirectTo = '/home';
 
     /**
+     * Authorized providers.
+     *
+     * @var array
+     */
+    protected $auth = [
+        'google',
+        'facebook',
+    ];
+
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -42,6 +52,10 @@ class LoginController extends Controller
 
     public function redirectToProvider($provider)
     {
+        if ( ! in_array($provider, $this->auth)) {
+            return abort(404);
+        }
+
         return Socialite::driver($provider)->redirect();
     }
 
@@ -50,9 +64,10 @@ class LoginController extends Controller
         $user = Socialite::driver($provider)->user();
 
         $user = User::firstOrCreate([
-            'google_id' => $user->getId(),
-            'name' => $user->getName(),
-            'email' => $user->getEmail(),
+            'email' => $user->getEmail()
+        ], [
+          $provider . '_id' => $user->getId(),
+          'name' => $user->getName(),
         ]);
 
         Auth::login($user);
