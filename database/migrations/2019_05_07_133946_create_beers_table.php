@@ -25,6 +25,7 @@ class CreateBeersTable extends Migration
             $table->unsignedInteger('brewery_id')->nullable();
             $table->unsignedInteger('packaging_id')->nullable();
             $table->unsignedInteger('style_id')->nullable();
+            $table->unsignedInteger('price_id')->nullable();
 
             $table->timestamps();
 
@@ -33,6 +34,8 @@ class CreateBeersTable extends Migration
             $table->foreign('packaging_id')->references('id')->on('packagings')
                 ->onDelete('set null');
             $table->foreign('brewery_id')->references('id')->on('breweries')
+                ->onDelete('set null');
+            $table->foreign('price_id')->references('id')->on('prices')
                 ->onDelete('set null');
         });
     }

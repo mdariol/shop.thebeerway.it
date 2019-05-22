@@ -4,10 +4,10 @@
         <div class="card-body">
             <div class="form-group">
                 <label for="packaging-id">Packaging</label>
-                <select class="form-control" @change="calculatePrices" v-model="packaging" name="packaging_id"
+                <select class="form-control" @change="calculatePrices" v-model="packaging_id" name="packaging_id"
                         id="packaging-id">
                     <option value=" ">-- select an option --</option>
-                    <option v-for="packaging in packagings" :value="packaging">
+                    <option v-for="packaging in packagings" :value="packaging.id">
                         {{ packaging.quantity }} {{ packaging.type }} x {{ packaging.capacity / 100 }}l
                     </option>
                 </select>
@@ -37,7 +37,7 @@
                     <label for="discount">Discount</label>
                     <div class="input-group">
                         <input class="form-control" @input="calculatePurchasePricesFromDiscount" v-model="discount"
-                               type="number" name="discount" id="discount" min="0" max="100">
+                               type="number" name="discount" id="discount" min="0" max="100" step=".01">
                         <div class="input-group-append"><span class="input-group-text">%</span></div>
                     </div>
                 </div>
@@ -90,10 +90,11 @@
                     <label for="margin">Margin</label>
                     <div class="input-group">
                         <div class="input-group-prepend"><div class="input-group-text">
+                            <label for="fixed-margin" hidden>Fixed margin</label>
                             <input type="checkbox" v-model="fixedMargin" name="fixed_margin" id="fixed-margin">
                         </div></div>
                         <input class="form-control" @input="calculateDistributionPricesFromMargin" v-model="margin" type="number"
-                               :disabled=" ! fixedMargin" name="margin" id="margin" min="0" max="100">
+                               :disabled=" ! fixedMargin" name="margin" id="margin" min="0" max="100" step=".01">
                         <div class="input-group-append"><span class="input-group-text">%</span></div>
                     </div>
                 </div>
@@ -127,6 +128,12 @@
             distributionLiter: function () {
                 return this.calculateLiterPrice(this.distribution);
             },
+
+            packaging: function () {
+                return this.packagings.find(packaging => {
+                    return this.packaging_id === packaging.id;
+                });
+            }
         },
 
         /* ----------------------------------------------------------------------------------------------------------
@@ -135,24 +142,24 @@
 
         data() {
             return {
-                packaging: null,
-                discount: null,
-                fixedMargin: null,
-                margin: null,
+                packaging_id: this.beer.packaging.id,
+                discount: this.beer.price.discount,
+                fixedMargin: this.beer.price.fixed_margin,
+                margin: this.beer.price.discount,
 
                 horeca: {
-                    total: null,
-                    unit: null,
+                    total: this.beer.price.horeca,
+                    unit: this.beer.price.horeca_unit,
                 },
 
                 purchase: {
-                    total: null,
-                    unit: null,
+                    total: this.beer.price.purchase,
+                    unit: this.beer.price.purchase_unit,
                 },
 
                 distribution: {
-                    total: null,
-                    unit: null,
+                    total: this.beer.price.distribution,
+                    unit: this.beer.price.distribution_unit,
                 }
             }
         },
@@ -272,17 +279,8 @@
                 }
 
                 return (prices.unit / (this.packaging.capacity / 100)).toFixed(2);
-            }
+            },
         },
-
-        /* ----------------------------------------------------------------------------------------------------------
-           Callbacks
-           ---------------------------------------------------------------------------------------------------------- */
-
-        mounted() {
-            this.packaging = this.beer.packaging;
-            this.fixedMargin = this.packaging.fixed_margin;
-        }
     }
 </script>
 

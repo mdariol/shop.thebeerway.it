@@ -21,6 +21,9 @@ $factory->define(Beer::class, function (Faker $faker) {
         },
         'style_id' => function () {
             return factory(App\Style::class)->create();
+        },
+        'price_id' => function () {
+        return factory(App\Price::class)->create();
         }
     ];
 });

@@ -1900,6 +1900,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PriceForm",
 
@@ -1919,6 +1920,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     distributionLiter: function distributionLiter() {
       return this.calculateLiterPrice(this.distribution);
+    },
+    packaging: function packaging() {
+      var _this = this;
+
+      return this.packagings.find(function (packaging) {
+        return _this.packaging_id === packaging.id;
+      });
     }
   },
 
@@ -1927,21 +1935,21 @@ __webpack_require__.r(__webpack_exports__);
      ---------------------------------------------------------------------------------------------------------- */
   data: function data() {
     return {
-      packaging: null,
-      discount: null,
-      fixedMargin: null,
-      margin: null,
+      packaging_id: this.beer.packaging.id,
+      discount: this.beer.price.discount,
+      fixedMargin: this.beer.price.fixed_margin,
+      margin: this.beer.price.discount,
       horeca: {
-        total: null,
-        unit: null
+        total: this.beer.price.horeca,
+        unit: this.beer.price.horeca_unit
       },
       purchase: {
-        total: null,
-        unit: null
+        total: this.beer.price.purchase,
+        unit: this.beer.price.purchase_unit
       },
       distribution: {
-        total: null,
-        unit: null
+        total: this.beer.price.distribution,
+        unit: this.beer.price.distribution_unit
       }
     };
   },
@@ -2046,14 +2054,6 @@ __webpack_require__.r(__webpack_exports__);
 
       return (prices.unit / (this.packaging.capacity / 100)).toFixed(2);
     }
-  },
-
-  /* ----------------------------------------------------------------------------------------------------------
-     Callbacks
-     ---------------------------------------------------------------------------------------------------------- */
-  mounted: function mounted() {
-    this.packaging = this.beer.packaging;
-    this.fixedMargin = this.packaging.fixed_margin;
   }
 });
 
@@ -37406,7 +37406,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card mb-3" }, [
-    _c("div", { staticClass: "card-header" }, [_vm._v("Price")]),
+    _c("div", { staticClass: "card-header" }, [_vm._v("Price calculator")]),
     _vm._v(" "),
     _c("div", { staticClass: "card-body" }, [
       _c("div", { staticClass: "form-group" }, [
@@ -37419,8 +37419,8 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.packaging,
-                expression: "packaging"
+                value: _vm.packaging_id,
+                expression: "packaging_id"
               }
             ],
             staticClass: "form-control",
@@ -37436,7 +37436,7 @@ var render = function() {
                       var val = "_value" in o ? o._value : o.value
                       return val
                     })
-                  _vm.packaging = $event.target.multiple
+                  _vm.packaging_id = $event.target.multiple
                     ? $$selectedVal
                     : $$selectedVal[0]
                 },
@@ -37450,7 +37450,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _vm._l(_vm.packagings, function(packaging) {
-              return _c("option", { domProps: { value: packaging } }, [
+              return _c("option", { domProps: { value: packaging.id } }, [
                 _vm._v(
                   "\n                    " +
                     _vm._s(packaging.quantity) +
@@ -37571,7 +37571,8 @@ var render = function() {
                 name: "discount",
                 id: "discount",
                 min: "0",
-                max: "100"
+                max: "100",
+                step: ".01"
               },
               domProps: { value: _vm.discount },
               on: {
@@ -37775,6 +37776,10 @@ var render = function() {
           _c("div", { staticClass: "input-group" }, [
             _c("div", { staticClass: "input-group-prepend" }, [
               _c("div", { staticClass: "input-group-text" }, [
+                _c("label", { attrs: { for: "fixed-margin", hidden: "" } }, [
+                  _vm._v("Fixed margin")
+                ]),
+                _vm._v(" "),
                 _c("input", {
                   directives: [
                     {
@@ -37835,7 +37840,8 @@ var render = function() {
                 name: "margin",
                 id: "margin",
                 min: "0",
-                max: "100"
+                max: "100",
+                step: ".01"
               },
               domProps: { value: _vm.margin },
               on: {

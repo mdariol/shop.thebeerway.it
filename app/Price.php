@@ -8,6 +8,6 @@ class Price extends Model
 {
     public function beer()
     {
-        return $this->belongsTo(Beer::class);
+        return $this->hasOne(Beer::class);
     }
 }
