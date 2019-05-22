@@ -37699,7 +37699,7 @@ var render = function() {
               ],
               staticClass: "form-control",
               attrs: {
-                disabled: _vm.fixedMargin,
+                readonly: _vm.fixedMargin,
                 type: "number",
                 name: "distribution",
                 id: "distribution",
@@ -37743,7 +37743,7 @@ var render = function() {
               ],
               staticClass: "form-control",
               attrs: {
-                disabled: _vm.fixedMargin,
+                readonly: _vm.fixedMargin,
                 type: "number",
                 name: "distribution_unit",
                 id: "distribution-unit",
@@ -37836,7 +37836,7 @@ var render = function() {
               staticClass: "form-control",
               attrs: {
                 type: "number",
-                disabled: !_vm.fixedMargin,
+                readonly: !_vm.fixedMargin,
                 name: "margin",
                 id: "margin",
                 min: "0",

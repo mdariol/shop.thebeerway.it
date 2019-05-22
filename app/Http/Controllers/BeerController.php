@@ -81,8 +81,18 @@ class BeerController extends Controller
      */
     public function update(Beer $beer)
     {
-        $beer->update(request(['code', 'name', 'description', 'abv', 'ibu',
-          'plato', 'brewery_id', 'packaging_id', 'style_id']));
+        $beer->price()->update(request([
+            'horeca', 'horeca_unit', 'discount',
+            'purchase', 'purchase_unit',
+            'distribution', 'distribution_unit',
+            'margin', 'fixed_margin'
+        ]));
+
+        $beer->update(request([
+            'code', 'name', 'description',
+            'abv', 'ibu', 'plato',
+            'brewery_id', 'packaging_id', 'style_id'
+        ]));
 
         return redirect('/beers');
     }

@@ -70,7 +70,7 @@
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text">€</span></div>
                         <input class="form-control" @input="calculateDistributionUnitPrice()"
-                               v-model="distribution.total" :disabled="fixedMargin" type="number" name="distribution"
+                               v-model="distribution.total" :readonly="fixedMargin" type="number" name="distribution"
                                id="distribution" min="0" step=".01">
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text">€</span></div>
                         <input class="form-control" @input="calculateDistributionTotalPrice"
-                               v-model="distribution.unit" :disabled="fixedMargin" type="number"
+                               v-model="distribution.unit" :readonly="fixedMargin" type="number"
                                name="distribution_unit" id="distribution-unit" min="0" step=".01">
                     </div>
                     <small class="form-text text-muted">Price per liter: € {{ distributionLiter }}</small>
@@ -94,7 +94,7 @@
                             <input type="checkbox" v-model="fixedMargin" name="fixed_margin" id="fixed-margin">
                         </div></div>
                         <input class="form-control" @input="calculateDistributionPricesFromMargin" v-model="margin" type="number"
-                               :disabled=" ! fixedMargin" name="margin" id="margin" min="0" max="100" step=".01">
+                               :readonly=" ! fixedMargin" name="margin" id="margin" min="0" max="100" step=".01">
                         <div class="input-group-append"><span class="input-group-text">%</span></div>
                     </div>
                 </div>
