@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services;
 
 use App\Packaging;
@@ -53,7 +52,7 @@ class FattureInCloud
         return collect(json_decode($response)->lista_prodotti);
     }
 
-    public function getPackagings(): Collection
+    public function parsePackagings(): Collection
     {
         $packagings = new Collection();
 
@@ -72,15 +71,17 @@ class FattureInCloud
         return $packagings;
     }
 
-    public function getBreweries(): Collection
+    public function parseBreweries(): Collection
     {
         $breweries = new Collection();
 
         $this->getProducts()->each(function ($product) use ($breweries) {
             $match = $this->matchBrewery($product->nome);
 
-            if ($match && ! $breweries->search($match)) {
-                $breweries->push($match);
+            if ($match && ! $breweries->has($match)) {
+                $breweries->put($match, [
+                    'name' => $match
+                ]);
             }
         });
 

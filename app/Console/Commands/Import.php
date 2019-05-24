@@ -43,7 +43,7 @@ class Import extends Command
     public function handle(FattureInCloud $fattureInCloud)
     {
         $headers = ['type', 'quantity', 'capacity'];
-        $lines = $fattureInCloud->getPackagings()->toArray();
+        $lines = $fattureInCloud->parsePackagings()->toArray();
 
         /*
         $this->getProducts()->each(function ($product) use (&$lines) {
