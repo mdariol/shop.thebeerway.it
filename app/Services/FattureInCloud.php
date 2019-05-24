@@ -9,6 +9,8 @@ use Illuminate\Support\Collection;
 
 class FattureInCloud
 {
+    const DUNNO = '  (´･_･｀)  ';
+
     /**
      * @var \GuzzleHttp\Client
      */
@@ -51,6 +53,23 @@ class FattureInCloud
 
         return collect(json_decode($response)->lista_prodotti);
     }
+
+    public function parseBeer(string $string): array
+    {
+        $brewery = $this->parseBrewery($string);
+        $packaging = $this->parsePackaging($string);
+
+        return [
+            $string => [
+                'name' => $this->matchBeer($string),
+                'style' => $this->matchStyle($string),
+                'brewery' => reset($brewery),
+                'packaging' => reset($packaging),
+                'abv' => $this->matchAbv($string),
+            ]
+        ];
+    }
+
     public function parseBeers(): Collection
     {
         $beers = new Collection();
@@ -58,20 +77,39 @@ class FattureInCloud
         $this->getProducts()->each(function ($product) use ($beers) {
             $name = $product->nome;
 
-            if ($name && ! $beers->has($product->id)) {
-                $beers->put($product->id, [
-                    'code' => $product->cod,
-                    'name' => $this->matchBeer($name),
-                    'description' => $product->note,
-                    'style' => $this->matchStyle($name),
-                    'brewery' => $this->matchBrewery($name),
-                    'packaging' => $this->matchPackaging($name),
-                    'abv' => $this->matchAbv($name),
-                ]);
+            if ( ! $name) {
+                return;
             }
+
+            $beer = $this->parseBeer($name);
+            $key = key($beer);
+
+            if ($beers->has($key) || $key === self::DUNNO) {
+                return;
+            }
+
+            $beers->put($key, reset($beer) + [
+                'code' => $product->cod,
+                'description' => $product->note,
+            ]);
         });
 
+        dd($beers);
+
         return $beers;
+    }
+
+    public function parsePackaging(string $string): array
+    {
+        $match = $this->matchPackaging($string);
+
+        return [
+            $match => [
+                'type' => $this->matchType($match),
+                'quantity' => $this->matchQuantity($match),
+                'capacity' => $this->matchCapacity($match),
+            ]
+        ];
     }
 
     public function parsePackagings(): Collection
@@ -79,18 +117,34 @@ class FattureInCloud
         $packagings = new Collection();
 
         $this->getProducts()->each(function ($product) use ($packagings) {
-            $match = $this->matchPackaging($product->nome);
+            $name = $product->nome;
 
-            if ($match && ! $packagings->has($match)) {
-                $packagings->put($match, [
-                    'type' => $this->matchType($match),
-                    'quantity' => $this->matchQuantity($match),
-                    'capacity' => $this->matchCapacity($match)
-                ]);
+            if ( ! $name) {
+                return;
             }
+
+            $packaging = $this->parsePackaging($name);
+            $key = key($packaging);
+
+            if ($packagings->has($key) || $key === self::DUNNO) {
+                return;
+            }
+
+            $packagings->put($key, reset($packaging));
         });
 
         return $packagings;
+    }
+
+    public function parseBrewery(string $string): array
+    {
+        $match = $this->matchBrewery($string);
+
+        return [
+            $match => [
+                'name' => $match
+            ]
+        ];
     }
 
     public function parseBreweries(): Collection
@@ -98,13 +152,20 @@ class FattureInCloud
         $breweries = new Collection();
 
         $this->getProducts()->each(function ($product) use ($breweries) {
-            $match = $this->matchBrewery($product->nome);
+            $name = $product->nome;
 
-            if ($match && ! $breweries->has($match)) {
-                $breweries->put($match, [
-                    'name' => $match
-                ]);
+            if ( ! $name) {
+                return;
             }
+
+            $brewery = $this->parseBrewery($name);
+            $key = key($brewery);
+
+            if ($breweries->has($key) || $key === self::DUNNO) {
+                return;
+            }
+
+            $breweries->put($key, reset($brewery));
         });
 
         return $breweries;
@@ -118,43 +179,43 @@ class FattureInCloud
         ];
     }
 
-    protected function matchBeer(string $string): ?string
+    protected function matchBeer(string $string): string
     {
         if (preg_match('/ -(.*?) di /', $string, $matches)) {
             return trim($matches[1]);
         }
 
-        return null;
+        return self::DUNNO;
     }
 
-    protected function matchStyle(string $string) : ?string
+    protected function matchStyle(string $string): string
     {
         if (preg_match('/, (.*?) da  /', $string, $matches)) {
             return trim($matches[1]);
         }
 
-        return null;
+        return self::DUNNO;
     }
 
-    protected function matchAbv(string $string): ?string
+    protected function matchAbv(string $string): string
     {
         if (preg_match('/da  (.*?)%/', $string, $matches)) {
             return trim($matches[1]);
         }
 
-        return null;
+        return self::DUNNO;
     }
 
-    protected function matchPackaging(string $string): ?string
+    protected function matchPackaging(string $string): string
     {
         if (preg_match('/^(.*?) -/', $string, $matches)) {
             return trim($matches[1]);
         }
 
-        return null;
+        return self::DUNNO;
     }
 
-    protected function matchType(string $string): ?string
+    protected function matchType(string $string): string
     {
         if (preg_match('/(^F-|^Bottiglia )/', $string, $matches)) {
             if ($matches[1] === 'F-') {
@@ -164,7 +225,7 @@ class FattureInCloud
             return Packaging::TYPE['bottle'];
         }
 
-        return null;
+        return self::DUNNO;
     }
 
     private function matchQuantity(string $string): int
@@ -185,12 +246,12 @@ class FattureInCloud
         return null;
     }
 
-    protected function matchBrewery(string $string): ?string
+    protected function matchBrewery(string $string): string
     {
         if (preg_match('/ di (.*?), /', $string, $matches)) {
             return trim($matches[1]);
         }
 
-        return null;
+        return self::DUNNO;
     }
 }

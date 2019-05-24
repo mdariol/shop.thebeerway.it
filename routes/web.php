@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function (\App\Services\FattureInCloud $fattureInCloud) {
-    dd($fattureInCloud);
-
+Route::get('/', function () {
     return view('welcome');
 });
 
