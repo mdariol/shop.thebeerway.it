@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Packaging;
+use App\Services\FattureInCloud;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Console\Command;
 use GuzzleHttp\Client;
@@ -39,10 +40,10 @@ class Import extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(FattureInCloud $fattureInCloud)
     {
-        $headers = ['id', 'type', 'quantity', 'capacity', 'created_at', 'updated_at'];
-        $lines = [];
+        $headers = ['type', 'quantity', 'capacity'];
+        $lines = $fattureInCloud->getPackagings()->toArray();
 
         /*
         $this->getProducts()->each(function ($product) use (&$lines) {
@@ -56,11 +57,13 @@ class Import extends Command
         });
         */
 
+        /*
         $this->getProducts()->each(function ($product) use (&$lines) {
             if ($packaging = $this->parsePackagin($product->nome)) {
                 array_push($lines, $packaging->toArray());
             }
         });
+        */
 
         $this->table($headers, $lines);
     }
