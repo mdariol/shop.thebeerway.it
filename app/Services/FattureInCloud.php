@@ -51,6 +51,28 @@ class FattureInCloud
 
         return collect(json_decode($response)->lista_prodotti);
     }
+    public function parseBeers(): Collection
+    {
+        $beers = new Collection();
+
+        $this->getProducts()->each(function ($product) use ($beers) {
+            $name = $product->nome;
+
+            if ($name && ! $beers->has($product->id)) {
+                $beers->put($product->id, [
+                    'code' => $product->cod,
+                    'name' => $this->matchBeer($name),
+                    'description' => $product->note,
+                    'style' => $this->matchStyle($name),
+                    'brewery' => $this->matchBrewery($name),
+                    'packaging' => $this->matchPackaging($name),
+                    'abv' => $this->matchAbv($name),
+                ]);
+            }
+        });
+
+        return $beers;
+    }
 
     public function parsePackagings(): Collection
     {
@@ -96,6 +118,33 @@ class FattureInCloud
         ];
     }
 
+    protected function matchBeer(string $string): ?string
+    {
+        if (preg_match('/ -(.*?) di /', $string, $matches)) {
+            return trim($matches[1]);
+        }
+
+        return null;
+    }
+
+    protected function matchStyle(string $string) : ?string
+    {
+        if (preg_match('/, (.*?) da  /', $string, $matches)) {
+            return trim($matches[1]);
+        }
+
+        return null;
+    }
+
+    protected function matchAbv(string $string): ?string
+    {
+        if (preg_match('/da  (.*?)%/', $string, $matches)) {
+            return trim($matches[1]);
+        }
+
+        return null;
+    }
+
     protected function matchPackaging(string $string): ?string
     {
         if (preg_match('/^(.*?) -/', $string, $matches)) {
@@ -139,7 +188,7 @@ class FattureInCloud
     protected function matchBrewery(string $string): ?string
     {
         if (preg_match('/ di (.*?), /', $string, $matches)) {
-            return $matches[1];
+            return trim($matches[1]);
         }
 
         return null;

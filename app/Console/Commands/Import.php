@@ -42,28 +42,10 @@ class Import extends Command
      */
     public function handle(FattureInCloud $fattureInCloud)
     {
-        $headers = ['type', 'quantity', 'capacity'];
-        $lines = $fattureInCloud->parsePackagings()->toArray();
+        $collection = $fattureInCloud->parseBeers();
 
-        /*
-        $this->getProducts()->each(function ($product) use (&$lines) {
-            array_push($lines, [
-                'name' => $this->matchBeer($product->nome),
-                'brewery' => $this->matchBrewery($product->nome),
-                'style' => $this->matchStyle($product->nome),
-                'packaging' => $this->matchPackaging($product->nome),
-                'abv' => $this->matchAbv($product->nome),
-            ]);
-        });
-        */
-
-        /*
-        $this->getProducts()->each(function ($product) use (&$lines) {
-            if ($packaging = $this->parsePackagin($product->nome)) {
-                array_push($lines, $packaging->toArray());
-            }
-        });
-        */
+        $headers = array_keys($collection->first());
+        $lines = $collection->toArray();
 
         $this->table($headers, $lines);
     }
