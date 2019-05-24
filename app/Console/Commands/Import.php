@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Packaging;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Console\Command;
 use GuzzleHttp\Client;
@@ -40,9 +41,10 @@ class Import extends Command
      */
     public function handle()
     {
-        $headers = ['name', 'brewery', 'style', 'packaging', 'abv'];
+        $headers = ['id', 'type', 'quantity', 'capacity', 'created_at', 'updated_at'];
         $lines = [];
 
+        /*
         $this->getProducts()->each(function ($product) use (&$lines) {
             array_push($lines, [
                 'name' => $this->matchBeer($product->nome),
@@ -52,11 +54,18 @@ class Import extends Command
                 'abv' => $this->matchAbv($product->nome),
             ]);
         });
+        */
+
+        $this->getProducts()->each(function ($product) use (&$lines) {
+            if ($packaging = $this->parsePackagin($product->nome)) {
+                array_push($lines, $packaging->toArray());
+            }
+        });
 
         $this->table($headers, $lines);
     }
 
-    private function getProducts() : Collection
+    private function getProducts(): Collection
     {
         $endpoint = config('services.fatture_in_cloud.url') . '/prodotti/lista';
 
@@ -68,6 +77,18 @@ class Import extends Command
         ])->getBody()->getContents();
 
         return collect(json_decode($response)->lista_prodotti);
+    }
+
+    private function getPackagings(): Collection
+    {
+        $products = $this->getProducts();
+        $packagings = [];
+
+        $products->each(function ($product) use (&$packagings) {
+            if ($packaging = $this->matchPackaging($product->nome)) {
+                array_push($packagings, $packaging);
+            }
+        });
     }
 
     private function matchBrewery(string $string) : string
@@ -106,48 +127,57 @@ class Import extends Command
         return '...';
     }
 
-    private function matchPackaging(string $string) : string
+    private function parsePackagin(string $string): ?Packaging
     {
-        if (preg_match('/^(.*?) -/', $string, $matches)) {
-            $type = $this->matchType($matches[1]);
-            $quantity = $this->matchQuantity($matches[1]);
-            $capacity = $this->matchCapacity($matches[1]);
-
-            return $quantity . ' ' . $type . ' x ' . $capacity . 'l';
+        if ($match = $this->matchPackaging($string)) {
+            return Packaging::firstOrCreate([
+                'type' => $this->matchType($match),
+                'quantity' => $this->matchQuantity($match),
+                'capacity' => $this->matchCapacity($match)
+            ]);
         }
 
-        return '...';
+        return null;
     }
 
-    private function matchQuantity(string $string) : string
+    private function matchPackaging(string $string) : ?string
     {
-        if (preg_match('/ X (.*?)$/', $string, $matches)) {
+        if (preg_match('/^(.*?) -/', $string, $matches)) {
             return trim($matches[1]);
         }
 
-        return '1';
+        return null;
     }
 
-    private function matchCapacity(string $string) : string
+    private function matchQuantity(string $string) : int
     {
-        if (preg_match('/(^F-|^Bottiglia )(.*?)(lt.| Lt.)/', $string, $matches)) {
-            return trim($matches[2]);
+        if (preg_match('/ X (.*?)$/', $string, $matches)) {
+            return (int) $matches[1];
         }
 
-        return '...';
+        return 1;
     }
 
-    private function matchType(string $string) : string
+    private function matchCapacity(string $string) : ?int
+    {
+        if (preg_match('/(^F-|^Bottiglia )(.*?)(lt.| Lt.)/', $string, $matches)) {
+            return (int) (str_replace(',', '.', $matches[2]) * 100);
+        }
+
+        return null;
+    }
+
+    private function matchType(string $string) : ?string
     {
         if (preg_match('/(^F-|^Bottiglia )/', $string, $matches)) {
             switch ($matches[1]) {
                 case 'F-':
-                    return 'Fusto';
+                    return 'fusti';
                 case 'Bottiglia ':
-                    return 'Bottiglia';
+                    return 'bottiglie';
             }
         }
 
-        return '...';
+        return null;
     }
 }
