@@ -58,11 +58,12 @@ class FattureInCloud
     {
         $brewery = $this->parseBrewery($string);
         $packaging = $this->parsePackaging($string);
+        $style = $this->parseStyle($string);
 
         return [
             $string => [
                 'name' => $this->matchBeer($string),
-                'style' => $this->matchStyle($string),
+                'style' => reset($style),
                 'brewery' => reset($brewery),
                 'packaging' => reset($packaging),
                 'abv' => $this->matchAbv($string),
@@ -93,8 +94,6 @@ class FattureInCloud
                 'description' => $product->note,
             ]);
         });
-
-        dd($beers);
 
         return $beers;
     }
@@ -169,6 +168,41 @@ class FattureInCloud
         });
 
         return $breweries;
+    }
+
+    public function parseStyle(string $string): array
+    {
+        $match = $this->matchStyle($string);
+
+        return [
+            $match => [
+                'name' => $match
+            ]
+        ];
+    }
+
+    public function parseStyles(): Collection
+    {
+        $styles = new Collection();
+
+        $this->getProducts()->each(function ($product) use ($styles) {
+            $name = $product->nome;
+
+            if ( ! $name) {
+                return;
+            }
+
+            $style = $this->parseStyle($name);
+            $key = key($style);
+
+            if ($styles->has($key) || $key === self::DUNNO) {
+                return;
+            }
+
+            $styles->put($key, reset($style));
+        });
+
+        return $styles;
     }
 
     protected function headers(): array

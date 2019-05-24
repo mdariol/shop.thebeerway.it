@@ -42,6 +42,6 @@ class Import extends Command
      */
     public function handle(FattureInCloud $fattureInCloud)
     {
-        dd($fattureInCloud->parseBeers());
+        dd($fattureInCloud->parseStyles());
     }
 }
