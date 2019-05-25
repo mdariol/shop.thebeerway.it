@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
@@ -28,6 +31,16 @@ class LoginController extends Controller
     protected $redirectTo = '/home';
 
     /**
+     * Authorized providers.
+     *
+     * @var array
+     */
+    protected $auth = [
+        'google',
+        'facebook',
+    ];
+
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -35,5 +48,30 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function redirectToProvider($provider)
+    {
+        if ( ! in_array($provider, $this->auth)) {
+            return abort(404);
+        }
+
+        return Socialite::driver($provider)->redirect();
+    }
+
+    public function handleProviderCallback($provider)
+    {
+        $user = Socialite::driver($provider)->user();
+
+        $user = User::updateOrCreate([
+            'email' => $user->getEmail()
+        ], [
+          $provider . '_id' => $user->getId(),
+          'name' => $user->getName(),
+        ]);
+
+        Auth::login($user);
+
+        return redirect($this->redirectPath());
     }
 }

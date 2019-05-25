@@ -4,10 +4,10 @@
         <div class="card-body">
             <div class="form-group">
                 <label for="packaging-id">Packaging</label>
-                <select class="form-control" @change="calculatePrices" v-model="packaging" name="packaging_id"
+                <select class="form-control" @change="calculatePrices" v-model="packaging_id" name="packaging_id"
                         id="packaging-id">
                     <option value=" ">-- select an option --</option>
-                    <option v-for="packaging in packagings" :value="packaging">
+                    <option v-for="packaging in packagings" :value="packaging.id">
                         {{ packaging.quantity }} {{ packaging.type }} x {{ packaging.capacity / 100 }}l
                     </option>
                 </select>
@@ -37,7 +37,7 @@
                     <label for="discount">Discount</label>
                     <div class="input-group">
                         <input class="form-control" @input="calculatePurchasePricesFromDiscount" v-model="discount"
-                               type="number" name="discount" id="discount" min="0" max="100">
+                               type="number" name="discount" id="discount" min="0" max="100" step=".01">
                         <div class="input-group-append"><span class="input-group-text">%</span></div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text">€</span></div>
                         <input class="form-control" @input="calculateDistributionUnitPrice()"
-                               v-model="distribution.total" :disabled="fixedMargin" type="number" name="distribution"
+                               v-model="distribution.total" :readonly="fixedMargin" type="number" name="distribution"
                                id="distribution" min="0" step=".01">
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text">€</span></div>
                         <input class="form-control" @input="calculateDistributionTotalPrice"
-                               v-model="distribution.unit" :disabled="fixedMargin" type="number"
+                               v-model="distribution.unit" :readonly="fixedMargin" type="number"
                                name="distribution_unit" id="distribution-unit" min="0" step=".01">
                     </div>
                     <small class="form-text text-muted">Price per liter: € {{ distributionLiter }}</small>
@@ -90,10 +90,11 @@
                     <label for="margin">Margin</label>
                     <div class="input-group">
                         <div class="input-group-prepend"><div class="input-group-text">
+                            <label for="fixed-margin" hidden>Fixed margin</label>
                             <input type="checkbox" v-model="fixedMargin" name="fixed_margin" id="fixed-margin">
                         </div></div>
-                        <input class="form-control" @input="calculateDistributionPricesFromMargin" v-model="margin" type="number"
-                               :disabled=" ! fixedMargin" name="margin" id="margin" min="0" max="100">
+                        <input class="form-control" @input="calculateDistributionPricesFromMargin" v-model="margin"
+                               type="number" :readonly=" ! fixedMargin" name="margin" id="margin" min="0" max="100" step=".01">
                         <div class="input-group-append"><span class="input-group-text">%</span></div>
                     </div>
                 </div>
@@ -104,7 +105,7 @@
 
 <script>
     export default {
-        name: "PriceForm",
+        name: "PriceCreate",
 
         /* ----------------------------------------------------------------------------------------------------------
            Props
@@ -112,7 +113,6 @@
 
         props: {
             'packagings': Array,
-            'beer': Object,
         },
 
         computed: {
@@ -127,6 +127,12 @@
             distributionLiter: function () {
                 return this.calculateLiterPrice(this.distribution);
             },
+
+            packaging: function () {
+                return this.packagings.find(packaging => {
+                    return this.packaging_id === packaging.id;
+                });
+            }
         },
 
         /* ----------------------------------------------------------------------------------------------------------
@@ -135,24 +141,24 @@
 
         data() {
             return {
-                packaging: null,
-                discount: null,
-                fixedMargin: null,
-                margin: null,
+                packaging_id: null,
+                discount: 0,
+                fixedMargin: false,
+                margin: 0,
 
                 horeca: {
-                    total: null,
-                    unit: null,
+                    total: 0,
+                    unit: 0,
                 },
 
                 purchase: {
-                    total: null,
-                    unit: null,
+                    total: 0,
+                    unit: 0,
                 },
 
                 distribution: {
-                    total: null,
-                    unit: null,
+                    total: 0,
+                    unit: 0,
                 }
             }
         },
@@ -272,17 +278,8 @@
                 }
 
                 return (prices.unit / (this.packaging.capacity / 100)).toFixed(2);
-            }
+            },
         },
-
-        /* ----------------------------------------------------------------------------------------------------------
-           Callbacks
-           ---------------------------------------------------------------------------------------------------------- */
-
-        mounted() {
-            this.packaging = this.beer.packaging;
-            this.fixedMargin = this.packaging.fixed_margin;
-        }
     }
 </script>
 

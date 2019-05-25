@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\FattureInCloud;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -14,7 +15,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(FattureInCloud::class, function () {
+            return new FattureInCloud(
+              config('services.fatture_in_cloud.key'),
+              config('services.fatture_in_cloud.secret')
+            );
+        });
     }
 
     /**

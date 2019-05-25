@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Packaging;
+use App\Services\FattureInCloud;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Console\Command;
 use GuzzleHttp\Client;
@@ -38,31 +40,8 @@ class Import extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(FattureInCloud $fattureInCloud)
     {
-        $products = $this->getProducts();
-
-        $products->each(function ($product) {
-            $this->line($product->nome);
-        });
-    }
-
-    /**
-     * Gets the products from Fatture in Cloud.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    private function getProducts() : Collection
-    {
-        $endpoint = config('services.fatture_in_cloud.url') . '/prodotti/lista';
-
-        $response = (new Client())->post($endpoint, [
-          RequestOptions::JSON => [
-            'api_uid' => config('services.fatture_in_cloud.key'),
-            'api_key' => config('services.fatture_in_cloud.secret'),
-          ]
-        ])->getBody()->getContents();
-
-        return collect(json_decode($response)->lista_prodotti);
+        dd($fattureInCloud->parseStyles());
     }
 }
