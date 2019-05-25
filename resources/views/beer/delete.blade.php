@@ -2,8 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1>Delete <em>{{ $beer->name }}</em></h1>
-        <p>This action cannot be undone.</p>
+        <h1>Elimina <em>{{ $beer->name }}</em></h1>
         <form method="POST" action="/beers/{{ $beer->id }}">
             @csrf
             @method('DELETE')

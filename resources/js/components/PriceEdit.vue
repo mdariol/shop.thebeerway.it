@@ -1,12 +1,12 @@
 <template>
     <div class="card mb-3">
-        <div class="card-header">Price calculator</div>
+        <div class="card-header">Calcolatore Prezzi</div>
         <div class="card-body">
             <div class="form-group">
                 <label for="packaging-id">Packaging</label>
                 <select class="form-control" @change="calculatePrices" v-model="packaging_id" name="packaging_id"
                         id="packaging-id">
-                    <option value=" ">-- select an option --</option>
+                    <option value=" ">-- seleziona un packaging --</option>
                     <option v-for="packaging in packagings" :value="packaging.id">
                         {{ packaging.quantity }} {{ packaging.type }} x {{ packaging.capacity / 100 }}l
                     </option>
@@ -24,17 +24,17 @@
                 </div>
 
                 <div class="form-group col-sm">
-                    <label for="horeca-unit">Horeca / Unit</label>
+                    <label for="horeca-unit">Horeca / Unitario</label>
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text">€</span></div>
                         <input class="form-control" @input="calculateHorecaTotalPrice" v-model="horeca.unit"
                                type="number" name="horeca_unit" id="horeca-unit" min="0" step=".01">
                     </div>
-                    <small class="form-text text-muted">Price per liter: € {{ horecaLiter }}</small>
+                    <small class="form-text text-muted">Prezzo per litro: € {{ horecaLiter }}</small>
                 </div>
 
                 <div class="form-group col-sm">
-                    <label for="discount">Discount</label>
+                    <label for="discount">Sconto</label>
                     <div class="input-group">
                         <input class="form-control" @input="calculatePurchasePricesFromDiscount" v-model="discount"
                                type="number" name="discount" id="discount" min="0" max="100" step=".01">
@@ -45,7 +45,7 @@
 
             <div class="form-row">
                 <div class="form-group col-sm">
-                    <label for="purchase">Purchase</label>
+                    <label for="purchase">Acquisto</label>
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text">€</span></div>
                         <input class="form-control" @input="calculatePurchaseUnitPrice" v-model="purchase.total"
@@ -54,19 +54,19 @@
                 </div>
 
                 <div class="form-group col-sm">
-                    <label for="purchase-unit">Purchase / Unit</label>
+                    <label for="purchase-unit">Acquisto / Unitario</label>
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text">€</span></div>
                         <input class="form-control" @input="calculatePurchaseTotalPrice" v-model="purchase.unit"
                                type="number" name="purchase_unit" id="purchase-unit" min="0" step=".01">
                     </div>
-                    <small class="form-text text-muted">Price per liter: € {{ purchaseLiter }}</small>
+                    <small class="form-text text-muted">Prezzo per litro: € {{ purchaseLiter }}</small>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group col-sm">
-                    <label for="distribution">Distribution</label>
+                    <label for="distribution">Distribuzione</label>
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text">€</span></div>
                         <input class="form-control" @input="calculateDistributionUnitPrice()"
@@ -76,21 +76,21 @@
                 </div>
 
                 <div class="form-group col-sm">
-                    <label for="distribution-unit">Distribution / Unit</label>
+                    <label for="distribution-unit">Distribuzione / Unitario</label>
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text">€</span></div>
                         <input class="form-control" @input="calculateDistributionTotalPrice"
                                v-model="distribution.unit" :readonly="fixedMargin" type="number"
                                name="distribution_unit" id="distribution-unit" min="0" step=".01">
                     </div>
-                    <small class="form-text text-muted">Price per liter: € {{ distributionLiter }}</small>
+                    <small class="form-text text-muted">Prezzo per litro: € {{ distributionLiter }}</small>
                 </div>
 
                 <div class="form-group col-sm">
-                    <label for="margin">Margin</label>
+                    <label for="margin">Margine %</label>
                     <div class="input-group">
                         <div class="input-group-prepend"><div class="input-group-text">
-                            <label for="fixed-margin" hidden>Fixed margin</label>
+                            <label for="fixed-margin" hidden>Fissa il margine</label>
                             <input type="checkbox" v-model="fixedMargin" name="fixed_margin" id="fixed-margin">
                         </div></div>
                         <input class="form-control" @input="calculateDistributionPricesFromMargin" v-model="margin" type="number"
