@@ -17,10 +17,10 @@ class CreateBeersTable extends Migration
             $table->bigIncrements('id');
             $table->string('code')->unique();
             $table->string('name');
-            $table->text('description');
-            $table->float('abv');
-            $table->float('ibu');
-            $table->float('plato');
+            $table->text('description')->nullable();
+            $table->float('abv')->nullable();
+            $table->float('ibu')->nullable();
+            $table->float('plato')->nullable();
 
             $table->unsignedInteger('brewery_id')->nullable();
             $table->unsignedInteger('packaging_id')->nullable();
