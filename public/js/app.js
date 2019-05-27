@@ -37677,7 +37677,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card mb-3" }, [
-    _c("div", { staticClass: "card-header" }, [_vm._v("Price calculator")]),
+    _c("div", { staticClass: "card-header" }, [_vm._v("Calcolatore Prezzi")]),
     _vm._v(" "),
     _c("div", { staticClass: "card-body" }, [
       _c("div", { staticClass: "form-group" }, [
@@ -37717,7 +37717,7 @@ var render = function() {
           },
           [
             _c("option", { attrs: { value: " " } }, [
-              _vm._v("-- select an option --")
+              _vm._v("-- seleziona un packaging --")
             ]),
             _vm._v(" "),
             _vm._l(_vm.packagings, function(packaging) {
@@ -37780,7 +37780,7 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "form-group col-sm" }, [
           _c("label", { attrs: { for: "horeca-unit" } }, [
-            _vm._v("Horeca / Unit")
+            _vm._v("Horeca / Unitario")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group" }, [
@@ -37819,12 +37819,12 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("small", { staticClass: "form-text text-muted" }, [
-            _vm._v("Price per liter: € " + _vm._s(_vm.horecaLiter))
+            _vm._v("Prezzo per litro: € " + _vm._s(_vm.horecaLiter))
           ])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group col-sm" }, [
-          _c("label", { attrs: { for: "discount" } }, [_vm._v("Discount")]),
+          _c("label", { attrs: { for: "discount" } }, [_vm._v("Sconto")]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group" }, [
             _c("input", {
@@ -37866,7 +37866,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "form-row" }, [
         _c("div", { staticClass: "form-group col-sm" }, [
-          _c("label", { attrs: { for: "purchase" } }, [_vm._v("Purchase")]),
+          _c("label", { attrs: { for: "purchase" } }, [_vm._v("Acquisto")]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group" }, [
             _vm._m(3),
@@ -37906,7 +37906,7 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "form-group col-sm" }, [
           _c("label", { attrs: { for: "purchase-unit" } }, [
-            _vm._v("Purchase / Unit")
+            _vm._v("Acquisto / Unitario")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group" }, [
@@ -37945,7 +37945,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("small", { staticClass: "form-text text-muted" }, [
-            _vm._v("Price per liter: € " + _vm._s(_vm.purchaseLiter))
+            _vm._v("Prezzo per litro: € " + _vm._s(_vm.purchaseLiter))
           ])
         ])
       ]),
@@ -37953,7 +37953,7 @@ var render = function() {
       _c("div", { staticClass: "form-row" }, [
         _c("div", { staticClass: "form-group col-sm" }, [
           _c("label", { attrs: { for: "distribution" } }, [
-            _vm._v("Distribution")
+            _vm._v("Distribuzione")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group" }, [
@@ -37997,7 +37997,7 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "form-group col-sm" }, [
           _c("label", { attrs: { for: "distribution-unit" } }, [
-            _vm._v("Distribution / Unit")
+            _vm._v("Distribuzione / Unitario")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group" }, [
@@ -38042,13 +38042,13 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group col-sm" }, [
-          _c("label", { attrs: { for: "margin" } }, [_vm._v("Margin")]),
+          _c("label", { attrs: { for: "margin" } }, [_vm._v("Margine %")]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group" }, [
             _c("div", { staticClass: "input-group-prepend" }, [
               _c("div", { staticClass: "input-group-text" }, [
                 _c("label", { attrs: { for: "fixed-margin", hidden: "" } }, [
-                  _vm._v("Fixed margin")
+                  _vm._v("Fissa il margine")
                 ]),
                 _vm._v(" "),
                 _c("input", {
@@ -38223,7 +38223,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card mb-3" }, [
-    _c("div", { staticClass: "card-header" }, [_vm._v("Price calculator")]),
+    _c("div", { staticClass: "card-header" }, [_vm._v("Calcolatore Prezzi")]),
     _vm._v(" "),
     _c("div", { staticClass: "card-body" }, [
       _c("div", { staticClass: "form-group" }, [
@@ -38263,7 +38263,7 @@ var render = function() {
           },
           [
             _c("option", { attrs: { value: " " } }, [
-              _vm._v("-- select an option --")
+              _vm._v("-- seleziona un packaging --")
             ]),
             _vm._v(" "),
             _vm._l(_vm.packagings, function(packaging) {
@@ -38326,7 +38326,7 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "form-group col-sm" }, [
           _c("label", { attrs: { for: "horeca-unit" } }, [
-            _vm._v("Horeca / Unit")
+            _vm._v("Horeca / Unitario")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group" }, [
@@ -38365,12 +38365,12 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("small", { staticClass: "form-text text-muted" }, [
-            _vm._v("Price per liter: € " + _vm._s(_vm.horecaLiter))
+            _vm._v("Prezzo per litro: € " + _vm._s(_vm.horecaLiter))
           ])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group col-sm" }, [
-          _c("label", { attrs: { for: "discount" } }, [_vm._v("Discount")]),
+          _c("label", { attrs: { for: "discount" } }, [_vm._v("Sconto")]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group" }, [
             _c("input", {
@@ -38412,7 +38412,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "form-row" }, [
         _c("div", { staticClass: "form-group col-sm" }, [
-          _c("label", { attrs: { for: "purchase" } }, [_vm._v("Purchase")]),
+          _c("label", { attrs: { for: "purchase" } }, [_vm._v("Acquisto")]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group" }, [
             _vm._m(3),
@@ -38452,7 +38452,7 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "form-group col-sm" }, [
           _c("label", { attrs: { for: "purchase-unit" } }, [
-            _vm._v("Purchase / Unit")
+            _vm._v("Acquisto / Unitario")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group" }, [
@@ -38491,7 +38491,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("small", { staticClass: "form-text text-muted" }, [
-            _vm._v("Price per liter: € " + _vm._s(_vm.purchaseLiter))
+            _vm._v("Prezzo per litro: € " + _vm._s(_vm.purchaseLiter))
           ])
         ])
       ]),
@@ -38499,7 +38499,7 @@ var render = function() {
       _c("div", { staticClass: "form-row" }, [
         _c("div", { staticClass: "form-group col-sm" }, [
           _c("label", { attrs: { for: "distribution" } }, [
-            _vm._v("Distribution")
+            _vm._v("Distribuzione")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group" }, [
@@ -38543,7 +38543,7 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "form-group col-sm" }, [
           _c("label", { attrs: { for: "distribution-unit" } }, [
-            _vm._v("Distribution / Unit")
+            _vm._v("Distribuzione / Unitario")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group" }, [
@@ -38583,18 +38583,18 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("small", { staticClass: "form-text text-muted" }, [
-            _vm._v("Price per liter: € " + _vm._s(_vm.distributionLiter))
+            _vm._v("Prezzo per litro: € " + _vm._s(_vm.distributionLiter))
           ])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group col-sm" }, [
-          _c("label", { attrs: { for: "margin" } }, [_vm._v("Margin")]),
+          _c("label", { attrs: { for: "margin" } }, [_vm._v("Margine %")]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group" }, [
             _c("div", { staticClass: "input-group-prepend" }, [
               _c("div", { staticClass: "input-group-text" }, [
                 _c("label", { attrs: { for: "fixed-margin", hidden: "" } }, [
-                  _vm._v("Fixed margin")
+                  _vm._v("Fissa il margine")
                 ]),
                 _vm._v(" "),
                 _c("input", {
@@ -51212,8 +51212,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/matteo/Sviluppo/php/shop.thebeerway.it/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/matteo/Sviluppo/php/shop.thebeerway.it/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/mdariol/sviluppo/shop.thebeerway.it/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/mdariol/sviluppo/shop.thebeerway.it/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

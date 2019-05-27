@@ -40,3 +40,7 @@ Route::get('/styles/{style}/delete', 'StyleController@delete')
 Route::resource('areas', 'AreaController');
 Route::get('/areas/{area}/delete', 'AreaController@delete')
   ->name('areas.delete');
+
+Route::resource('colors', 'ColorController');
+Route::get('/colors/{color}/delete', 'ColorController@delete')
+    ->name('colors.delete');
