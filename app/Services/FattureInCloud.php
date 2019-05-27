@@ -2,14 +2,17 @@
 
 namespace App\Services;
 
+use App\Beer;
+use App\Brewery;
 use App\Packaging;
+use App\Style;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Collection;
 
 class FattureInCloud
 {
-    const DUNNO = '  (´･_･｀)  ';
+    const DUNNO = '///';
 
     /**
      * @var \GuzzleHttp\Client
@@ -56,18 +59,17 @@ class FattureInCloud
 
     public function parseBeer(string $string): array
     {
-        $brewery = $this->parseBrewery($string);
-        $packaging = $this->parsePackaging($string);
-        $style = $this->parseStyle($string);
+        $beer = new Beer([
+          'name' => $this->matchBeer($string),
+          'abv' => $this->matchAbv($string)
+        ]);
+
+        $beer->brewery = array_values($this->parseBrewery($string))[0];
+        $beer->packaging = array_values($this->parsePackaging($string))[0];
+        $beer->style = array_values($this->parseStyle($string))[0];
 
         return [
-            $string => [
-                'name' => $this->matchBeer($string),
-                'style' => reset($style),
-                'brewery' => reset($brewery),
-                'packaging' => reset($packaging),
-                'abv' => $this->matchAbv($string),
-            ]
+          $string => $beer
         ];
     }
 
@@ -89,13 +91,13 @@ class FattureInCloud
                 return;
             }
 
-            $beers->put($key, reset($beer) + [
-                'code' => $product->cod,
-                'description' => $product->note,
-            ]);
+            reset($beer)->code = $product->cod;
+            reset($beer)->description = $product->note;
+
+            $beers->put($key, reset($beer));
         });
 
-        return $beers;
+        return $beers->values();
     }
 
     public function parsePackaging(string $string): array
@@ -103,11 +105,11 @@ class FattureInCloud
         $match = $this->matchPackaging($string);
 
         return [
-            $match => [
-                'type' => $this->matchType($match),
-                'quantity' => $this->matchQuantity($match),
-                'capacity' => $this->matchCapacity($match),
-            ]
+            $match => new Packaging([
+              'type' => $this->matchType($match),
+              'quantity' => $this->matchQuantity($match),
+              'capacity' => $this->matchCapacity($match),
+            ])
         ];
     }
 
@@ -132,7 +134,7 @@ class FattureInCloud
             $packagings->put($key, reset($packaging));
         });
 
-        return $packagings;
+        return $packagings->values();
     }
 
     public function parseBrewery(string $string): array
@@ -140,15 +142,15 @@ class FattureInCloud
         $match = $this->matchBrewery($string);
 
         return [
-            $match => [
-                'name' => $match
-            ]
+            $match => new Brewery([
+              'name' => $match
+            ])
         ];
     }
 
-    public function parseBreweries(): Collection
+    public function parseBreweries(): \Illuminate\Database\Eloquent\Collection
     {
-        $breweries = new Collection();
+        $breweries = new \Illuminate\Database\Eloquent\Collection();
 
         $this->getProducts()->each(function ($product) use ($breweries) {
             $name = $product->nome;
@@ -167,7 +169,7 @@ class FattureInCloud
             $breweries->put($key, reset($brewery));
         });
 
-        return $breweries;
+        return $breweries->values();
     }
 
     public function parseStyle(string $string): array
@@ -175,9 +177,9 @@ class FattureInCloud
         $match = $this->matchStyle($string);
 
         return [
-            $match => [
-                'name' => $match
-            ]
+            $match => new Style([
+              'name' => $match
+            ])
         ];
     }
 
@@ -202,7 +204,7 @@ class FattureInCloud
             $styles->put($key, reset($style));
         });
 
-        return $styles;
+        return $styles->values();
     }
 
     protected function headers(): array
