@@ -7,8 +7,7 @@ use App\Color;
 use Faker\Generator as Faker;
 
 $factory->define(Color::class, function (Faker $faker) {
-    return [
-        'name' => $faker->randomElement(['Chiara', 'Ambrata', 'Scura'])];
+    return ['name' => $faker->colorName];
 });
 
 

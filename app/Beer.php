@@ -10,11 +10,11 @@ class Beer extends Model
         'code', 'name', 'description',
         'abv', 'ibu', 'plato',
         'brewery_id', 'packaging_id',
-        'style_id', 'price_id'
+        'style_id', 'price_id', 'color_id',
     ];
 
     protected $with = [
-        'packaging', 'style', 'brewery', 'price'
+        'packaging', 'style', 'brewery', 'price', 'color',
     ];
 
     public function brewery()
@@ -35,5 +35,10 @@ class Beer extends Model
     public function price()
     {
         return $this->hasOne(Price::class);
+    }
+
+    public function color()
+    {
+        return $this->belongsTo(Color::class);
     }
 }

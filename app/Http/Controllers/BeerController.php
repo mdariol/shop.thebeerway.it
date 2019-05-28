@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Beer;
 use App\Brewery;
+use App\Color;
 use App\Packaging;
 use App\Style;
 
@@ -29,7 +30,8 @@ class BeerController extends Controller
         return view('beer.create')->with([
             'packagings' => Packaging::all(),
             'styles' => Style::all(),
-            'breweries' => Brewery::all()
+            'breweries' => Brewery::all(),
+            'colors' => Color::all(),
         ]);
     }
 
@@ -81,7 +83,8 @@ class BeerController extends Controller
             'beer' => $beer,
             'breweries' => Brewery::all(),
             'styles' => Style::all(),
-            'packagings' => Packaging::all()
+            'packagings' => Packaging::all(),
+            'colors' => Color::all(),
         ]);
     }
 

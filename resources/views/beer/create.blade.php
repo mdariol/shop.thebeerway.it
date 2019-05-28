@@ -64,6 +64,16 @@
                         @endforeach
                     </select>
                 </div>
+
+                <div class="form-group col-sm-4">
+                    <label for="color-id">Colore</label>
+                    <select name="color_id" id="color-id" class="form-control">
+                        <option value=" ">-- seleziona un colore --</option>
+                        @foreach($colors as $color)
+                            <option value="{{ $color->id }}">{{ $color->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
             <price-create :packagings='@json($packagings)'></price-create>
