@@ -23,10 +23,7 @@
             <div class="row align-items-center">
                 <div class="col-sm">
                     <h3>{{ $beer->name }} <small class="text-muted">// {{ $beer->brewery->name }}</small></h3>
-                    <p class="text-muted">
-                        {{ $beer->style ? $beer->style->name : '' }}
-                        {{ $beer->color ? $beer->color->name : '' }} da {{ $beer->abv }}%
-                    </p>
+                    <p class="text-muted">{{ $beer->style->name }}, {{ $beer->color->name }} da {{ $beer->abv }}%</p>
                 </div>
                 <div class="col-sm-auto">
                     <a href="/beers/{{ $beer->id }}/edit" class="btn btn-primary">Modifica</a>

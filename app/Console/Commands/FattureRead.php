@@ -89,4 +89,9 @@ class FattureRead extends Command
     {
         return $this->fattureInCloud->parsePackagings();
     }
+
+    protected function colors()
+    {
+        return $this->fattureInCloud->parseColors();
+    }
 }

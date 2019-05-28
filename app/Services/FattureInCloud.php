@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Beer;
 use App\Brewery;
+use App\Color;
 use App\Packaging;
 use App\Style;
 use GuzzleHttp\Client;
@@ -91,8 +92,17 @@ class FattureInCloud
                 return;
             }
 
+            // TODO: Improves Color parsing.
+            // Despite other relations Color cannot be parsed via parseBeer(),
+            // because that function accepts $product->nome - returned by
+            // getProducts() - as parameter. A viable solutions could be
+            // accepting the $product instead of $product->nome for each
+            // parse*() functions. This way it should be more consistent.
+            $color = array_values($this->parseColor($product->categoria))[0];
+
             reset($beer)->code = $product->cod;
             reset($beer)->description = $product->note;
+            reset($beer)->color = $color;
 
             $beers->put($key, reset($beer));
         });
@@ -207,6 +217,41 @@ class FattureInCloud
         return $styles->values();
     }
 
+    public function parseColor(string $string): array
+    {
+        $match = $this->matchColor($string);
+
+        return [
+            $match => new Color([
+                'name' => $match
+            ])
+        ];
+    }
+
+    public function parseColors(): Collection
+    {
+        $colors = new Collection();
+
+        $this->getProducts()->each(function ($product) use ($colors) {
+            $category = $product->categoria;
+
+            if ( ! $category) {
+                return;
+            }
+
+            $color = $this->parseColor($category);
+            $key = key($color);
+
+            if ($colors->has($key) || $key === self::DUNNO) {
+                return;
+            }
+
+            $colors->put($key, reset($color));
+        });
+
+        return $colors->values();
+    }
+
     protected function headers(): array
     {
         return [
@@ -285,6 +330,15 @@ class FattureInCloud
     protected function matchBrewery(string $string): string
     {
         if (preg_match('/ di (.*?), /', $string, $matches)) {
+            return trim($matches[1]);
+        }
+
+        return self::DUNNO;
+    }
+
+    protected function matchColor(string $string): string
+    {
+        if (preg_match('/^(.*?) - /', $string, $matches)) {
             return trim($matches[1]);
         }
 

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Beer;
 use App\Brewery;
+use App\Color;
 use App\Packaging;
 use App\Services\FattureInCloud;
 use App\Style;
@@ -69,6 +70,7 @@ class FattureImport extends Command
                 Beer::updateOrCreate(['code' => $beer->code], $beer->toArray() + [
                     'brewery_id' => Brewery::firstOrCreate($beer->brewery->toArray())->id,
                     'style_id' => Style::firstOrCreate($beer->style->toArray())->id,
+                    'color_id' => Color::firstOrCreate($beer->color->toArray())->id,
                     'packaging_id' => Packaging::firstOrCreate($beer->packaging->toArray())->id,
                 ]);
             } catch (\Exception $exception) {
@@ -112,6 +114,19 @@ class FattureImport extends Command
                 Style::firstOrCreate($style->toArray());
             } catch (\Exception $exception) {
                 $this->error("Cannot import style \"$style->name\"");
+            }
+        });
+    }
+
+    protected function colors()
+    {
+        $colors = $this->fattureInCLoud->parseColors();
+
+        $colors->each(function ($color) {
+            try {
+                Color::firstOrCreate($color->toArray());
+            } catch (\Exception $exception) {
+                $this->error("Cannot import color \"$color->name\"");
             }
         });
     }
