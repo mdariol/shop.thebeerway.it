@@ -2,11 +2,14 @@
 
 namespace App;
 
-use App\Http\Filters\QueryFilter;
+use App\Contracts\Filterable;
+use App\Traits\HasFilters;
 use Illuminate\Database\Eloquent\Model;
 
-class Beer extends Model
+class Beer extends Model implements Filterable
 {
+    use HasFilters;
+
     protected $fillable = [
         'code', 'name', 'description',
         'abv', 'ibu', 'plato',
@@ -17,11 +20,6 @@ class Beer extends Model
     protected $with = [
         'packaging', 'style', 'brewery', 'price', 'color',
     ];
-
-    public function scopeFilter($query, QueryFilter $filter)
-    {
-        return $filter->apply($query);
-    }
 
     public function brewery()
     {
