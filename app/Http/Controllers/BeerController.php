@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Beer;
 use App\Brewery;
 use App\Color;
+use App\Http\Filters\BeerFilter;
 use App\Packaging;
 use App\Style;
 
@@ -15,9 +16,11 @@ class BeerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(BeerFilter $filter)
     {
-        return view('beer.index')->with('beers', Beer::all());
+        $beers = Beer::filter($filter)->get();
+
+        return view('beer.index')->with('beers', $beers);
     }
 
     /**

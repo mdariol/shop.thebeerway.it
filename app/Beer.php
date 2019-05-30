@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Filters\QueryFilter;
 use Illuminate\Database\Eloquent\Model;
 
 class Beer extends Model
@@ -16,6 +17,11 @@ class Beer extends Model
     protected $with = [
         'packaging', 'style', 'brewery', 'price', 'color',
     ];
+
+    public function scopeFilter($query, QueryFilter $filter)
+    {
+        return $filter->apply($query);
+    }
 
     public function brewery()
     {
