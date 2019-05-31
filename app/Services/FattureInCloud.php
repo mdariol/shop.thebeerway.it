@@ -58,6 +58,15 @@ class FattureInCloud
         return collect(json_decode($response)->lista_prodotti);
     }
 
+    public function putProduct(array $attributes): bool
+    {
+        $response = $this->client->post($this->url . '/prodotti/modifica', [
+            RequestOptions::JSON => $this->headers() + $attributes
+        ])->getBody()->getContents();
+
+        return json_decode($response)->success;
+    }
+
     public function parseBeer(string $string): array
     {
         $beer = new Beer([
