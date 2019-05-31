@@ -13,25 +13,27 @@
                 <form method="GET" action="/beers">
                     <div class="form-group">
                         <label for="name">Birra</label>
-                        <input type="text" class="form-control" name="name" id="name">
+                        <input type="text" class="form-control" name="name" id="name" value="{{ request()->name }}">
                     </div>
 
                     <div class="form-group">
                         <label for="brewery">Birrificio</label>
-                        <input type="text" class="form-control" name="brewery" id="brewery">
+                        <input type="text" class="form-control" name="brewery" id="brewery"
+                               value="{{ request()->brewery }}">
                     </div>
 
                     <div class="form-group">
                         <label for="color">Colore</label>
-                        <input type="text" class="form-control" name="color" id="color">
+                        <input type="text" class="form-control" name="color" id="color" value="{{ request()->color }}">
                     </div>
 
                     <div class="form-group">
                         <label for="style">Stile</label>
-                        <input type="text" class="form-control" name="style" id="style">
+                        <input type="text" class="form-control" name="style" id="style" value="{{ request()->style }}">
                     </div>
 
                     <button class="btn btn-primary">Filter</button>
+                    <a href="/beers" class="btn btn-link">Reset</a>
                 </form>
             </div>
         </div>

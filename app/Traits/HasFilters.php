@@ -2,13 +2,20 @@
 
 namespace App\Traits;
 
-use App\Http\Filters\QueryFilter;
-use Illuminate\Database\Eloquent\Builder;
+use App\Http\QueryFilters\QueryFilter;
 
 trait HasFilters
 {
-    public function scopeFilter($filters, QueryFilter $query_filter): Builder
+    /**
+     * Applies query strings, if any.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeQueryFilter($query)
     {
-        return $query_filter->apply($filters);
+        $queryFilter = app(QueryFilter::guessFilterName($this));
+
+        return $queryFilter->apply($query);
     }
 }

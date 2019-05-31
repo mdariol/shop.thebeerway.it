@@ -2,11 +2,10 @@
 
 namespace App;
 
-use App\Contracts\Filterable;
 use App\Traits\HasFilters;
 use Illuminate\Database\Eloquent\Model;
 
-class Beer extends Model implements Filterable
+class Beer extends Model
 {
     use HasFilters;
 
