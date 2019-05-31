@@ -13,6 +13,7 @@ $factory->define(Beer::class, function (Faker $faker) {
         'abv' => $faker->numberBetween(2, 14),
         'ibu' => $faker->numberBetween(2, 14),
         'plato' => $faker->numberBetween(2, 14),
+        'stock' => $faker->numberBetween(-7, 12),
         'color_id' => function () {
             return factory(App\Color::class)->create();
         },

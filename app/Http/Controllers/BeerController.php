@@ -46,7 +46,7 @@ class BeerController extends Controller
     {
         $beer = Beer::create(request([
             'code', 'name', 'description',
-            'abv', 'ibu', 'plato',
+            'abv', 'ibu', 'plato', 'stock',
             'brewery_id', 'packaging_id',
             'style_id',
         ]));
@@ -108,7 +108,7 @@ class BeerController extends Controller
 
         $beer->update(request([
             'code', 'name', 'description',
-            'abv', 'ibu', 'plato',
+            'abv', 'ibu', 'plato', 'stock',
             'brewery_id', 'packaging_id', 'style_id'
         ]));
 

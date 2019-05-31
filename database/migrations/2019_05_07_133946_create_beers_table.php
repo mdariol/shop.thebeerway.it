@@ -21,6 +21,7 @@ class CreateBeersTable extends Migration
             $table->float('abv')->nullable();
             $table->float('ibu')->nullable();
             $table->float('plato')->nullable();
+            $table->integer('stock')->default(0);
 
             $table->unsignedInteger('color_id')->nullable();
             $table->unsignedInteger('brewery_id')->nullable();
