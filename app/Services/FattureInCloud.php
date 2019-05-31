@@ -113,6 +113,10 @@ class FattureInCloud
             reset($beer)->description = $product->note;
             reset($beer)->color = $color;
 
+            if ($product->magazzino) {
+                reset($beer)->stock = $product->giacenza;
+            }
+
             $beers->put($key, reset($beer));
         });
 
