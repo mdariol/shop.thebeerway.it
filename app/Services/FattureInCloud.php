@@ -41,7 +41,7 @@ class FattureInCloud
      * @param  string  $key
      * @param  string  $secret
      */
-    public function __construct(string $key, string $secret)
+    public function __construct($key, $secret)
     {
         $this->client = new Client();
         $this->url = config('services.fatture_in_cloud.url');
