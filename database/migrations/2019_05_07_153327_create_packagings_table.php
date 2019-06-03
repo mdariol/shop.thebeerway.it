@@ -16,8 +16,8 @@ class CreatePackagingsTable extends Migration
         Schema::create('packagings', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('type');
-            $table->unsignedInteger('quantity');
-            $table->unsignedInteger('capacity');
+            $table->unsignedBigInteger('quantity');
+            $table->unsignedBigInteger('capacity');
             $table->timestamps();
 
             $table->unique(['type','quantity','capacity']);

@@ -90,6 +90,11 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label for="stock">Magazzino</label>
+                <input class="form-control" type="number" name="stock" id="stock" value="{{ $beer->stock }}">
+            </div>
+
             <price-edit :packagings='@json($packagings)' :beer='@json($beer)'></price-edit>
 
             <button class="btn btn-primary">Aggiorna</button>

@@ -76,6 +76,11 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label for="stock">Magazzino</label>
+                <input type="number" class="form-control" name="stock" id="stock" value="0">
+            </div>
+
             <price-create :packagings='@json($packagings)'></price-create>
 
             <button class="btn btn-primary">Memorizza</button>

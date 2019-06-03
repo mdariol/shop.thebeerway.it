@@ -7,33 +7,36 @@
 
         <div class="card mb-4">
             <div class="card-header">
-                <h5 class="mb-0" data-toggle="collapse" data-target="#search">Search</h5>
+                <h5 class="mb-0" data-toggle="collapse" data-target="#filter">Filter</h5>
             </div>
-            <div class="card-body collapse" id="search">
+            <div class="card-body collapse" id="filter">
                 <form method="GET" action="/beers">
                     <div class="form-group">
-                        <label for="name">Beer</label>
-                        <input type="text" class="form-control" name="name" id="name">
+                        <label for="name">Birra</label>
+                        <input type="text" class="form-control" name="name" id="name" value="{{ request()->name }}">
                     </div>
 
-                    <button class="btn btn-primary">Search</button>
+                    <div class="form-group">
+                        <label for="brewery">Birrificio</label>
+                        <input type="text" class="form-control" name="brewery" id="brewery"
+                               value="{{ request()->brewery }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="color">Colore</label>
+                        <input type="text" class="form-control" name="color" id="color" value="{{ request()->color }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="style">Stile</label>
+                        <input type="text" class="form-control" name="style" id="style" value="{{ request()->style }}">
+                    </div>
+
+                    <button class="btn btn-primary">Filter</button>
+                    <a href="/beers" class="btn btn-link">Reset</a>
                 </form>
             </div>
         </div>
-
-        <!--
-        @foreach($beers as $beer)
-            <div class="card mb-2">
-                <div class="card-body">
-                    <p class="float-left">{{ $beer->name }}</p>
-                    <div class="float-right">
-                        <a href="/beers/{{ $beer->id }}/edit" class="btn btn-primary">Modifica</a>
-                        <a href="/beers/{{ $beer->id }}/delete" class="btn btn-danger">Elimina</a>
-                    </div>
-                </div>
-            </div>
-        @endforeach
-        -->
 
         @foreach($beers as $beer)
             <div class="row align-items-center">

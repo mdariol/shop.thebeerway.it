@@ -21,11 +21,12 @@ class CreateBeersTable extends Migration
             $table->float('abv')->nullable();
             $table->float('ibu')->nullable();
             $table->float('plato')->nullable();
+            $table->integer('stock')->default(0);
 
-            $table->unsignedInteger('color_id')->nullable();
-            $table->unsignedInteger('brewery_id')->nullable();
-            $table->unsignedInteger('packaging_id')->nullable();
-            $table->unsignedInteger('style_id')->nullable();
+            $table->unsignedBigInteger('color_id')->nullable();
+            $table->unsignedBigInteger('brewery_id')->nullable();
+            $table->unsignedBigInteger('packaging_id')->nullable();
+            $table->unsignedBigInteger('style_id')->nullable();
 
             $table->timestamps();
 

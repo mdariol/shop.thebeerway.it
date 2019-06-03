@@ -2,14 +2,16 @@
 
 namespace App;
 
-use App\Http\Filters\QueryFilter;
+use App\Traits\HasFilters;
 use Illuminate\Database\Eloquent\Model;
 
 class Beer extends Model
 {
+    use HasFilters;
+
     protected $fillable = [
         'code', 'name', 'description',
-        'abv', 'ibu', 'plato',
+        'abv', 'ibu', 'plato', 'stock',
         'brewery_id', 'packaging_id',
         'style_id', 'price_id', 'color_id',
     ];
@@ -17,11 +19,6 @@ class Beer extends Model
     protected $with = [
         'packaging', 'style', 'brewery', 'price', 'color',
     ];
-
-    public function scopeFilter($query, QueryFilter $filter)
-    {
-        return $filter->apply($query);
-    }
 
     public function brewery()
     {
@@ -46,5 +43,10 @@ class Beer extends Model
     public function color()
     {
         return $this->belongsTo(Color::class);
+    }
+
+    public function inStock(): bool
+    {
+        return $this->stock > 0;
     }
 }

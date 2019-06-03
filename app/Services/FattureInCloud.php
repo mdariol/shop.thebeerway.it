@@ -41,7 +41,7 @@ class FattureInCloud
      * @param  string  $key
      * @param  string  $secret
      */
-    public function __construct(string $key, string $secret)
+    public function __construct($key, $secret)
     {
         $this->client = new Client();
         $this->url = config('services.fatture_in_cloud.url');
@@ -56,6 +56,15 @@ class FattureInCloud
         ])->getBody()->getContents();
 
         return collect(json_decode($response)->lista_prodotti);
+    }
+
+    public function putProduct(array $attributes): bool
+    {
+        $response = $this->client->post($this->url . '/prodotti/modifica', [
+            RequestOptions::JSON => $this->headers() + $attributes
+        ])->getBody()->getContents();
+
+        return json_decode($response)->success;
     }
 
     public function parseBeer(string $string): array
@@ -103,6 +112,10 @@ class FattureInCloud
             reset($beer)->code = $product->cod;
             reset($beer)->description = $product->note;
             reset($beer)->color = $color;
+
+            if ($product->magazzino) {
+                reset($beer)->stock = $product->giacenza;
+            }
 
             $beers->put($key, reset($beer));
         });
