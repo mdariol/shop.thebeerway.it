@@ -44,3 +44,4 @@ Route::get('/areas/{area}/delete', 'AreaController@delete')
 Route::resource('colors', 'ColorController');
 Route::get('/colors/{color}/delete', 'ColorController@delete')
     ->name('colors.delete');
+

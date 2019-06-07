@@ -29,7 +29,7 @@
 
                     <div class="form-group">
                         <label for="style">Stile</label>
-                        <input type="text" class="form-control" name="style" id="style" value="{{ request()->style }}">
+                        <autocomplete :styles='@json($styles)'></autocomplete>
                     </div>
 
                     <button class="btn btn-primary">Filter</button>

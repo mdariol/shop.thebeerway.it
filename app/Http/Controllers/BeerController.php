@@ -19,7 +19,10 @@ class BeerController extends Controller
     {
         $beers = Beer::queryFilter()->get();
 
-        return view('beer.index')->with('beers', $beers);
+        return view('beer.index')->with([
+            'beers' => $beers,
+            'styles' => Style::all(),
+        ]);
     }
 
     /**

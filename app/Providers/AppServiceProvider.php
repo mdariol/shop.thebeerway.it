@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\FattureInCloud;
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
