@@ -26,10 +26,10 @@ class BeerFilters extends QueryFilter
         });
     }
 
-    public function color(string $search): Builder
+    public function color(array $search): Builder
     {
         return $this->builder->whereHas('color', function ($query) use ($search) {
-            $query->where('name', 'LIKE', '%'.$search.'%');
+            $this->wherebuilder($search, $query);
         });
     }
 

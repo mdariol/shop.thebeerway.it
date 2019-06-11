@@ -7,26 +7,23 @@
 
         <div class="card mb-4">
             <div class="card-header">
-                <h5 class="mb-0" data-toggle="collapse" data-target="#filter">Filter</h5>
+                <h5 class="mb-0" data-toggle="collapse" data-target="#filter">Filtri</h5>
             </div>
             <div class="card-body collapse" id="filter">
                 <form method="GET" action="/beers">
 
                     <autocomplete :options='@json($breweries)' name='brewery' label='Birrificio'></autocomplete>
                     <autocomplete :options='@json($styles)' name='style' label='Stile'></autocomplete>
+                    <autocomplete :options='@json($colors)' name='color' label='Colore'></autocomplete>
 
-                    <div class="form-group">
-                        <label for="color">Colore</label>
-                        <input type="text" class="form-control" name="color" id="color" value="{{ request()->color }}">
-                    </div>
 
                     <div class="form-group">
                         <label for="name">Birra</label>
                         <input type="text" class="form-control" name="name" id="name" value="{{ request()->name }}">
                     </div>
 
-                    <button class="btn btn-primary">Filter</button>
-                    <a href="/beers" class="btn btn-link">Reset</a>
+                    <button class="btn btn-primary">Applica Filtri</button>
+                    <a href="/beers" class="btn btn-link">Reset Filtri</a>
 
                 </form>
             </div>

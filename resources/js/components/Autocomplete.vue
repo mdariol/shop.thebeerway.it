@@ -1,7 +1,7 @@
 <template>
     <div class="form-group">
         <label :for="name">{{ label }}</label>
-        <multiselect v-model="values" :options="options" label="name" track-by="name" :closeOnSelect="false"  :multiple="true"></multiselect>
+        <multiselect v-model="values" :options="options" label="name" track-by="name" :closeOnSelect="false" placeholder="Seleziona un'opzione" :multiple="true"></multiselect>
         <select :name="name+'[]'" multiple class="d-none">
             <option v-for="value in values" :value="value.name" selected>{{ value.name }}</option>
         </select>
@@ -28,7 +28,7 @@
 
         data () {
             return {
-                values: null,
+                values: [],
                 url: new URL(window.location)
             }
         },
@@ -41,9 +41,7 @@
 //            console.log(this.options);
 
             search.forEach(item => {
-                console.log(this);
-
-                var result = this.options.find(function(option){
+                var result = this.options.find((option) => {
                     return option.name == item;
                 });
 
@@ -55,6 +53,4 @@
     }
 </script>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css">
-
-</style>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
