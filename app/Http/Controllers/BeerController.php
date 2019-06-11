@@ -24,6 +24,7 @@ class BeerController extends Controller
             'beers' => $beers,
             'styles' => Style::all(),
             'breweries' => Brewery::all(),
+            'colors' => Color::all(),
         ]);
     }
 
