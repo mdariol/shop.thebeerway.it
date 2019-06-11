@@ -34,11 +34,11 @@ abstract class QueryFilter
             $hasParam = (boolean) $reflection->getNumberOfParameters();
             $requiresParam = (boolean) $reflection->getNumberOfRequiredParameters();
 
-            if (strlen($parameter) && ($requiresParam || $hasParam)) {
+            if ( ! empty($parameter) && ($requiresParam || $hasParam)) {
                 $this->$method($parameter);
             }
 
-            if ( ! strlen($parameter) && (! $requiresParam || ! $hasParam)) {
+            if (empty($parameter) && (! $requiresParam || ! $hasParam)) {
                 $this->$method();
             }
         }

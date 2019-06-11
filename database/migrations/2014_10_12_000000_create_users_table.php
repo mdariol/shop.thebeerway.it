@@ -18,6 +18,9 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('google_id')->nullable()->unique();
             $table->unsignedBigInteger('facebook_id')->nullable()->unique();
             $table->string('name');
+            $table->boolean('ishoreca');
+            $table->string('horecaname');
+            $table->string('vatnumber');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();

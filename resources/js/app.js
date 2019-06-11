@@ -22,6 +22,8 @@ window.Vue = require('vue');
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('price-edit', require('./components/PriceEdit.vue').default);
 Vue.component('price-create', require('./components/PriceCreate.vue').default);
+Vue.component('horeca-user', require('./components/HorecaUser.vue').default);
+Vue.component('autocomplete', require('./components/Autocomplete.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

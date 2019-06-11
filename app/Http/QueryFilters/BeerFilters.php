@@ -9,19 +9,20 @@ class BeerFilters extends QueryFilter
     public function name(string $search): Builder
     {
         return $this->builder->where('beers.name', 'LIKE', '%'.$search.'%');
+
     }
 
-    public function style(string $search): Builder
+    public function style(array $search): Builder
     {
         return $this->builder->whereHas('style', function ($query) use ($search) {
-            $query->where('name', 'LIKE', '%'.$search.'%');
+            $this->wherebuilder($search, $query);
         });
     }
 
-    public function brewery(string $search): Builder
+    public function brewery(array $search): Builder
     {
         return $this->builder->whereHas('brewery', function ($query) use ($search) {
-            $query->where('name', 'LIKE', '%'.$search.'%');
+            $this->wherebuilder($search, $query);
         });
     }
 
@@ -31,4 +32,16 @@ class BeerFilters extends QueryFilter
             $query->where('name', 'LIKE', '%'.$search.'%');
         });
     }
+
+    protected function wherebuilder($search, $query ){
+
+        foreach ($search as $key => $string) {
+            if ($key == 0) {
+                $query->where('name', 'LIKE', '%'.$string.'%');
+            } else {
+                $query->orwhere('name', 'LIKE', '%'.$string.'%');
+            }
+    }
+
+}
 }
