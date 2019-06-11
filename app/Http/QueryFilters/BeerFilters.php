@@ -12,6 +12,15 @@ class BeerFilters extends QueryFilter
 
     }
 
+    public function stock(string $search): Builder
+    {
+        if ($search =='on') {
+            return $this->builder->where('beers.stock', '>', 0);
+        } else
+        {
+            return $this->builder;
+        }
+}
     public function style(array $search): Builder
     {
         return $this->builder->whereHas('style', function ($query) use ($search) {
