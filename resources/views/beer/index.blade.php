@@ -11,7 +11,6 @@
             </div>
             <div class="card-body collapse" id="filter">
                 <form method="GET" action="/beers">
-
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input mb-2" name="stock" id="stock"
                                 {{ request()->has('stock') ? 'checked' : '' }}>
@@ -22,18 +21,13 @@
                     <autocomplete :options='@json($styles)' name='style' label=' '></autocomplete>
                     <autocomplete :options='@json($colors)' name='color' label='Colore'></autocomplete>
 
-
                     <div class="form-group">
                         <label for="name">Birra</label>
                         <input type="text" class="form-control" name="name" id="name" value="{{ request()->name }}">
                     </div>
 
-
-
-
                     <button class="btn btn-primary">Applica Filtri</button>
                     <a href="/beers" class="btn btn-link">Reset Filtri</a>
-
                 </form>
             </div>
         </div>
