@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
             ];
 
             $client = new Client($config);
-            $adapter = new WebDAVAdapter($client, null);
+            $adapter = new WebDAVAdapter($client, $root);
 
             return new Filesystem($adapter);
         });
