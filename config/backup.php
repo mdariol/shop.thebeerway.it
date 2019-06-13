@@ -8,7 +8,7 @@ return [
          * The name of this application. You can use this name to monitor
          * the backups.
          */
-        'name' => env('APP_NAME', 'laravel-backup'),
+        'name' => env('BACKUP_NAME', 'laravel-backup'),
 
         'source' => [
 
@@ -85,14 +85,14 @@ return [
              * The disk names on which the backups will be stored.
              */
             'disks' => [
-                env('BACKUP_PRIMARY_DISK', 'local'),
+                env('BACKUP_DISK', 'local'),
             ],
         ],
 
         /*
          * The directory where the temporary files will be stored.
          */
-        'temporary_directory' => env('BACKUP_TEMPORARY_PATH', storage_path('app/backup-temp')),
+        'temporary_directory' => env('BACKUP_TEMP', storage_path('app/backup-temp')),
     ],
 
     /*
@@ -120,7 +120,7 @@ return [
         'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
 
         'mail' => [
-            'to' => env('BACKUP_NOTIFY_MAIL', 'your@example.com'),
+            'to' => env('BACKUP_MAIL', 'your@example.com'),
         ],
 
         'slack' => [
@@ -145,9 +145,9 @@ return [
      */
     'monitor_backups' => [
         [
-            'name' => env('APP_NAME', 'laravel-backup'),
+            'name' => env('BACKUP_NAME', 'laravel-backup'),
             'disks' => [
-                env('BACKUP_PRIMARY_DISK', 'local'),
+                env('BACKUP_DISK', 'local'),
             ],
             'health_checks' => [
                 \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 1,
