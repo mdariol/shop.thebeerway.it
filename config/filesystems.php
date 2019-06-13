@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'cloud' => env('FILESYSTEM_CLOUD', 's3'),
+    'cloud' => env('FILESYSTEM_CLOUD', 'nextcloud'),
 
     /*
     |--------------------------------------------------------------------------
@@ -62,6 +62,14 @@ return [
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
+        ],
+
+        'nextcloud' => [
+            'driver' => 'webdav',
+            'url' => env('NEXTCLOUD_URL'),
+            'user' => env('NEXTCLOUD_USER'),
+            'password' => env('NEXTCLOUD_PASSWORD'),
+            'root' => env('NEXTCLOUD_ROOT'),
         ],
 
     ],
