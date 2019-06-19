@@ -3,10 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Area;
+use App\Http\Middleware\AllowIfAdmin;
 use Illuminate\Http\Request;
 
 class AreaController extends Controller
 {
+    /**
+     * Control if is Admin role defined in middleware.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function __construct()
+    {
+        $this->middleware('admin');
+    }
+
+
     /**
      * Display a listing of the resource.
      *

@@ -8,6 +8,18 @@ use Illuminate\Http\Request;
 class BreweryController extends Controller
 {
     /**
+     * Control if is Admin role defined in middleware.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function __construct()
+    {
+        $this->middleware('admin');
+    }
+
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
