@@ -10,6 +10,7 @@ Log of unreleased changes.
 
 - Use [spatie/laravel-backup](https://github.com/spatie/laravel-backup) to backup the application.
 - Adds `fatture:sync` command.
+- Adds `colors` column to `fatture:read beers` command.
 
 ## v0.1.0
 
