@@ -3,6 +3,7 @@
 @section('content')
     <div class="container">
         <h1>Birre</h1>
+
         <a class="btn btn-primary mb-2" href="/beers/create">Nuova</a>
 
         <div class="card mb-4">
@@ -19,7 +20,7 @@
                     </div>
 
                     <autocomplete :options='@json($breweries)' name='brewery' label='Birrificio'></autocomplete>
-                    <autocomplete :options='@json($styles)' name='style' label=' '></autocomplete>
+                    <autocomplete :options='@json($styles)' name='style' label='Stile'></autocomplete>
                     <autocomplete :options='@json($colors)' name='color' label='Colore'></autocomplete>
 
 
@@ -28,11 +29,15 @@
                         <input type="text" class="form-control" name="name" id="name" value="{{ request()->name }}">
                     </div>
 
+                    <div class="form-group" hidden>
+                        <label for="name">Packaging</label>
+                        <input type="text" class="form-control" name="packaging" id="packaging" value="{{ request()->packaging }}">
+                    </div>
 
 
 
                     <button class="btn btn-primary">Applica Filtri</button>
-                    <a href="/beers" class="btn btn-link">Reset Filtri</a>
+                    <a href="/beers?packaging={{ request()->packaging }}" class="btn btn-link">Reset Filtri</a>
 
                 </form>
             </div>

@@ -42,6 +42,13 @@ class BeerFilters extends QueryFilter
         });
     }
 
+    public function packaging(string $search): Builder
+    {
+        return $this->builder->whereHas('packaging', function ($query) use ($search) {
+           $query->where('type', '=', $search);
+        });
+    }
+
     protected function wherebuilder($search, $query ){
 
         foreach ($search as $key => $string) {
@@ -50,7 +57,7 @@ class BeerFilters extends QueryFilter
             } else {
                 $query->orwhere('name', 'LIKE', '%'.$string.'%');
             }
-    }
+        }
 
-}
+    }
 }

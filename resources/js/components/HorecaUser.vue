@@ -5,7 +5,7 @@
                 <div class="form-group row">
                         <label for="is-horeca" class="col-md-4 col-form-label text-md-right">{{ (' ') }}</label>
                         <div class="custom-control custom-switch col-md-6">
-                                <input class="custom-control-input" type="checkbox"  v-model="ishoreca" name="is_horeca" id="is-horeca">
+                                <input class="custom-control-input" type="checkbox"  v-model="ishoreca" name="ishoreca" id="is-horeca">
                                 <label class="custom-control-label" for="is-horeca" >Utente Ho.Re.Ca. </label>
                         </div>
                 </div>

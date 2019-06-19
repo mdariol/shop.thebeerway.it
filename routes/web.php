@@ -45,3 +45,10 @@ Route::resource('colors', 'ColorController');
 Route::get('/colors/{color}/delete', 'ColorController@delete')
     ->name('colors.delete');
 
+Route::resource('roles', 'RoleController');
+Route::get('/roles/{role}/delete', 'RoleController@delete')
+    ->name('roles.delete');
+
+Route::resource('users', 'UserController');
+Route::post('/roleassign', 'UserController@roleassign')
+    ->name('users.roleassign');

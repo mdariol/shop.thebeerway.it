@@ -38470,7 +38470,7 @@ var render = function() {
             }
           ],
           staticClass: "custom-control-input",
-          attrs: { type: "checkbox", name: "is_horeca", id: "is-horeca" },
+          attrs: { type: "checkbox", name: "ishoreca", id: "is-horeca" },
           domProps: {
             checked: Array.isArray(_vm.ishoreca)
               ? _vm._i(_vm.ishoreca, null) > -1
