@@ -9,6 +9,7 @@ Log of unreleased changes.
 ### Added
 
 - Use [spatie/laravel-backup](https://github.com/spatie/laravel-backup) to backup the application.
+- Adds `fatture:sync` command.
 
 ## v0.1.0
 

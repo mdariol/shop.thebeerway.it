@@ -2,8 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Beer;
 use App\Services\FattureInCloud;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 
 class FattureSync extends Command
 {
@@ -12,7 +15,7 @@ class FattureSync extends Command
      *
      * @var string
      */
-    protected $signature = 'fatture:sync';
+    protected $signature = 'fatture:sync {data} {--field=*}';
 
     /**
      * The console command description.
@@ -46,55 +49,70 @@ class FattureSync extends Command
      */
     public function handle()
     {
-        //
+        $data = $this->argument('data');
+        $method = 'sync' . ucfirst($data);
+
+        if ( ! method_exists($this, $method)) {
+            throw new InvalidArgumentException("Data \"$data\" is not defined.");
+        }
+
+        $skipped = $this->$method();
+        $this->footer($skipped);
     }
 
-    /*
-    public function handle()
+    /**
+     * Sync specified field from Fatture in Cloud to the application.
+     *
+     * @return array
+     */
+    protected function syncBeers()
     {
-        $webSelect = new FattureInCloud('', '');
+        $beers = $this->fattureInCloud->parseBeers();
 
-        $fromProducts = $this->fattureInCloud->getProducts();
-        $toProducts = $webSelect->getProducts();
-        $attributes = $this->attributes($fromProducts, $toProducts);
-
-        $bar = $this->output->createProgressBar($attributes->count());
+        $bar = $this->output->createProgressBar(count($beers));
         $bar->start();
 
-        $attributes->chunk(27)->each(function (Collection $chunck) use ($webSelect, $bar) {
-            $chunck->each(function ($attributes) use ($webSelect, $bar) {
-                $webSelect->putProduct($attributes);
+        $skipped = [];
 
-                $bar->advance();
-            });
+        $beers->each(function ($beer) use ($bar, &$skipped) {
+            $attributes = [];
 
-            sleep(60);
+            foreach ($this->option('field') as $attribute) {
+                $attributes[$attribute] = $beer->$attribute;
+            }
+
+            try {
+                Beer::where('code', $beer->code)->firstOrFail()
+                  ->update($attributes);
+            } catch (ModelNotFoundException $exception) {
+                $skipped[] = $beer;
+            }
+
+            $bar->advance();
         });
 
         $bar->finish();
-    }
-    */
 
-    /*
-    protected function attributes(Collection $fromProducts, Collection $toProducts): Collection
+        return $skipped;
+    }
+
+    /**
+     * Prints sync results.
+     *
+     * @param $skipped
+     */
+    protected function footer($skipped)
     {
-        $attributes = new Collection();
+        $data = $this->argument('data');
 
-        $fromProducts->each(function ($fromProduct) use ($toProducts, $attributes) {
-            if (empty($fromProduct->cod)) return;
+        if ($count = count($skipped)) {
+            $this->line("\n\nSkipped elements ($count):\n");
 
-            $toProduct = $toProducts->firstWhere('cod', $fromProduct->cod);
+            foreach ($skipped as $item) {
+                $this->line("  - \"$item->name\" with code \"$item->code\"");
+            }
 
-            if ( ! $toProduct) return;
-
-            $attributes->push([
-                'id' => $toProduct->id,
-                'note' => $fromProduct->note,
-                'categoria' => $fromProduct->categoria,
-            ]);
-        });
-
-        return $attributes;
+            $this->line('');
+        }
     }
-    */
 }
