@@ -3,9 +3,12 @@
 namespace App\Providers;
 
 use App\Services\FattureInCloud;
-use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
+use League\Flysystem\Filesystem;
+use League\Flysystem\WebDAV\WebDAVAdapter;
+use Sabre\DAV\Client;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +34,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Storage::extend('webdav', function ($app, $config) {
+            $root = $config['root'];
+
+            $config = [
+                'baseUri' => $config['url'],
+                'userName' => $config['user'],
+                'password' => $config['password']
+            ];
+
+            $client = new Client($config);
+            $adapter = new WebDAVAdapter($client, $root);
+
+            return new Filesystem($adapter);
+        });
+
         Blade::directive('ClToLt', function($expression){
             return "<?php echo $expression/100?>";
         });

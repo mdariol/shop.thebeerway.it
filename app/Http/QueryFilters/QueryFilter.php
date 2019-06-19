@@ -23,23 +23,20 @@ abstract class QueryFilter
     public function apply(Builder $builder)
     {
         $this->builder = $builder;
-        foreach ($this->filters() as $method => $parameter) {
-            if ( ! method_exists($this, $method)) {
+
+        foreach ($this->filters() as $filter => $parameter) {
+            if ( ! method_exists($this, $filter)) {
                 continue;
             }
 
-            $reflection = new \ReflectionMethod($this, $method);
-
-            $hasParam = (boolean) $reflection->getNumberOfParameters();
+            $reflection = new \ReflectionMethod($this, $filter);
             $requiresParam = (boolean) $reflection->getNumberOfRequiredParameters();
 
-            if ( ! empty($parameter) && ($requiresParam || $hasParam)) {
-                $this->$method($parameter);
+            if (empty($parameter) && $requiresParam) {
+                continue;
             }
 
-            if (empty($parameter) && (! $requiresParam || ! $hasParam)) {
-                $this->$method();
-            }
+            empty($parameter) ? $this->$filter() : $this->$filter($parameter);
         }
 
         return $this->builder;

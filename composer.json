@@ -15,7 +15,7 @@
         "laravel/framework": "5.8.*",
         "laravel/socialite": "^4.1",
         "laravel/tinker": "^1.0",
-        "nao-pon/flysystem-google-drive": "^1.1",
+        "league/flysystem-webdav": "^1.0",
         "spatie/laravel-backup": "^6.2",
         "spatie/laravel-permission": "^2.37"
     },
