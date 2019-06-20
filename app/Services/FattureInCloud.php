@@ -6,6 +6,7 @@ use App\Beer;
 use App\Brewery;
 use App\Color;
 use App\Packaging;
+use App\Price;
 use App\Style;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
@@ -13,7 +14,7 @@ use Illuminate\Support\Collection;
 
 class FattureInCloud
 {
-    const DUNNO = '///';
+    const DUNNO = '';
 
     /**
      * @var \GuzzleHttp\Client
@@ -67,20 +68,27 @@ class FattureInCloud
         return json_decode($response)->success;
     }
 
-    public function parseBeer(string $string): array
+    public function parseBeer($product): ?Beer
     {
+        $name = $product->nome;
+
+        if (empty($name)) return null;
+
         $beer = new Beer([
-          'name' => $this->matchBeer($string),
-          'abv' => $this->matchAbv($string)
+            'name' => $this->matchBeer($name),
+            'abv' => $this->matchAbv($name),
+            'code' => $product->cod,
+            'description' => $product->note,
+            'stock' => $product->magazzino ? $product->giacenza : 0,
         ]);
 
-        $beer->brewery = array_values($this->parseBrewery($string))[0];
-        $beer->packaging = array_values($this->parsePackaging($string))[0];
-        $beer->style = array_values($this->parseStyle($string))[0];
+        $beer->brewery = array_values($this->parseBrewery($name))[0];
+        $beer->packaging = array_values($this->parsePackaging($name))[0];
+        $beer->style = array_values($this->parseStyle($name))[0];
+        $beer->price = $this->parsePrice($product);
+        $beer->color = $this->parseColor($product);
 
-        return [
-          $string => $beer
-        ];
+        return $beer;
     }
 
     public function parseBeers(): Collection
@@ -88,18 +96,22 @@ class FattureInCloud
         $beers = new Collection();
 
         $this->getProducts()->each(function ($product) use ($beers) {
-            $name = $product->nome;
+            $beer = $this->parseBeer($product);
 
-            if ( ! $name) {
-                return;
-            }
+            if ( ! $beer) return;
 
-            $beer = $this->parseBeer($name);
-            $key = key($beer);
+//            $name = $product->nome;
+//
+//            if ( ! $name) {
+//                return;
+//            }
+//
+//            $beer = $this->parseBeer($name);
 
-            if ($beers->has($key) || $key === self::DUNNO) {
-                return;
-            }
+
+            $key = $beer->code;
+
+            if ($beers->has($key)) return;
 
             // TODO: Improves Color parsing.
             // Despite other relations Color cannot be parsed via parseBeer(),
@@ -107,17 +119,17 @@ class FattureInCloud
             // getProducts() - as parameter. A viable solutions could be
             // accepting the $product instead of $product->nome for each
             // parse*() functions. This way it should be more consistent.
-            $color = array_values($this->parseColor($product->categoria))[0];
+//            $color = array_values($this->parseColor($product->categoria))[0];
 
-            reset($beer)->code = $product->cod;
-            reset($beer)->description = $product->note;
-            reset($beer)->color = $color;
+//            reset($beer)->code = $product->cod;
+//            reset($beer)->description = $product->note;
+//            reset($beer)->color = $color;
 
-            if ($product->magazzino) {
-                reset($beer)->stock = $product->giacenza;
-            }
+//            if ($product->magazzino) {
+//                reset($beer)->stock = $product->giacenza;
+//            }
 
-            $beers->put($key, reset($beer));
+            $beers->put($key, $beer);
         });
 
         return $beers->values();
@@ -230,39 +242,86 @@ class FattureInCloud
         return $styles->values();
     }
 
-    public function parseColor(string $string): array
+    /**
+     * Return a Color object reading Fatture in Cloud product.
+     *
+     * @param $product
+     * @return \App\Color
+     */
+    public function parseColor($product): ?Color
     {
+        $string = $product->categoria;
+
+        if (empty($string)) return null;
+
         $match = $this->matchColor($string);
 
-        return [
-            $match => new Color([
-                'name' => $match
-            ])
-        ];
+        if (empty($match)) return null;
+
+        return new Color([
+          'name' => $match
+        ]);
     }
 
+    /**
+     * Return a Collection of Color objects reading Fatture in Cloud products.
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function parseColors(): Collection
     {
         $colors = new Collection();
 
         $this->getProducts()->each(function ($product) use ($colors) {
-            $category = $product->categoria;
+            $color = $this->parseColor($product);
 
-            if ( ! $category) {
-                return;
-            }
+//            $category = $product->categoria;
+//
+//            if ( ! $category) {
+//                return;
+//            }
 
-            $color = $this->parseColor($category);
-            $key = key($color);
+            if ( ! $color) return;
 
-            if ($colors->has($key) || $key === self::DUNNO) {
-                return;
-            }
+//            $color = $this->parseColor($category);
+            $key = $color->name;
 
-            $colors->put($key, reset($color));
+            if ($colors->has($key)) return;
+
+            $colors->put($key, $color);
         });
 
         return $colors->values();
+    }
+
+    /**
+     * Return a Price object reading Fatture in Cloud product.
+     *
+     * @param $product
+     * @return \App\Price
+     */
+    public function parsePrice($product): Price
+    {
+        return new Price([
+            'purchase' => $product->costo,
+            'distribution' => $product->prezzo_netto,
+        ]);
+    }
+
+    /**
+     * Return a Collection of Price objects reading Fatture in Cloud products.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function parsePrices(): Collection
+    {
+        $prices = new Collection();
+
+        $this->getProducts()->each(function ($product) use ($prices) {
+            $prices->push($this->parsePrice($product));
+        });
+
+        return $prices;
     }
 
     protected function headers(): array
@@ -291,13 +350,13 @@ class FattureInCloud
         return self::DUNNO;
     }
 
-    protected function matchAbv(string $string): string
+    protected function matchAbv(string $string): float
     {
         if (preg_match('/da  (.*?)%/', $string, $matches)) {
-            return trim($matches[1]);
+            return (float) str_replace(',', '.', $matches[1]);
         }
 
-        return self::DUNNO;
+        return 0.0;
     }
 
     protected function matchPackaging(string $string): string
@@ -331,13 +390,13 @@ class FattureInCloud
         return 1;
     }
 
-    private function matchCapacity(string $string): ?int
+    private function matchCapacity(string $string): int
     {
         if (preg_match('/(^F-|^Bottiglia )(.*?)(lt.| Lt.)/', $string, $matches)) {
             return (int) (str_replace(',', '.', $matches[2]) * 100);
         }
 
-        return null;
+        return 0;
     }
 
     protected function matchBrewery(string $string): string

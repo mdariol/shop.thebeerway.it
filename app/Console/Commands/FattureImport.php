@@ -6,9 +6,11 @@ use App\Beer;
 use App\Brewery;
 use App\Color;
 use App\Packaging;
+use App\Price;
 use App\Services\FattureInCloud;
 use App\Style;
 use Illuminate\Console\Command;
+use Illuminate\Database\QueryException;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 
 class FattureImport extends Command
@@ -79,10 +81,10 @@ class FattureImport extends Command
                 Beer::updateOrCreate(['code' => $beer->code], $beer->toArray() + [
                     'brewery_id' => Brewery::firstOrCreate($beer->brewery->toArray())->id,
                     'style_id' => Style::firstOrCreate($beer->style->toArray())->id,
-                    'color_id' => Color::firstOrCreate($beer->color->toArray())->id,
+                    'color_id' => ! $beer->color ?: Color::firstOrCreate($beer->color->toArray())->id,
                     'packaging_id' => Packaging::firstOrCreate($beer->packaging->toArray())->id,
                 ]);
-            } catch (\Exception $exception) {
+            } catch (QueryException $exception) {
                 $skipped[] = $beer;
             }
 
