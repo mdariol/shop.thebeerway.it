@@ -2,13 +2,15 @@
 
 @section('content')
     <div class="container">
-        <h1>Birre</h1>
+        <h3 class="text-capitalize">{{ request()->packaging }}</h3>
 
-        <a class="btn btn-primary mb-2" href="/beers/create">Nuova</a>
+        @hasrole('Admin')
+            <a class="btn btn-primary mb-2" href="/beers/create">Nuova</a>
+        @endhasrole
 
-        <div class="card mb-4">
+        <div class="card mb-2 mt-2 ">
             <div class="card-header">
-                <h5 class="mb-0" data-toggle="collapse" data-target="#filter">Filtri</h5>
+                <h6 small class="mb-0" data-toggle="collapse" data-target="#filter">Filtri</h6>
             </div>
             <div class="card-body collapse" id="filter">
                 <form method="GET" action="/beers">
@@ -44,17 +46,26 @@
         </div>
 
         @foreach($beers as $beer)
-            <div class="row align-items-center">
-                <div class="col-sm">
-                    <h3>{{ $beer->name }} <small class="text-muted">// {{ $beer->brewery->name }}</small></h3>
-                    <p class="text-muted">{{ $beer->style->name }}, {{ $beer->color->name }} da {{ $beer->abv }}%.
-                        {{ $beer->packaging->name }}.</p>
+            <div class="row align-items-center mb-0 mt-0">
+                <div class="col-sm mb-0 mt-0">
+                    <h5 class="text-primary">{{ $beer->name }} <small class="text-secondary"> - {{ $beer->brewery->name }}</small></h5>
+                    <h6 class="text-body">{{ $beer->style->name }}, {{ $beer->color->name }} da {{ $beer->abv }}%.
+                        {{ $beer->packaging->name }}.</h6>
                 </div>
+
+                @hasanyrole('Publican|Admin')
                 <div class="col-sm-auto">
-                    <a href="/beers/{{ $beer->id }}/edit" class="btn btn-primary">Modifica</a>
-                    <a href="/beers/{{ $beer->id }}/delete" class="btn btn-danger">Elimina</a>
+                    <h6 class="text-body">&euro; {{ $beer->price  ? $beer->price->distribution : 'n/d'}} {{ ($beer->price && $beer->packaging->type='fusti' ) ? '- €/l '.$beer->price->distributionLiter : ' '}} </h6>
                 </div>
-                <hr class="w-100">
+                @endhasanyrole
+
+                @hasrole('Admin')
+                    <div class="col-sm-auto">
+                        <a href="/beers/{{ $beer->id }}/edit" class="btn-primary">Modifica</a>
+                        <a href="/beers/{{ $beer->id }}/delete" class="btn-danger">Elimina</a>
+                    </div>
+                @endhasrole
+                <hr class="w-100 mb-1 mt-1">
             </div>
         @endforeach
     </div>

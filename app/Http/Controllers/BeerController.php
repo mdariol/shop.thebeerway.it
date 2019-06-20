@@ -114,7 +114,7 @@ class BeerController extends Controller
      */
     public function update(Beer $beer)
     {
-        $beer->price()->update(request([
+        $beer->price()->updateOrCreate(['beer_id' => $beer->id], request([
             'horeca', 'horeca_unit', 'discount',
             'purchase', 'purchase_unit',
             'distribution', 'distribution_unit', 'margin'

@@ -28,8 +28,15 @@
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'The BeerWay') }}
+                    <img src="Home-icon-yellow.png" alt="Home" width="40px" >
                 </a>
+                <a class="navbar-brand" href="{{ url('/beers?packaging=fusti') }}">
+                    <img src="Fusto.png" alt="Fusti" height="40px" >
+                </a>
+                <a class="navbar-brand" href="{{ url('/beers?packaging=bottiglie') }}">
+                    <img src="Bottiglia512.png" alt="Bottiglie" height="40px" >
+                </a>
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>

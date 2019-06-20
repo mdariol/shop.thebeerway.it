@@ -17,4 +17,10 @@ class Price extends Model
     {
         return $this->belongsTo(Beer::class);
     }
+    public function getDistributionLiterAttribute()
+    {
+        return ( $this->beer ? round($this->distribution / $this->beer->packaging->capacity,2) : ' ');
+
+    }
+
 }
