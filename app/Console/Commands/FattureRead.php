@@ -70,6 +70,7 @@ class FattureRead extends Command
             $beer->description = substr($beer->description, 0, 17);
             $beer->brewery = substr($beer->brewery->name, 0, 17);
             $beer->style = substr($beer->style->name, 0, 17);
+            $beer->color = $beer->color->name;
         });
 
         return $beers;
