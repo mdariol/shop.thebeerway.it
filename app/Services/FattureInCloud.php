@@ -68,29 +68,42 @@ class FattureInCloud
         return json_decode($response)->success;
     }
 
+    /**
+     * Return a Beer object reading Fatture in Cloud product.
+     *
+     * @param $product
+     * @return \App\Beer|null
+     */
     public function parseBeer($product): ?Beer
     {
-        $name = $product->nome;
+        if (empty($product->nome)) return null;
+
+        $name = $this->matchBeer($product->nome);
 
         if (empty($name)) return null;
 
         $beer = new Beer([
-            'name' => $this->matchBeer($name),
-            'abv' => $this->matchAbv($name),
+            'name' => $name,
+            'abv' => $this->matchAbv($product->nome),
             'code' => $product->cod,
             'description' => $product->note,
-            'stock' => $product->magazzino ? $product->giacenza : 0,
+            'stock' => $product->giacenza ?: 0,
         ]);
 
-        $beer->brewery = array_values($this->parseBrewery($name))[0];
-        $beer->packaging = array_values($this->parsePackaging($name))[0];
-        $beer->style = array_values($this->parseStyle($name))[0];
+        $beer->brewery = $this->parseBrewery($product);
+        $beer->packaging = $this->parsePackaging($product);
+        $beer->style = $this->parseStyle($product);
         $beer->price = $this->parsePrice($product);
         $beer->color = $this->parseColor($product);
 
         return $beer;
     }
 
+    /**
+     * Return Beer objects reading Fatture in Cloud products.
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function parseBeers(): Collection
     {
         $beers = new Collection();
@@ -100,34 +113,9 @@ class FattureInCloud
 
             if ( ! $beer) return;
 
-//            $name = $product->nome;
-//
-//            if ( ! $name) {
-//                return;
-//            }
-//
-//            $beer = $this->parseBeer($name);
-
-
             $key = $beer->code;
 
             if ($beers->has($key)) return;
-
-            // TODO: Improves Color parsing.
-            // Despite other relations Color cannot be parsed via parseBeer(),
-            // because that function accepts $product->nome - returned by
-            // getProducts() - as parameter. A viable solutions could be
-            // accepting the $product instead of $product->nome for each
-            // parse*() functions. This way it should be more consistent.
-//            $color = array_values($this->parseColor($product->categoria))[0];
-
-//            reset($beer)->code = $product->cod;
-//            reset($beer)->description = $product->note;
-//            reset($beer)->color = $color;
-
-//            if ($product->magazzino) {
-//                reset($beer)->stock = $product->giacenza;
-//            }
 
             $beers->put($key, $beer);
         });
@@ -135,108 +123,132 @@ class FattureInCloud
         return $beers->values();
     }
 
-    public function parsePackaging(string $string): array
+    /**
+     * Return Packaging object reading Fatture in Cloud product.
+     *
+     * @param  $product
+     * @return \App\Packaging|null
+     */
+    public function parsePackaging($product): ?Packaging
     {
-        $match = $this->matchPackaging($string);
+        if (empty($product->nome)) return null;
 
-        return [
-            $match => new Packaging([
-              'type' => $this->matchType($match),
-              'quantity' => $this->matchQuantity($match),
-              'capacity' => $this->matchCapacity($match),
-            ])
-        ];
+        $match = $this->matchPackaging($product->nome);
+
+        if (empty($match)) return null;
+
+        return new Packaging([
+          'type' => $this->matchType($match),
+          'quantity' => $this->matchQuantity($match),
+          'capacity' => $this->matchCapacity($match),
+        ]);
     }
 
+    /**
+     * Return a Collection of Packaging objects reading Fatture in Cloud products.
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function parsePackagings(): Collection
     {
         $packagings = new Collection();
 
         $this->getProducts()->each(function ($product) use ($packagings) {
-            $name = $product->nome;
+            $packaging = $this->parsePackaging($product);
 
-            if ( ! $name) {
-                return;
-            }
+            if ( ! $packaging) return;
 
-            $packaging = $this->parsePackaging($name);
-            $key = key($packaging);
+            $key = $packaging->name;
 
-            if ($packagings->has($key) || $key === self::DUNNO) {
-                return;
-            }
+            if ($packagings->has($key)) return;
 
-            $packagings->put($key, reset($packaging));
+            $packagings->put($key, $packaging);
         });
 
         return $packagings->values();
     }
 
-    public function parseBrewery(string $string): array
+    /**
+     * Return Brewery object reading from Fatture in Cloud product.
+     *
+     * @param $product
+     * @return \App\Brewery|null
+     */
+    public function parseBrewery($product): ?Brewery
     {
-        $match = $this->matchBrewery($string);
+        if (empty($product->nome)) return null;
 
-        return [
-            $match => new Brewery([
-              'name' => $match
-            ])
-        ];
+        $match = $this->matchBrewery($product->nome);
+
+        if (empty($match)) return null;
+
+        return new Brewery([
+          'name' => $match
+        ]);
     }
 
-    public function parseBreweries(): \Illuminate\Database\Eloquent\Collection
+    /**
+     * Return a Collection of Breweries objects reading from Fatture in Cloud products.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function parseBreweries(): Collection
     {
-        $breweries = new \Illuminate\Database\Eloquent\Collection();
+        $breweries = new Collection();
 
         $this->getProducts()->each(function ($product) use ($breweries) {
-            $name = $product->nome;
+            $brewery = $this->parseBrewery($product);
 
-            if ( ! $name) {
-                return;
-            }
+            if ( ! $brewery) return;
 
-            $brewery = $this->parseBrewery($name);
-            $key = key($brewery);
+            $key = $brewery->name;
 
-            if ($breweries->has($key) || $key === self::DUNNO) {
-                return;
-            }
+            if ($breweries->has($key)) return;
 
-            $breweries->put($key, reset($brewery));
+            $breweries->put($key, $brewery);
         });
 
         return $breweries->values();
     }
 
-    public function parseStyle(string $string): array
+    /**
+     * Return Style object reading Fatture in Cloud product.
+     *
+     * @param $product
+     * @return \App\Style|null
+     */
+    public function parseStyle($product): ?Style
     {
-        $match = $this->matchStyle($string);
+        if (empty($product->nome)) return null;
 
-        return [
-            $match => new Style([
-              'name' => $match
-            ])
-        ];
+        $match = $this->matchStyle($product->nome);
+
+        if (empty($match)) return null;
+
+        return new Style([
+          'name' => $match
+        ]);
     }
 
+    /**
+     * Return a Collection of Style objects reading Fatture in Cloud products.
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function parseStyles(): Collection
     {
         $styles = new Collection();
 
         $this->getProducts()->each(function ($product) use ($styles) {
-            $name = $product->nome;
+            $style = $this->parseStyle($product);
 
-            if ( ! $name) {
-                return;
-            }
+            if ( ! $style) return;
 
-            $style = $this->parseStyle($name);
-            $key = key($style);
+            $key = $style->name;
 
-            if ($styles->has($key) || $key === self::DUNNO) {
-                return;
-            }
+            if ($styles->has($key)) return;
 
-            $styles->put($key, reset($style));
+            $styles->put($key, $style);
         });
 
         return $styles->values();
@@ -275,15 +287,8 @@ class FattureInCloud
         $this->getProducts()->each(function ($product) use ($colors) {
             $color = $this->parseColor($product);
 
-//            $category = $product->categoria;
-//
-//            if ( ! $category) {
-//                return;
-//            }
-
             if ( ! $color) return;
 
-//            $color = $this->parseColor($category);
             $key = $color->name;
 
             if ($colors->has($key)) return;
@@ -303,8 +308,8 @@ class FattureInCloud
     public function parsePrice($product): Price
     {
         return new Price([
-            'purchase' => $product->costo,
-            'distribution' => $product->prezzo_netto,
+            'purchase' => round($product->costo, 2),
+            'distribution' => round($product->prezzo_netto, 2),
         ]);
     }
 

@@ -14,7 +14,8 @@ Log of unreleased changes.
 ### Changed
 
 - Adds `colors` column to `fatture:read beers` command.
-- `App\Price` now can be imported via `fatture:import prices|beers` command. 
+- `App\Price` now can be imported via `fatture:import beers` command. 
+- Functions `parse*()` of `FattureInCloud` service now returns `Model` or `Collection` instances.
 
 ## v0.1.0
 
