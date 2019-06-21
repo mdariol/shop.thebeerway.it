@@ -20,7 +20,7 @@ class CreatePricesTable extends Migration
             $table->integer('distribution')->nullable();
 
             $table->integer('horeca_unit')->nullable();
-            $table->integer('purchase_unit');
+            $table->integer('purchase_unit')->nullable();
             $table->integer('distribution_unit')->nullable();
 
             $table->unsignedDecimal('discount')->nullable();
