@@ -41,8 +41,6 @@ class FattureRead extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {
@@ -66,11 +64,13 @@ class FattureRead extends Command
         $beers = $this->fattureInCloud->parseBeers();
 
         $beers->each(function ($beer) {
-            $beer->packaging = $beer->packaging->name;
-            $beer->description = substr($beer->description, 0, 17);
-            $beer->brewery = substr($beer->brewery->name, 0, 17);
-            $beer->style = substr($beer->style->name, 0, 17);
-            $beer->color = $beer->color->name;
+            $beer->name = $beer->name ? substr($beer->name, 0, 14) : null;
+            $beer->packaging = $beer->packaging ? $beer->packaging->name : null;
+            $beer->description = $beer->description ? substr($beer->description, 0, 17) : null;
+            $beer->brewery = $beer->brewery ? substr($beer->brewery->name, 0, 17) : null;
+            $beer->style = $beer->style ? substr($beer->style->name, 0, 17) : null;
+            $beer->color = $beer->color ? $beer->color->name : null;
+            $beer->price = $beer->price ? '€ ' . $beer->price->distribution : null;
         });
 
         return $beers;

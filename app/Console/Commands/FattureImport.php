@@ -6,9 +6,11 @@ use App\Beer;
 use App\Brewery;
 use App\Color;
 use App\Packaging;
+use App\Price;
 use App\Services\FattureInCloud;
 use App\Style;
 use Illuminate\Console\Command;
+use Illuminate\Database\QueryException;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 
 class FattureImport extends Command
@@ -76,13 +78,17 @@ class FattureImport extends Command
 
         $beers->each(function ($beer) use ($bar, &$skipped) {
             try {
-                Beer::updateOrCreate(['code' => $beer->code], $beer->toArray() + [
-                    'brewery_id' => Brewery::firstOrCreate($beer->brewery->toArray())->id,
-                    'style_id' => Style::firstOrCreate($beer->style->toArray())->id,
-                    'color_id' => Color::firstOrCreate($beer->color->toArray())->id,
-                    'packaging_id' => Packaging::firstOrCreate($beer->packaging->toArray())->id,
+                $newBeer = Beer::updateOrCreate(['code' => $beer->code], $beer->toArray() + [
+                    'brewery_id' => $beer->brewery ? Brewery::firstOrCreate($beer->brewery->toArray())->id : null,
+                    'style_id' => $beer->style ? Style::firstOrCreate($beer->style->toArray())->id : null,
+                    'color_id' => $beer->color ? Color::firstOrCreate($beer->color->toArray())->id : null,
+                    'packaging_id' => $beer->packaging ? Packaging::firstOrCreate($beer->packaging->toArray())->id : null,
                 ]);
-            } catch (\Exception $exception) {
+
+                Price::firstOrCreate($beer->price->toArray() + [
+                    'beer_id' => $newBeer->id,
+                ]);
+            } catch (QueryException $exception) {
                 $skipped[] = $beer;
             }
 
@@ -114,7 +120,6 @@ class FattureImport extends Command
                 Brewery::firstOrCreate($brewery->toArray());
             } catch (\Exception $exception) {
                 $skipped[] = $brewery;
-                // $this->error("Cannot import brewery \"$brewery->name\"");
             }
 
             $bar->advance();

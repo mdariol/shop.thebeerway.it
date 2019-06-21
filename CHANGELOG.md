@@ -10,7 +10,12 @@ Log of unreleased changes.
 
 - Use [spatie/laravel-backup](https://github.com/spatie/laravel-backup) to backup the application.
 - Adds `fatture:sync` command.
+
+### Changed
+
 - Adds `colors` column to `fatture:read beers` command.
+- `App\Price` now can be imported via `fatture:import beers` command. 
+- Functions `parse*()` of `FattureInCloud` service now returns `Model` or `Collection` instances.
 
 ## v0.1.0
 
