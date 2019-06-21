@@ -55,7 +55,8 @@
 
                 @hasanyrole('Publican|Admin')
                 <div class="col-sm-auto">
-                    <h6 class="text-body">&euro; {{ $beer->price  ? $beer->price->distribution : 'n/d'}} {{ ($beer->price && $beer->packaging->type='fusti' ) ? '- €/l '.$beer->price->distributionLiter : ' '}} </h6>
+                    <h6 class="text-body">&euro; {{ $beer->price  ? $beer->price->distribution : 'n/d'}} {{ ($beer->price && $beer->packaging->type=='fusti' ) ? '- €/lt '.$beer->price->distributionLiter : ' '}}
+                        {{ ($beer->price && $beer->packaging->type=='bottiglie' ) ? '- €/bt '.$beer->price->distribution_unit : ' '}}</h6>
                 </div>
                 @endhasanyrole
 
