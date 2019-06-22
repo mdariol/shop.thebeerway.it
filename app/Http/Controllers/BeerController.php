@@ -7,6 +7,7 @@ use App\Brewery;
 use App\Color;
 use App\Packaging;
 use App\Style;
+use App\Taste;
 
 class BeerController extends Controller
 {
@@ -35,6 +36,7 @@ class BeerController extends Controller
             'styles' => Style::all(),
             'breweries' => Brewery::all(),
             'colors' => Color::all(),
+            'tastes' => Taste::all(),
         ]);
     }
 
@@ -50,6 +52,7 @@ class BeerController extends Controller
             'styles' => Style::all(),
             'breweries' => Brewery::all(),
             'colors' => Color::all(),
+            'tastes' => Taste::all(),
         ]);
     }
 
@@ -103,6 +106,7 @@ class BeerController extends Controller
             'styles' => Style::all(),
             'packagings' => Packaging::all(),
             'colors' => Color::all(),
+            'tastes' => Taste::all(),
         ]);
     }
 

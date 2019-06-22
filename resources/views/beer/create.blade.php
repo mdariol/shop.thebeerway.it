@@ -74,6 +74,17 @@
                         @endforeach
                     </select>
                 </div>
+
+                <div class="form-group col-sm-4">
+                    <label for="taste-id">Gusto Prevalente</label>
+                    <select name="taste_id" id="taste-id" class="form-control">
+                        <option value=" ">-- seleziona un gusto prevalente --</option>
+                        @foreach($tastes as $taste)
+                            <option value="{{ $taste->id }}">{{ $taste->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
             </div>
 
             <div class="form-group">

@@ -42,6 +42,13 @@ class BeerFilters extends QueryFilter
         });
     }
 
+    public function taste(array $search): Builder
+    {
+        return $this->builder->whereHas('taste', function ($query) use ($search) {
+            $this->wherebuilder($search, $query);
+        });
+    }
+
     public function packaging(string $search): Builder
     {
         return $this->builder->whereHas('packaging', function ($query) use ($search) {

@@ -17,6 +17,9 @@ $factory->define(Beer::class, function (Faker $faker) {
         'color_id' => function () {
             return factory(App\Color::class)->create();
         },
+        'taste_id' => function () {
+            return factory(App\Taste::class)->create();
+        },
         'brewery_id' => function () {
             return factory(App\Brewery::class)->create();
         },

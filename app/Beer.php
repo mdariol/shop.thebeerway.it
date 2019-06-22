@@ -13,11 +13,11 @@ class Beer extends Model
         'code', 'name', 'description',
         'abv', 'ibu', 'plato', 'stock',
         'brewery_id', 'packaging_id',
-        'style_id', 'price_id', 'color_id',
+        'style_id', 'price_id', 'color_id','taste_id',
     ];
 
     protected $with = [
-        'packaging', 'style', 'brewery', 'price', 'color',
+        'packaging', 'style', 'brewery', 'price', 'color','taste',
     ];
 
     public function brewery()
@@ -45,6 +45,10 @@ class Beer extends Model
         return $this->belongsTo(Color::class);
     }
 
+    public function taste()
+    {
+        return $this->belongsTo(Taste::class);
+    }
     public function inStock(): bool
     {
         return $this->stock > 0;

@@ -24,6 +24,7 @@ class CreateBeersTable extends Migration
             $table->integer('stock')->default(0);
 
             $table->unsignedBigInteger('color_id')->nullable();
+            $table->unsignedBigInteger('taste_id')->nullable();
             $table->unsignedBigInteger('brewery_id')->nullable();
             $table->unsignedBigInteger('packaging_id')->nullable();
             $table->unsignedBigInteger('style_id')->nullable();
@@ -31,6 +32,8 @@ class CreateBeersTable extends Migration
             $table->timestamps();
 
             $table->foreign('color_id')->references('id')->on('colors')
+                ->onDelete('set null');
+            $table->foreign('taste_id')->references('id')->on('tastes')
                 ->onDelete('set null');
             $table->foreign('style_id')->references('id')->on('styles')
                 ->onDelete('set null');

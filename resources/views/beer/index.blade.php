@@ -24,6 +24,7 @@
                     <autocomplete :options='@json($breweries)' name='brewery' label='Birrificio'></autocomplete>
                     <autocomplete :options='@json($styles)' name='style' label='Stile'></autocomplete>
                     <autocomplete :options='@json($colors)' name='color' label='Colore'></autocomplete>
+                    <autocomplete :options='@json($tastes)' name='taste' label='Gusto Prevalente'></autocomplete>
 
 
                     <div class="form-group">
@@ -49,8 +50,11 @@
             <div class="row align-items-center mb-0 mt-0">
                 <div class="col-sm mb-0 mt-0">
                     <h5 class="text-primary">{{ $beer->name }} <small class="text-secondary"> - {{ $beer->brewery->name }}</small></h5>
-                    <h6 class="text-body">{{ $beer->style->name }}, {{ $beer->color->name }} da {{ $beer->abv }}%.
-                        {{ $beer->packaging->name }}.</h6>
+                    <h6 class="text-body">{{ $beer->style ? $beer->style->name.', ' : '' }}
+                        {{ $beer->color ? $beer->color->name.', ' : ''}}
+                        {{ $beer->taste ? $beer->taste->name.', ' : ''}}
+                        {{ $beer->abv ? 'da '.$beer->abv.'%, ' : ''}}
+                        {{ $beer->packaging ? $beer->packaging->name : '' }}.</h6>
                 </div>
 
                 @hasanyrole('Publican|Admin')
