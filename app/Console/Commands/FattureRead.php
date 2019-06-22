@@ -71,6 +71,7 @@ class FattureRead extends Command
             $beer->style = $beer->style ? substr($beer->style->name, 0, 17) : null;
             $beer->color = $beer->color ? $beer->color->name : null;
             $beer->price = $beer->price ? '€ ' . $beer->price->distribution : null;
+            $beer->taste = $beer->taste ? $beer->taste->name : null;
         });
 
         return $beers;
@@ -94,5 +95,10 @@ class FattureRead extends Command
     protected function colors()
     {
         return $this->fattureInCloud->parseColors();
+    }
+
+    protected function tastes()
+    {
+        return $this->fattureInCloud->parseTastes();
     }
 }

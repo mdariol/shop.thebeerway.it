@@ -9,6 +9,7 @@ use App\Packaging;
 use App\Price;
 use App\Services\FattureInCloud;
 use App\Style;
+use App\Taste;
 use Illuminate\Console\Command;
 use Illuminate\Database\QueryException;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
@@ -83,6 +84,7 @@ class FattureImport extends Command
                     'style_id' => $beer->style ? Style::firstOrCreate($beer->style->toArray())->id : null,
                     'color_id' => $beer->color ? Color::firstOrCreate($beer->color->toArray())->id : null,
                     'packaging_id' => $beer->packaging ? Packaging::firstOrCreate($beer->packaging->toArray())->id : null,
+                    'taste_id' => $beer->taste ? Taste::firstOrCreate($beer->taste->toArray())->id : null,
                 ]);
 
                 Price::firstOrCreate($beer->price->toArray() + [
@@ -204,6 +206,34 @@ class FattureImport extends Command
                 Color::firstOrCreate($color->toArray());
             } catch (\Exception $exception) {
                 $skipped[] = $color;
+            }
+
+            $bar->advance();
+        });
+
+        $bar->finish();
+
+        return $skipped;
+    }
+
+    /**
+     * Reads tastes from Fatture in Cloud products and try to import them into
+     * the application.
+     */
+    protected function tastes()
+    {
+        $tastes = $this->fattureInCLoud->parseTastes();
+
+        $bar = $this->output->createProgressBar(count($tastes));
+        $bar->start();
+
+        $skipped = [];
+
+        $tastes->each(function ($taste) use ($bar, $skipped) {
+            try {
+                Taste::firstOrCreate($taste->toArray());
+            } catch (QueryException $exception) {
+                $skipped[] = $taste;
             }
 
             $bar->advance();
