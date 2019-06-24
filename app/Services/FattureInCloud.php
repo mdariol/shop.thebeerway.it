@@ -308,8 +308,8 @@ class FattureInCloud
     public function parsePrice($product): Price
     {
         return new Price([
-            'purchase' => round($product->costo, 2),
-            'distribution' => round($product->prezzo_netto, 2),
+            'purchase' => round($product->costo * 100),
+            'distribution' => round($product->prezzo_netto * 100),
         ]);
     }
 
