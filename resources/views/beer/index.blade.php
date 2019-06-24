@@ -5,7 +5,7 @@
         <h3 class="text-capitalize">{{ request()->packaging }}</h3>
 
         @hasrole('Admin')
-            <a class="btn btn-primary mb-2" href="/beers/create">Nuova</a>
+            <a class="btn btn-primary mb-2" href="/beers/create?packaging={{ request()->packaging }} ">Nuova</a>
         @endhasrole
 
         <div class="card mb-2 mt-2 ">
@@ -74,12 +74,13 @@
                     </div>
                 @endhasanyrole
 
+                <div class="col-sm-auto">
+                <a class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }}  aria-expanded="false" aria-controls={{ "beer".$beer->id }} >Espandi</a>
                 @hasrole('Admin')
-                    <div class="col-sm-auto">
-                        <a href="/beers/{{ $beer->id }}/edit" class="btn-primary">Modifica</a>
-                        <a href="/beers/{{ $beer->id }}/delete" class="btn-danger">Elimina</a>
-                    </div>
+                        <a href="/beers/{{ $beer->id }}/edit?packaging={{ request()->packaging }} " class="btn-primary">Modifica</a>
+                        <a href="/beers/{{ $beer->id }}/delete?packaging={{ request()->packaging }} " class="btn-danger">Elimina</a>
                 @endhasrole
+                </div>
                 <hr class="w-100 mb-1 mt-1">
             </div>
         @endforeach

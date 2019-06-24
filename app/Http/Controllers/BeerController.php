@@ -78,7 +78,7 @@ class BeerController extends Controller
             'fixed_margin' => request()->has('fixed_margin') ? true : false
         ]);
 
-        return redirect('beers');
+        return redirect('beers?packaging='.request()->packaging);
     }
 
     /**
@@ -132,7 +132,7 @@ class BeerController extends Controller
             'brewery_id', 'packaging_id', 'style_id'
         ]));
 
-        return redirect('/beers');
+        return redirect('/beers?packaging='.request()->packaging );
     }
 
     /**
@@ -158,6 +158,6 @@ class BeerController extends Controller
     {
         $beer->delete();
 
-        return redirect('/beers');
+        return redirect('/beers?packaging='.request()->packaging );
     }
 }

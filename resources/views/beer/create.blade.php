@@ -4,7 +4,7 @@
     <div class="container">
         <h1><em>Nuova</em> Birra</h1>
 
-        <form method="POST" action="/beers">
+        <form method="POST" action="/beers?packaging={{ request()->packaging }} " >
             @csrf
 
             <div class="form-row">
