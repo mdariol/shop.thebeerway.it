@@ -49,19 +49,29 @@
         @foreach($beers as $beer)
             <div class="row align-items-center mb-0 mt-0">
                 <div class="col-sm mb-0 mt-0">
-                    <h5 class="text-primary">{{ $beer->name }} <small class="text-secondary"> - {{ $beer->brewery->name }}</small></h5>
+                    <h5 class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }} aria-expanded="false" aria-controls={{ "beer".$beer->id }}>{{ $beer->name }} <small class="text-secondary"> - {{ $beer->brewery->name }}</small></h5>
                     <h6 class="text-body">{{ $beer->style ? $beer->style->name.', ' : '' }}
                         {{ $beer->color ? $beer->color->name.', ' : ''}}
                         {{ $beer->taste ? $beer->taste->name.', ' : ''}}
                         {{ $beer->abv ? 'da '.$beer->abv.'%, ' : ''}}
-                        {{ $beer->packaging ? $beer->packaging->name : '' }}.</h6>
+                        {{ $beer->packaging ? $beer->packaging->name : '' }}.
+                    </h6>
+                    <div class="collapse" id={{ "beer".$beer->id }}>
+                        <div class="card card-body p-1">
+                            {{ $beer->description }}
+                        </div>
+                    </div>
+
+
                 </div>
 
+
+
                 @hasanyrole('Publican|Admin')
-                <div class="col-sm-auto">
-                    <h6 class="text-body">&euro; {{ $beer->price  ? $beer->price->distribution : 'n/d'}} {{ ($beer->price && $beer->packaging->type=='fusti' ) ? '- €/lt '.$beer->price->distributionLiter : ' '}}
-                        {{ ($beer->price && $beer->packaging->type=='bottiglie' ) ? '- €/bt '.$beer->price->distribution_unit : ' '}}</h6>
-                </div>
+                    <div class="col-sm-auto">
+                        <h6 class="text-body">&euro; {{ $beer->price  ? $beer->price->distribution : 'n/d'}} {{ ($beer->price && $beer->packaging->type=='fusti' ) ? '- €/lt '.$beer->price->distributionLiter : ' '}}
+                            {{ ($beer->price && $beer->packaging->type=='bottiglie' ) ? '- €/bt '.$beer->price->distribution_unit : ' '}}</h6>
+                    </div>
                 @endhasanyrole
 
                 @hasrole('Admin')
