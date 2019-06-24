@@ -2,19 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v0.2.0
 
-Log of unreleased changes.
+Released on **2019/06/24**.
 
 ### Added
 
 - Use [spatie/laravel-backup](https://github.com/spatie/laravel-backup) to backup the application.
 - Adds `fatture:sync` command.
+- Adds `Taste` model.
 
 ### Changed
 
-- Adds `colors` column to `fatture:read beers` command.
-- `App\Price` now can be imported via `fatture:import beers` command. 
+- Adds `colors` and `tastes` columns to `fatture:read beers` command.
+- `App\Price` now can be imported via `fatture:import beers` command.
+- `App\Taste` now can be imported via `fatture:import beers|tastes` commands. 
 - Functions `parse*()` of `FattureInCloud` service now returns `Model` or `Collection` instances.
 
 ## v0.1.0

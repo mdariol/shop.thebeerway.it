@@ -8,6 +8,7 @@ use App\Color;
 use App\Packaging;
 use App\Price;
 use App\Style;
+use App\Taste;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Collection;
@@ -95,6 +96,7 @@ class FattureInCloud
         $beer->style = $this->parseStyle($product);
         $beer->price = $this->parsePrice($product);
         $beer->color = $this->parseColor($product);
+        $beer->taste = $this->parseTaste($product);
 
         return $beer;
     }
@@ -262,11 +264,9 @@ class FattureInCloud
      */
     public function parseColor($product): ?Color
     {
-        $string = $product->categoria;
+        if (empty($product->categoria)) return null;
 
-        if (empty($string)) return null;
-
-        $match = $this->matchColor($string);
+        $match = $this->matchColor($product->categoria);
 
         if (empty($match)) return null;
 
@@ -327,6 +327,49 @@ class FattureInCloud
         });
 
         return $prices;
+    }
+
+    /**
+     * Return a Taste object reading Fatture in Cloud product.
+     *
+     * @param $product
+     * @return \App\Taste|null
+     */
+    public function parseTaste($product): ?Taste
+    {
+        if (empty($product->categoria)) return null;
+
+        $match = $this->matchTaste($product->categoria);
+
+        if (empty($match)) return null;
+
+        return new Taste([
+          'name' => $match
+        ]);
+    }
+
+    /**
+     * Return a Collection of Taste objects reading Fatture in Cloud products.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function parseTastes(): Collection
+    {
+        $tastes = new Collection();
+
+        $this->getProducts()->each(function ($product) use ($tastes) {
+            $taste = $this->parseTaste($product);
+
+            if ( ! $taste) return;
+
+            $key = $taste->name;
+
+            if ($tastes->has($key)) return;
+
+            $tastes->put($key, $taste);
+        });
+
+        return $tastes->values();
     }
 
     protected function headers(): array
@@ -416,6 +459,15 @@ class FattureInCloud
     protected function matchColor(string $string): string
     {
         if (preg_match('/^(.*?) - /', $string, $matches)) {
+            return trim($matches[1]);
+        }
+
+        return self::DUNNO;
+    }
+
+    protected function matchTaste(string $string): string
+    {
+        if (preg_match('/ - (.*?)$/', $string, $matches)) {
             return trim($matches[1]);
         }
 
