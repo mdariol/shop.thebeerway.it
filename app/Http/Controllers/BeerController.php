@@ -45,7 +45,7 @@ class BeerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Beer $beer )
     {
         return view('beer.create')->with([
             'packagings' => Packaging::all(),
@@ -53,6 +53,7 @@ class BeerController extends Controller
             'breweries' => Brewery::all(),
             'colors' => Color::all(),
             'tastes' => Taste::all(),
+            'beer' => $beer,
         ]);
     }
 
