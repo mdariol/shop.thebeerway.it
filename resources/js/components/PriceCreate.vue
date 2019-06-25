@@ -113,6 +113,7 @@
 
         props: {
             'packagings': Array,
+            'beer': Object,
         },
 
         computed: {
@@ -141,24 +142,24 @@
 
         data() {
             return {
-                packaging_id: null,
-                discount: 0,
-                fixedMargin: false,
-                margin: 0,
+                packaging_id: this.beer.packaging ? this.beer.packaging.id : null,
+                discount: this.beer.price ? this.beer.price.discount : 0,
+                fixedMargin: this.beer.price ? this.beer.price.fixed_margin : false,
+                margin: this.beer.price ? this.beer.price.margin : 0,
 
                 horeca: {
-                    total: 0,
-                    unit: 0,
+                    total: this.beer.price ? this.beer.price.horeca : 0,
+                    unit: this.beer.price ? this.beer.price.horeca_unit : 0,
                 },
 
                 purchase: {
-                    total: 0,
-                    unit: 0,
+                    total: this.beer.price ? this.beer.price.purchase : 0,
+                    unit: this.beer.price ? this.beer.price.purchase_unit : 0,
                 },
 
                 distribution: {
-                    total: 0,
-                    unit: 0,
+                    total: this.beer.price ? this.beer.price.distribution : 0,
+                    unit: this.beer.price ? this.beer.price.distribution_unit : 0,
                 }
             }
         },

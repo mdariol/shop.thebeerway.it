@@ -45,7 +45,7 @@ class BeerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Beer $beer )
     {
         return view('beer.create')->with([
             'packagings' => Packaging::all(),
@@ -53,6 +53,24 @@ class BeerController extends Controller
             'breweries' => Brewery::all(),
             'colors' => Color::all(),
             'tastes' => Taste::all(),
+            'beer' => $beer,
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function duplicate(Beer $beer )
+    {
+        return view('beer.create')->with([
+            'packagings' => Packaging::all(),
+            'styles' => Style::all(),
+            'breweries' => Brewery::all(),
+            'colors' => Color::all(),
+            'tastes' => Taste::all(),
+            'beer' => $beer,
         ]);
     }
 
@@ -78,7 +96,7 @@ class BeerController extends Controller
             'fixed_margin' => request()->has('fixed_margin') ? true : false
         ]);
 
-        return redirect('beers');
+        return redirect('beers?packaging='.request()->packaging);
     }
 
     /**
@@ -132,7 +150,7 @@ class BeerController extends Controller
             'brewery_id', 'packaging_id', 'style_id'
         ]));
 
-        return redirect('/beers');
+        return redirect('/beers?packaging='.request()->packaging );
     }
 
     /**
@@ -158,6 +176,6 @@ class BeerController extends Controller
     {
         $beer->delete();
 
-        return redirect('/beers');
+        return redirect('/beers?packaging='.request()->packaging );
     }
 }

@@ -24,6 +24,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('beers', 'BeerController');
 Route::get('/beers/{beer}/delete', 'BeerController@delete')
     ->name('beers.delete');
+Route::get('/beers/{beer}/duplicate', 'BeerController@duplicate')
+    ->name('beers.duplicate');
 
 Route::resource('breweries', 'BreweryController');
 Route::get('/breweries/{brewery}/delete', 'BreweryController@delete')
