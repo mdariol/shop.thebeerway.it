@@ -56,11 +56,6 @@
                         {{ $beer->abv ? 'da '.$beer->abv.'%, ' : ''}}
                         {{ $beer->packaging ? $beer->packaging->name : '' }}.
                     </h6>
-                    <div class="collapse" id={{ "beer".$beer->id }}>
-                        <div class="card card-body p-1">
-                            {{ $beer->description }}
-                        </div>
-                    </div>
 
 
                 </div>
@@ -77,10 +72,18 @@
                 <div class="col-sm-auto">
                 <a class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }}  aria-expanded="false" aria-controls={{ "beer".$beer->id }} >Espandi</a>
                 @hasrole('Admin')
+                        <a href="/beers/{{ $beer->id }}/duplicate?packaging={{ request()->packaging }} " class="btn-primary">Duplica</a>
                         <a href="/beers/{{ $beer->id }}/edit?packaging={{ request()->packaging }} " class="btn-primary">Modifica</a>
                         <a href="/beers/{{ $beer->id }}/delete?packaging={{ request()->packaging }} " class="btn-danger">Elimina</a>
                 @endhasrole
                 </div>
+
+                <div class="collapse ml-2 mb-0 mt-0 mr-2 align-items-center" id={{ "beer".$beer->id }}>
+                    <div class="card card-body p-1">
+                        {{ $beer->description }}
+                    </div>
+                </div>
+
                 <hr class="w-100 mb-1 mt-1">
             </div>
         @endforeach

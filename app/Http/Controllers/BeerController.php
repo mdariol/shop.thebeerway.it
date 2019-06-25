@@ -57,6 +57,23 @@ class BeerController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function duplicate(Beer $beer )
+    {
+        return view('beer.create')->with([
+            'packagings' => Packaging::all(),
+            'styles' => Style::all(),
+            'breweries' => Brewery::all(),
+            'colors' => Color::all(),
+            'tastes' => Taste::all(),
+            'beer' => $beer,
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @return \Illuminate\Http\Response
