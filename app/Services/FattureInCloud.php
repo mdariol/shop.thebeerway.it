@@ -308,8 +308,8 @@ class FattureInCloud
     public function parsePrice($product): Price
     {
         return new Price([
-            'purchase' => round($product->costo * 100),
-            'distribution' => round($product->prezzo_netto * 100),
+          'purchase' => $product->costo,
+          'distribution' => $product->prezzo_netto,
         ]);
     }
 
@@ -438,13 +438,13 @@ class FattureInCloud
         return 1;
     }
 
-    private function matchCapacity(string $string): int
+    private function matchCapacity(string $string): float
     {
         if (preg_match('/(^F-|^Bottiglia )(.*?)(lt.| Lt.)/', $string, $matches)) {
-            return (int) (str_replace(',', '.', $matches[2]) * 100);
+            return (float) str_replace(',', '.', $matches[2]);
         }
 
-        return 0;
+        return 0.0;
     }
 
     protected function matchBrewery(string $string): string

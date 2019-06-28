@@ -2347,7 +2347,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       packaging_id: this.beer.packaging ? this.beer.packaging.id : null,
       discount: this.beer.price ? this.beer.price.discount : 0,
-      fixedMargin: this.beer.price ? this.beer.price.fixed_margin : false,
+      fixedMargin: this.beer.price ? Boolean(parseInt(this.beer.price.fixed_margin)) : false,
       margin: this.beer.price ? this.beer.price.margin : 0,
       horeca: {
         total: this.beer.price ? this.beer.price.horeca : 0,
@@ -2381,11 +2381,14 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.purchase.total) {
         this.calculatePurchaseUnitPrice();
-        return;
       }
 
       if (this.purchase.unit) {
         this.calculatePurchaseTotalPrice();
+      }
+
+      if (this.distribution.total) {
+        this.calculateDistributionUnitPrice();
       }
     },
     calculateHorecaTotalPrice: function calculateHorecaTotalPrice() {
@@ -2462,8 +2465,11 @@ __webpack_require__.r(__webpack_exports__);
         return 0.00;
       }
 
-      return (prices.unit / (this.packaging.capacity / 100)).toFixed(2);
+      return (prices.unit / this.packaging.capacity).toFixed(2);
     }
+  },
+  mounted: function mounted() {
+    this.calculatePrices();
   }
 });
 
@@ -39273,7 +39279,7 @@ var render = function() {
                     " " +
                     _vm._s(packaging.type) +
                     " x " +
-                    _vm._s(packaging.capacity / 100) +
+                    _vm._s(packaging.capacity) +
                     "l\n                "
                 )
               ])

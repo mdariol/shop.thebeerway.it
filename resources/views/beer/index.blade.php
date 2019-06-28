@@ -56,11 +56,7 @@
                         {{ $beer->abv ? 'da '.$beer->abv.'%, ' : ''}}
                         {{ $beer->packaging ? $beer->packaging->name : '' }}.
                     </h6>
-
-
                 </div>
-
-
 
                 @hasanyrole('Publican|Admin')
                     <div class="col-sm-auto">
