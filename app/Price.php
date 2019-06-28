@@ -21,40 +21,6 @@ class Price extends Model
         return $this->belongsTo(Beer::class);
     }
 
-    /* ======================================================================
-     * Prices
-     * ====================================================================== */
-
-    public function setPurchaseAttribute($value)
-    {
-        $this->attributes['purchase'] = $value * 100;
-    }
-
-    public function setDistributionAttribute($value)
-    {
-        $this->attributes['distribution'] = $value * 100;
-    }
-
-    public function setHorecaAttribute($value)
-    {
-        $this->attributes['horeca'] = $value * 100;
-    }
-
-    public function getPurchaseAttribute($value): float
-    {
-        return round($value / 100, 2);
-    }
-
-    public function getDistributionAttribute($value): float
-    {
-        return round($value / 100, 2);
-    }
-
-    public function getHorecaAttribute($value): float
-    {
-        return round($value / 100, 2);
-    }
-
     /* ----- Price per unit ----- */
 
     public function getPurchaseUnitAttribute(): float
@@ -89,14 +55,7 @@ class Price extends Model
         return $this->getLiterPrice($this->horeca);
     }
 
-    /* ======================================================================
-     * Helpers
-     * ====================================================================== */
-
-    protected function getPrice($price): float
-    {
-        return round($price / 100, 2);
-    }
+    /* ----- Helpers ----- */
 
     protected function getLiterPrice($price): float
     {

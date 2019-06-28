@@ -22,14 +22,4 @@ class Packaging extends Model
     {
         return $this->hasMany(Beer::class);
     }
-
-    public function getCapacityAttribute($value)
-    {
-        return $value / 100;
-    }
-
-    public function setCapacityAttribute($value)
-    {
-        $this->attributes['capacity'] = $value * 100;
-    }
 }

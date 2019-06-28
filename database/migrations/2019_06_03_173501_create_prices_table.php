@@ -15,9 +15,9 @@ class CreatePricesTable extends Migration
     {
         Schema::create('prices', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('horeca')->nullable();
-            $table->unsignedInteger('purchase');
-            $table->unsignedInteger('distribution')->nullable();
+            $table->unsignedDecimal('horeca')->nullable();
+            $table->unsignedDecimal('purchase');
+            $table->unsignedDecimal('distribution')->nullable();
 
             $table->unsignedDecimal('discount')->nullable();
             $table->unsignedDecimal('margin')->nullable();
