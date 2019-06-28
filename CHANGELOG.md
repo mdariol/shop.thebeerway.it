@@ -9,6 +9,7 @@ Log of unreleased changes.
 ### Changed
 
 - `*_liter` and `*_unit` prices are now calculated.
+- Deploying to `stage` does not require a tag.
 
 ### Fixes
 
