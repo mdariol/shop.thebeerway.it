@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+Log of unreleased changes.
+
+### Changed
+
+- `*_liter` and `*_unit` prices are now calculated fields.
+- Deploying to `stage` does not require a tag.
+- Prices are stored as `decimal` instead of `integer`.
+
+### Fixes
+
+- Prices are calculated when `PriceEdit.vue` is mounted.
+
 ## v0.2.0
 
 Released on **2019/06/24**.

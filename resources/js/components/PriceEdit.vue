@@ -8,7 +8,7 @@
                         id="packaging-id">
                     <option value=" ">-- seleziona un packaging --</option>
                     <option v-for="packaging in packagings" :value="packaging.id">
-                        {{ packaging.quantity }} {{ packaging.type }} x {{ packaging.capacity / 100 }}l
+                        {{ packaging.quantity }} {{ packaging.type }} x {{ packaging.capacity }}l
                     </option>
                 </select>
             </div>
@@ -144,7 +144,7 @@
             return {
                 packaging_id: this.beer.packaging ? this.beer.packaging.id : null,
                 discount: this.beer.price ? this.beer.price.discount : 0,
-                fixedMargin: this.beer.price ? this.beer.price.fixed_margin : false,
+                fixedMargin: this.beer.price ? Boolean(parseInt(this.beer.price.fixed_margin)) : false,
                 margin: this.beer.price ? this.beer.price.margin : 0,
 
                 horeca: {
@@ -184,12 +184,14 @@
 
                 if (this.purchase.total) {
                     this.calculatePurchaseUnitPrice();
-
-                    return;
                 }
 
                 if (this.purchase.unit) {
                     this.calculatePurchaseTotalPrice();
+                }
+
+                if (this.distribution.total) {
+                    this.calculateDistributionUnitPrice();
                 }
             },
 
@@ -278,8 +280,12 @@
                     return 0.00;
                 }
 
-                return (prices.unit / (this.packaging.capacity / 100)).toFixed(2);
+                return (prices.unit / (this.packaging.capacity)).toFixed(2);
             },
+        },
+
+        mounted() {
+            this.calculatePrices();
         },
     }
 </script>

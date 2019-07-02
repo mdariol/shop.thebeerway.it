@@ -79,7 +79,10 @@ class FattureImport extends Command
 
         $beers->each(function ($beer) use ($bar, &$skipped) {
             try {
-                $newBeer = Beer::updateOrCreate(['code' => $beer->code], $beer->toArray() + [
+                /** @var \App\Price $price */
+                $price = $beer->price;
+
+                $beer = Beer::updateOrCreate(['code' => $beer->code], $beer->toArray() + [
                     'brewery_id' => $beer->brewery ? Brewery::firstOrCreate($beer->brewery->toArray())->id : null,
                     'style_id' => $beer->style ? Style::firstOrCreate($beer->style->toArray())->id : null,
                     'color_id' => $beer->color ? Color::firstOrCreate($beer->color->toArray())->id : null,
@@ -87,8 +90,8 @@ class FattureImport extends Command
                     'taste_id' => $beer->taste ? Taste::firstOrCreate($beer->taste->toArray())->id : null,
                 ]);
 
-                Price::firstOrCreate($beer->price->toArray() + [
-                    'beer_id' => $newBeer->id,
+                Price::firstOrCreate($price->toArray() + [
+                    'beer_id' => $beer->id,
                 ]);
             } catch (QueryException $exception) {
                 $skipped[] = $beer;

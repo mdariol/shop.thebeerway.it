@@ -16,7 +16,9 @@ set('git_tty', true);
 set('default_stage', 'stage');
 
 set('release_name', function () {
-    return input()->getOption('tag');
+    if ($tag = input()->getOption('tag')) return $tag;
+
+    return time();
 });
 
 //add('shared_files', []);
@@ -46,10 +48,13 @@ task('build', function () {
 });
 
 task('check:tag', function () {
-    if (empty(input()->getOption('tag'))) {
+    $stage = input()->getArgument('stage');
+    $tag = input()->getOption('tag');
+
+    if ($stage && empty($tag)) {
         throw new \Exception('Please, specify a version to deploy via "--tag" option.');
     }
-});
+})->local();
 
 /* ----- After ----- */
 
