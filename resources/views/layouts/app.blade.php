@@ -30,10 +30,10 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="Home-icon-yellow.png" alt="Home" width="40px" >
                 </a>
-                <a class="navbar-brand" href="{{ url('/beers?packaging=fusti') }}">
+                <a class="navbar-brand" href="{{ url('/beers?packaging=fusti&stock=on') }}">
                     <img src="Fusto.png" alt="Fusti" height="40px" >
                 </a>
-                <a class="navbar-brand" href="{{ url('/beers?packaging=bottiglie') }}">
+                <a class="navbar-brand" href="{{ url('/beers?packaging=bottiglie&stock=on') }}">
                     <img src="Bottiglia512.png" alt="Bottiglie" height="40px" >
                 </a>
 

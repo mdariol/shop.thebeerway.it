@@ -11,6 +11,8 @@
             <div class="form-group">
                 <label for="name">Birrificio</label>
                 <input type="text" name="name" id="name" value="{{ $brewery->name }}">
+                <label for="isactive">Attivo</label>
+                <input type="checkbox" name="isactive" id="isactive" {{ $brewery->isactive ? 'checked' : ''}}>
             </div>
 
             <button class="btn btn-primary">Aggiorna</button>

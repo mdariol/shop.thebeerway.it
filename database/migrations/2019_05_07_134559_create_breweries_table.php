@@ -16,6 +16,7 @@ class CreateBreweriesTable extends Migration
         Schema::create('breweries', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->boolean('isactive')->default(true);
             $table->timestamps();
         });
     }

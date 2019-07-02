@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Brewery extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name','isactive'];
 
     public function beers()
     {
