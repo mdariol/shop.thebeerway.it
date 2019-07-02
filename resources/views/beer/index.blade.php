@@ -49,7 +49,12 @@
         @foreach($beers as $beer)
             <div class="row align-items-center mb-0 mt-0">
                 <div class="col-sm mb-0 mt-0">
-                    <h5 class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }} aria-expanded="false" aria-controls={{ "beer".$beer->id }}>{{ $beer->name }} <small class="text-secondary"> - {{ $beer->brewery->name }}</small></h5>
+                    <h5 class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }} aria-expanded="false" aria-controls={{ "beer".$beer->id }}>{{ $beer->name }} <small class="text-secondary"> - {{ $beer->brewery->name }}
+                        @hasanyrole('Admin|Distributor')
+                        [{{$beer->stock}}]
+                        @endhasanyrole
+
+                        </small></h5>
                     <h6 class="text-body">{{ $beer->style ? $beer->style->name.', ' : '' }}
                         {{ $beer->color ? $beer->color->name.', ' : ''}}
                         {{ $beer->taste ? $beer->taste->name.', ' : ''}}
@@ -62,24 +67,25 @@
 
 
 
-                @hasanyrole('Publican|Admin')
+                @hasanyrole('Publican|Admin|Distributor')
                     <div class="col-sm-auto">
                         <h6 class="text-body">&euro; {{ $beer->price  ? $beer->price->distribution : 'n/d'}} {{ ($beer->price && $beer->packaging->type=='fusti' ) ? '- €/lt '.$beer->price->distributionLiter : ' '}}
-                            {{ ($beer->price && $beer->packaging->type=='bottiglie' ) ? '- €/bt '.$beer->price->distribution_unit : ' '}}</h6>
+                            {{ ($beer->price && $beer->packaging->type=='bottiglie' ) ? '- €/bt '.$beer->price->distribution_unit : ' '}} (+Iva)</h6>
                     </div>
                 @endhasanyrole
 
                 <div class="col-sm-auto">
-                <a class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }}  aria-expanded="false" aria-controls={{ "beer".$beer->id }} >Espandi</a>
                 @hasrole('Admin')
-                        <a href="/beers/{{ $beer->id }}/duplicate?packaging={{ request()->packaging }} " class="btn-primary">Duplica</a>
-                        <a href="/beers/{{ $beer->id }}/edit?packaging={{ request()->packaging }} " class="btn-primary">Modifica</a>
-                        <a href="/beers/{{ $beer->id }}/delete?packaging={{ request()->packaging }} " class="btn-danger">Elimina</a>
+                        <a href="/beers/{{ $beer->id }}/duplicate?packaging={{ request()->packaging }} " class="btn-primary"> Duplica </a>
+                        <a href="/beers/{{ $beer->id }}/edit?packaging={{ request()->packaging }} " class="btn-primary ml-2"> Modifica </a>
+                        <a href="/beers/{{ $beer->id }}/delete?packaging={{ request()->packaging }} " class="btn-danger ml-2 mr-2"> Elimina </a>
                 @endhasrole
+                    <a class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }}  aria-expanded="false" aria-controls={{ "beer".$beer->id }} > Espandi </a>
+
                 </div>
 
-                <div class="collapse ml-2 mb-0 mt-0 mr-2 align-items-center" id={{ "beer".$beer->id }}>
-                    <div class="card card-body p-1">
+                <div class="card collapse w-100 " id={{ "beer".$beer->id }}>
+                    <div class="card card-body pb-1 pt-1 pl-3 pr-3">
                         {{ $beer->description }}
                     </div>
                 </div>
