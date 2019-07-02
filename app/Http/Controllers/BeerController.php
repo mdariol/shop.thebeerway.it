@@ -29,7 +29,17 @@ class BeerController extends Controller
      */
     public function index()
     {
-        $beers = Beer::queryFilter()->get();
+
+
+        $beers = Beer::queryFilter()
+            ->join('breweries', 'beers.brewery_id', '=', 'breweries.id' )
+            ->select('beers.*', 'breweries.name as brewery_name')
+            ->orderBy('brewery_name', 'DESC')
+            ->orderBy('beers.name', 'ASC')
+            ->get();
+
+
+
 
         return view('beer.index')->with([
             'beers' => $beers,
