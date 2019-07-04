@@ -30,12 +30,14 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="Home-icon-yellow.png" alt="Home" width="40px" >
                 </a>
-                <a class="navbar-brand" href="{{ url('/beers?packaging=fusti&stock=on') }}">
+                <a class="navbar-brand" href="{{ url(request()->exists('packaging') ? str_replace('bottiglie','fusti',request()->getRequestUri()) : '/beers?packaging=fusti&stock=on')}}">
                     <img src="Fusto.png" alt="Fusti" height="40px" >
                 </a>
-                <a class="navbar-brand" href="{{ url('/beers?packaging=bottiglie&stock=on') }}">
+                <a class="navbar-brand" href="{{ url(request()->exists('packaging') ? str_replace('fusti','bottiglie',request()->getRequestUri()) : '/beers?packaging=fusti&stock=on')}}">
                     <img src="Bottiglia512.png" alt="Bottiglie" height="40px" >
                 </a>
+
+
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>

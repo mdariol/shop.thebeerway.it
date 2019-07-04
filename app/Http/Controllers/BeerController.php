@@ -30,7 +30,6 @@ class BeerController extends Controller
     public function index()
     {
 
-
         $beers = Beer::queryFilter()
             ->join('breweries', 'beers.brewery_id', '=', 'breweries.id' )
             ->select('beers.*', 'breweries.name as brewery_name')
