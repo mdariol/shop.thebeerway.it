@@ -6,6 +6,8 @@
 
         @hasrole('Admin')
             <a class="btn btn-primary mb-2" href="/beers/create?packaging={{ request()->packaging }} ">Nuova</a>
+            <a class="btn btn-warning mb-2" href="/stocksync">Sincronizza Stock</a>
+
         @endhasrole
 
         <div class="card mb-2 mt-2 ">
@@ -48,7 +50,7 @@
 
         @foreach($beers as $beer)
 
-@if( (auth()->user() && auth()->user()->hasrole('Admin')) or $beer->brewery->isactive)
+@if( (auth()->user() && auth()->user()->hasrole('Admin')) or ($beer->brewery->isactive and $beer->isactive))
 
             <div class="row align-items-center mb-0 mt-0">
                 <div class="col-sm mb-0 mt-0">

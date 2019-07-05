@@ -8,7 +8,7 @@
             @csrf
 
             <div class="form-row">
-                <div class="form-group col-sm-8">
+                <div class="form-group col-sm-7">
                     <label for="name">Nome</label>
                     <input class="form-control form-control-lg" type="text" name="name" id="name" value="{{ $beer->name }}">
                 </div>
@@ -20,6 +20,11 @@
                         <input class="form-control form-control-lg" type="text" name="code" id="code" value="{{ $beer->code }}">
                     </div>
                 </div>
+                <div class="form-group col-sm-1">
+                    <label for="isactive">Attiva</label>
+                    <input class="form-control form-control-lg" type="checkbox" name="isactive" id="isactive" {{ $beer->isactive ? 'checked' : ''}}>
+                </div>
+
             </div>
 
             <div class="form-group">

@@ -54,3 +54,12 @@ Route::get('/roles/{role}/delete', 'RoleController@delete')
 Route::resource('users', 'UserController');
 Route::post('/roleassign', 'UserController@roleassign')
     ->name('users.roleassign');
+
+Route::get('/stocksync', function () {
+    $exitCode = Artisan::call('fatture:sync beers --field=stock');
+    if ($exitCode==0) {
+        return back()->with('success','Sincronizzazione Completata con successo!');
+    }
+    return back()->withErrors($exitCode);
+    //
+});
