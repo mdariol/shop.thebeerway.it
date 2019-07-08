@@ -11,6 +11,7 @@ Log of unreleased changes.
 - `*_liter` and `*_unit` prices are now calculated fields.
 - Deploying to `stage` does not require a tag.
 - Prices are stored as `decimal` instead of `integer`.
+- Use Postgresql as default database.
 
 ### Fixes
 

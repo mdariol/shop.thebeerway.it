@@ -8,7 +8,7 @@ class BeerFilters extends QueryFilter
 {
     public function name(string $search): Builder
     {
-        return $this->builder->where('beers.name', 'LIKE', '%'.$search.'%');
+        return $this->builder->where('beers.name', 'ILIKE', '%'.$search.'%');
 
     }
 
@@ -60,9 +60,9 @@ class BeerFilters extends QueryFilter
 
         foreach ($search as $key => $string) {
             if ($key == 0) {
-                $query->where('name', 'LIKE', '%'.$string.'%');
+                $query->where('name', 'ILIKE', '%'.$string.'%');
             } else {
-                $query->orwhere('name', 'LIKE', '%'.$string.'%');
+                $query->orwhere('name', 'ILIKE', '%'.$string.'%');
             }
         }
 
