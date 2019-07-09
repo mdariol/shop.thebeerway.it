@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.2.2
+
+Released on **2019/07/09**.
+
+### Changed
+
+- Changes `facebook_id` and `google_id` column type to `string`.
+
+### Fixed
+
+- Uses `ILIKE` instead of `LIKE` in `BeerFilters`.
+
 ## v0.2.1
 
 Released on **2019/07/09**.
