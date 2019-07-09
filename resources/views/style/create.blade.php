@@ -12,9 +12,9 @@
                 <input type="text" name="name" id="name">
             </div>
             <div class="form-group">
-                <label for="area_id">Area</label>
-                <select class="form-control" name="area_id" id="area_id">
-                    <option label=" ">-- Seleziona un'opzione --</option>
+                <label for="area-id">Area</label>
+                <select class="form-control" name="area_id" id="area-id">
+                    <option value=" ">-- Seleziona un'opzione --</option>
                     @foreach($areas as $area)
                         <option value="{{$area->id}}"> {{$area->name}} </option>
                     @endforeach
