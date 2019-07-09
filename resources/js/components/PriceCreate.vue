@@ -8,7 +8,7 @@
                         id="packaging-id">
                     <option value=" ">-- seleziona un packaging --</option>
                     <option v-for="packaging in packagings" :value="packaging.id">
-                        {{ packaging.quantity }} {{ packaging.type }} x {{ packaging.capacity / 100 }}l
+                        {{ packaging.quantity }} {{ packaging.type }} x {{ packaging.capacity }}l
                     </option>
                 </select>
             </div>
@@ -278,7 +278,7 @@
                     return 0.00;
                 }
 
-                return (prices.unit / (this.packaging.capacity / 100)).toFixed(2);
+                return (prices.unit / (this.packaging.capacity)).toFixed(2);
             },
         },
     }

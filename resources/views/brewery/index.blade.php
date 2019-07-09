@@ -8,6 +8,7 @@
             <div class="card mb-2">
                 <div class="card-body">
                     <p class="float-left">{{ $brewery->name }}</p>
+                    <p class="float-left"> - {{ $brewery->isactive }}</p>
                     <div class="float-right">
                         <a href="/breweries/{{ $brewery->id }}/edit" class="btn btn-primary">Modifica</a>
                         <a href="/breweries/{{ $brewery->id }}/delete" class="btn btn-danger">Elimina</a>

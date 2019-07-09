@@ -29,7 +29,16 @@ class BeerController extends Controller
      */
     public function index()
     {
-        $beers = Beer::queryFilter()->get();
+
+        $beers = Beer::queryFilter()
+            ->join('breweries', 'beers.brewery_id', '=', 'breweries.id' )
+            ->select('beers.*', 'breweries.name as brewery_name')
+            ->orderBy('brewery_name', 'DESC')
+            ->orderBy('beers.name', 'ASC')
+            ->get();
+
+
+
 
         return view('beer.index')->with([
             'beers' => $beers,
@@ -86,7 +95,9 @@ class BeerController extends Controller
             'abv', 'ibu', 'plato', 'stock',
             'brewery_id', 'packaging_id',
             'style_id',
-        ]));
+        ])+ [
+                'isactive' => request()->has('isactive')
+            ]);
 
         $beer->price()->create(request([
             'horeca', 'horeca_unit', 'discount',
@@ -136,6 +147,7 @@ class BeerController extends Controller
      */
     public function update(Beer $beer)
     {
+
         $beer->price()->updateOrCreate(['beer_id' => $beer->id], request([
             'horeca', 'horeca_unit', 'discount',
             'purchase', 'purchase_unit',
@@ -148,7 +160,9 @@ class BeerController extends Controller
             'code', 'name', 'description',
             'abv', 'ibu', 'plato', 'stock',
             'brewery_id', 'packaging_id', 'style_id'
-        ]));
+        ])+ [
+                'isactive' => request()->has('isactive')
+            ]);
 
         return redirect('/beers?packaging='.request()->packaging );
     }

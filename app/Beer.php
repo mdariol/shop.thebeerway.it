@@ -13,7 +13,7 @@ class Beer extends Model
         'code', 'name', 'description',
         'abv', 'ibu', 'plato', 'stock',
         'brewery_id', 'packaging_id',
-        'style_id', 'price_id', 'color_id','taste_id',
+        'style_id', 'price_id', 'color_id','taste_id','isactive'
     ];
 
     protected $with = [

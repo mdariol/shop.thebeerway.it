@@ -83,7 +83,9 @@ class BreweryController extends Controller
      */
     public function update(Request $request, Brewery $brewery)
     {
-        $brewery->update(request(['name']));
+        $brewery->update(request(['name']) + [
+                'isactive' => $request->has('isactive')
+            ]);
 
         return redirect('/breweries');
     }
