@@ -52,7 +52,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"><span class="nav-link">Ordini a:</span></li>
+                        <li class="nav-item"><span class="nav-link">Per Ordinare:</span></li>
                         <li class="nav-item"><a class="nav-link" href="mailto:massimo@thebeerway.it">massimo@thebeerway.it</a> </li>
                         <li class="nav-item"><a class="nav-link" href="tel:+393356371167">+39 335 637 1167</a> </li>
                     </ul>
