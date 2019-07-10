@@ -10,10 +10,10 @@ class Beer extends Model
     use HasFilters;
 
     protected $fillable = [
-        'code', 'name', 'description',
-        'abv', 'ibu', 'plato', 'stock',
-        'brewery_id', 'packaging_id',
-        'style_id', 'price_id', 'color_id','taste_id','isactive'
+        'code', 'name', 'description', 'isactive',
+        'abv', 'ibu', 'plato', 'stock', 'taste_id',
+        'brewery_id', 'packaging_id', 'color_id',
+        'style_id', 'price_id',
     ];
 
     protected $with = [
@@ -49,6 +49,7 @@ class Beer extends Model
     {
         return $this->belongsTo(Taste::class);
     }
+
     public function inStock(): bool
     {
         return $this->stock > 0;

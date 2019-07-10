@@ -11,12 +11,6 @@ use App\Taste;
 
 class BeerController extends Controller
 {
-    /**
-     * Control if is Admin role defined in middleware.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
     public function __construct()
     {
         $this->middleware('admin', ['except' => ['index', 'show']]);
@@ -29,16 +23,12 @@ class BeerController extends Controller
      */
     public function index()
     {
-
         $beers = Beer::queryFilter()
             ->join('breweries', 'beers.brewery_id', '=', 'breweries.id' )
             ->select('beers.*', 'breweries.name as brewery_name')
             ->orderBy('brewery_name', 'DESC')
             ->orderBy('beers.name', 'ASC')
             ->get();
-
-
-
 
         return view('beer.index')->with([
             'beers' => $beers,
@@ -94,17 +84,17 @@ class BeerController extends Controller
             'code', 'name', 'description',
             'abv', 'ibu', 'plato', 'stock',
             'brewery_id', 'packaging_id',
-            'style_id',
-        ])+ [
-                'isactive' => request()->has('isactive')
-            ]);
+            'style_id', 'color_id', 'taste_id'
+        ]) + [
+            'isactive' => request()->has('isactive')
+        ]);
 
         $beer->price()->create(request([
             'horeca', 'horeca_unit', 'discount',
             'purchase', 'purchase_unit',
             'distribution', 'distribution_unit', 'margin'
         ]) + [
-            'fixed_margin' => request()->has('fixed_margin') ? true : false
+            'fixed_margin' => request()->has('fixed_margin')
         ]);
 
         return redirect('beers?packaging='.request()->packaging);
@@ -157,12 +147,12 @@ class BeerController extends Controller
         ]);
 
         $beer->update(request([
-            'code', 'name', 'description',
-            'abv', 'ibu', 'plato', 'stock',
+            'code', 'name', 'description', 'color_id',
+            'abv', 'ibu', 'plato', 'stock', 'taste_id',
             'brewery_id', 'packaging_id', 'style_id'
         ])+ [
-                'isactive' => request()->has('isactive')
-            ]);
+            'isactive' => request()->has('isactive')
+        ]);
 
         return redirect('/beers?packaging='.request()->packaging );
     }
