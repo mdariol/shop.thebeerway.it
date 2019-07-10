@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.2.3
+
+Released on **2019/07/10**.
+
+### Fixed
+
+- Fixes `Style` create form.
+
 ## v0.2.2
 
 Released on **2019/07/09**.
