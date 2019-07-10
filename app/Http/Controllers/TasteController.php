@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\taste;
+use App\Taste;
 use Illuminate\Http\Request;
 
 class TasteController extends Controller

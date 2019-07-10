@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+Log of unreleased changes.
+
+### Fixed
+
+- Fixes `Taste` import in `TasteController`. 
+
 ## v0.2.3
 
 Released on **2019/07/10**.
