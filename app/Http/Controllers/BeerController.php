@@ -97,7 +97,8 @@ class BeerController extends Controller
             'fixed_margin' => request()->has('fixed_margin')
         ]);
 
-        return redirect('beers?packaging='.request()->packaging);
+        return redirect(request()->getRequestUri());
+
     }
 
     /**
@@ -137,6 +138,7 @@ class BeerController extends Controller
      */
     public function update(Beer $beer)
     {
+//        dd(request()->getRequestUri());
 
         $beer->price()->updateOrCreate(['beer_id' => $beer->id], request([
             'horeca', 'horeca_unit', 'discount',
@@ -154,7 +156,10 @@ class BeerController extends Controller
             'isactive' => request()->has('isactive')
         ]);
 
-        return redirect('/beers?packaging='.request()->packaging );
+
+        return redirect(str_replace('/'.$beer->id.'?','?',request()->getRequestUri()));
+
+
     }
 
     /**
@@ -180,6 +185,7 @@ class BeerController extends Controller
     {
         $beer->delete();
 
-        return redirect('/beers?packaging='.request()->packaging );
+        return redirect(str_replace('/'.$beer->id.'?','?',request()->getRequestUri()));
+
     }
 }

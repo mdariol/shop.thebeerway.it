@@ -4,7 +4,7 @@
     <div class="container">
         <h1><em>Modifica</em> Birra</h1>
 
-        <form method="POST" action="/beers/{{ $beer->id }}?packaging={{ request()->packaging }} ">
+        <form method="POST" action="{{str_replace('/edit', '', request()->getRequestUri() )}}">
             @csrf
             @method('PATCH')
 

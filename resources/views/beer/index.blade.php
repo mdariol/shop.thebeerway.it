@@ -5,14 +5,15 @@
         <h3 class="text-capitalize">{{ request()->packaging }}  {{ request()->has('stock') ? ' (Disponibili)' : '(Catalogo)' }}</h3>
 
         @hasrole('Admin')
-            <a class="btn btn-primary mb-2" href="/beers/create?packaging={{ request()->packaging }} ">Nuova</a>
+            <a class="btn btn-primary mb-2" href="{{str_replace('?', '/create?' , request()->getRequestUri() )}}" >Nuova</a>
+
             <a class="btn btn-warning mb-2" href="/stocksync">Sincronizza Stock</a>
 
         @endhasrole
 
-        <div class="card mb-2 mt-2 ">
-            <div class="card-header">
-                <h6 small class="mb-0" data-toggle="collapse" data-target="#filter">Filtri</h6>
+        <div class="card m-0 p-0">
+            <div class="card-header m-0 p-0">
+                <h1  class="btn btn-dark btn-lg m-0 p-0 w-100" data-toggle="collapse" role="button" data-target="#filter">Filtri</h1>
             </div>
             <div class="card-body collapse" id="filter">
                 <form method="GET" action="/beers">
@@ -52,15 +53,16 @@
 
 @if( (auth()->user() && auth()->user()->hasrole('Admin')) or ($beer->brewery->isactive and $beer->isactive))
 
-            <div class="row align-items-center mb-0 mt-0">
-                <div class="col-sm mb-0 mt-0">
-                    <h5 class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }} aria-expanded="false" aria-controls={{ "beer".$beer->id }}>{{ $beer->name }} <small class="text-secondary"> - {{ $beer->brewery->name }}
+            <div class="row align-items-center mb-0 mt-0" data-toggle="collapse" href={{ "#beer".$beer->id }} aria-expanded="false" aria-controls={{ "beer".$beer->id }} >
+                <div class="col-sm mb-0 mt-0" >
+                    <h5 class="text-primary" >{{ $beer->name }}<small class="text-secondary"> - {{ $beer->brewery->name }}
                             @if(auth()->user())
                             [{{$beer->stock}}]
                             @endif
 
                             </small></h5>
-                        <h6 class="text-body">{{ $beer->style ? $beer->style->name.', ' : '' }}
+                        <h6 class="text-body" >
+                            {{ $beer->style ? $beer->style->name.', ' : '' }}
                             {{ $beer->color ? $beer->color->name.', ' : ''}}
                             {{ $beer->taste ? $beer->taste->name.', ' : ''}}
                             {{ $beer->abv ? 'da '.$beer->abv.'%, ' : ''}}
@@ -69,8 +71,6 @@
 
 
                     </div>
-
-
 
                     @hasanyrole('Publican|Admin|Distributor')
                         <div class="col-sm-auto">
@@ -82,15 +82,17 @@
                     <div class="col-sm-auto">
                     @hasrole('Admin')
                             <a href="/beers/{{ $beer->id }}/duplicate?packaging={{ request()->packaging }} " class="btn-primary"> Duplica </a>
-                            <a href="/beers/{{ $beer->id }}/edit?packaging={{ request()->packaging }} " class="btn-primary ml-2"> Modifica </a>
-                            <a href="/beers/{{ $beer->id }}/delete?packaging={{ request()->packaging }} " class="btn-danger ml-2 mr-2"> Elimina </a>
+
+                            <a  href="{{str_replace('?', '/'.$beer->id.'/edit?' , request()->getRequestUri() )}}" class="btn-primary ml-2"> Modifica </a>
+                            <a  href="{{str_replace('?', '/'.$beer->id.'/delete?' , request()->getRequestUri() )}}" class="btn-danger ml-2 mr-2"> Elimina </a>
+
                     @endhasrole
                         <a class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }}  aria-expanded="false" aria-controls={{ "beer".$beer->id }} > Espandi </a>
 
                     </div>
 
-                    <div class="card collapse w-100 " id={{ "beer".$beer->id }}>
-                        <div class="card card-body pb-1 pt-1 pl-3 pr-3">
+                    <div class="card collapse w-100 pl-3 pr-3 pt-1 pb-1 border-0" id={{ "beer".$beer->id }}>
+                        <div class="card card-body  m-0 p-0 border-0">
                             {{ $beer->description }}
                         </div>
                     </div>

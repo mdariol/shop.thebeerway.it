@@ -3,12 +3,15 @@
 @section('content')
     <div class="container">
         <h1>Elimina <em>{{ $beer->name }}</em></h1>
-        <form method="POST" action="/beers/{{ $beer->id }}?packaging={{ request()->packaging }} ">
+
+
+        <form method="POST" action="{{str_replace('/delete', '', request()->getRequestUri() )}}">
             @csrf
             @method('DELETE')
 
             <button type="submit" class="btn btn-primary">Delete</button>
-            <a href="/beers?packaging={{ request()->packaging }}" class="btn btn-link">Cancel</a>
+            <a href="{{str_replace('/'.$beer->id.'/delete?','?',request()->getRequestUri())}}">Cancel</a>
+
         </form>
     </div>
 @endsection

@@ -4,7 +4,9 @@
     <div class="container">
         <h1><em>Nuova</em> Birra</h1>
 
-        <form method="POST" action="/beers?packaging={{ request()->packaging }} " >
+        <form method="POST" action="{{str_replace('/create?', '?' , request()->getRequestUri() )}}" >
+
+
             @csrf
 
             <div class="form-row">
