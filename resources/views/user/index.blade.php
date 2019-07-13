@@ -13,7 +13,7 @@
 
                 <div class="card mb-2">
                     <div class="card-body">
-                        <p class="float-left mr-5">{{ $user->name }}  </p>
+                        <p class="float-left mr-5">{{ $user->name }} {{ $user->ishoreca ? '( '.$user->horecaname.' )' : ''}} </p>
                         <div class="float-right">
                             <button class="btn btn-primary">Assegna Ruoli</button>
                         </div>
@@ -24,6 +24,12 @@
                                 <input class="form-control" type=text" name="assign_user" value="{{ $user->id }}"  hidden>
                             </div>
                         @endforeach
+
+                        <div class="float-right">
+                            <a href="/users/{{ $user->id }}/edit" class="btn btn-primary">Modifica</a>
+                            <a href="/users/{{ $user->id }}/delete" class="btn btn-danger">Elimina</a>
+                        </div>
+
                     </div>
                 </div>
             </form>

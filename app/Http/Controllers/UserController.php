@@ -17,7 +17,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-//        $this->middleware('admin');
+        $this->middleware('admin')->except('edit', 'update');
     }
 
 
@@ -45,6 +45,39 @@ class UserController extends Controller
 
         $user->syncRoles(request()->roles);
         return back();
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\user  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(user $user)
+    {
+        return view('user.edit')->with('user', $user);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\user  $user
+     * @return \Illuminate\Http\Response
+     */
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\user  $user
+     * @return \Illuminate\Http\Response
+     */
+
+    public function update(Request $request, user $user)
+    {
+        $user->update(request(['name','ishoreca','horecaname','vatnumber']));
+
+        return redirect(  $user->hasrole('Admin') ? '/users' : '/');
     }
 
 

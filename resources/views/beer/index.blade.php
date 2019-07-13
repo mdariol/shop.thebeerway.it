@@ -12,7 +12,7 @@
         @endhasrole
 
         <div class="card m-0 p-0">
-            <div class="card-header m-0 p-0">
+            <div class="card-header m-0 p-0 border-0">
                 <h1  class="btn btn-dark btn-lg m-0 p-0 w-100" data-toggle="collapse" role="button" data-target="#filter">Filtri</h1>
             </div>
             <div class="card-body collapse" id="filter">
