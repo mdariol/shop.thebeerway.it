@@ -9,7 +9,8 @@ Log of unreleased changes.
 ### Fixed
 
 - Fixes `Taste` import in `TasteController`.
-- Fixes `color_id` and `taste_id` values not saved on `Beer` `create` and `update`. 
+- Fixes `color_id` and `taste_id` values not saved on `Beer` `create` and `update`.
+- Fixes wrong management of `is_horeca` value in `RegisterController@create` method. 
 
 ## v0.2.3
 
