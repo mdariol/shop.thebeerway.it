@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\BeersScope;
 use App\Traits\HasFilters;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,6 +20,20 @@ class Beer extends Model
     protected $with = [
         'packaging', 'style', 'brewery', 'price', 'color','taste',
     ];
+
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new BeersScope);
+    }
+
 
     public function brewery()
     {

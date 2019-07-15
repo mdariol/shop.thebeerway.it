@@ -2,11 +2,26 @@
 
 namespace App;
 
+use App\Scopes\BreweriesScope;
 use Illuminate\Database\Eloquent\Model;
 
 class Brewery extends Model
 {
     protected $fillable = ['name','isactive'];
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new BreweriesScope);
+    }
+
+
 
     public function beers()
     {

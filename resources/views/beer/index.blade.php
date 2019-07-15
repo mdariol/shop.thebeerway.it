@@ -51,7 +51,6 @@
 
         @foreach($beers as $beer)
 
-@if( (auth()->user() && auth()->user()->hasrole('Admin')) or ($beer->brewery->isactive and $beer->isactive))
 
             <div class="row align-items-center mb-0 mt-0" data-toggle="collapse" href={{ "#beer".$beer->id }} aria-expanded="false" aria-controls={{ "beer".$beer->id }} >
                 <div class="col-sm mb-0 mt-0" >
@@ -99,7 +98,6 @@
 
                     <hr class="w-100 mb-1 mt-1">
                 </div>
-    @endif
             @endforeach
         </div>
     @endsection
