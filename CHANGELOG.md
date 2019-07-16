@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 Log of unreleased changes.
 
+### Added
+
+- Requires email verification.
+
 ### Fixed
 
 - Fixes `Taste` import in `TasteController`.

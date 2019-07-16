@@ -2,12 +2,14 @@
 
 namespace App;
 
+use App\Mail\Verify;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
     use HasRoles;
@@ -18,7 +20,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'google_id', 'facebook_id', 'name', 'email', 'password', 'ishoreca', 'horecaname','vatnumber'
+        'google_id', 'facebook_id', 'name', 'email',
+        'password', 'ishoreca', 'horecaname','vatnumber',
     ];
 
     /**
@@ -38,4 +41,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Send the email verification notification.
+     *
+     * @return void
+     */
+    public function sendEmailVerificationNotification()
+    {
+        Mail::to($this)->send(new Verify($this));
+    }
 }
