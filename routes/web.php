@@ -15,7 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['verify' => true]);
+
 Route::get('/login/{provider}', 'Auth\LoginController@redirectToProvider');
 Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
 
@@ -41,7 +42,7 @@ Route::get('/styles/{style}/delete', 'StyleController@delete')
 
 Route::resource('areas', 'AreaController');
 Route::get('/areas/{area}/delete', 'AreaController@delete')
-  ->name('areas.delete');
+    ->name('areas.delete');
 
 Route::resource('tastes', 'TasteController');
 Route::get('/tastes/{taste}/delete', 'TasteController@delete')
@@ -61,9 +62,10 @@ Route::post('/roleassign', 'UserController@roleassign')
 
 Route::get('/stocksync', function () {
     $exitCode = Artisan::call('fatture:sync beers --field=stock');
-    if ($exitCode==0) {
-        return back()->with('success','Sincronizzazione Completata con successo!');
+
+    if ($exitCode == 0) {
+        return back()->with('success', 'Sincronizzazione completata con successo!');
     }
+
     return back()->withErrors($exitCode);
-    //
 });
