@@ -44,6 +44,23 @@ class VerificationController extends Controller
     }
 
     /**
+     * Show the email verification notice.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request)
+    {
+        $user = User::find($request->user);
+
+        if ( ! $user) return back();
+
+        return $user->hasVerifiedEmail()
+          ? redirect($this->redirectPath())
+          : view('auth.verify');
+    }
+
+    /**
      * Resend the email verification notification.
      *
      * @param  \Illuminate\Http\Request  $request
