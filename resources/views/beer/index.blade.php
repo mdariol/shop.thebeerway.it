@@ -80,11 +80,9 @@
 
                     <div class="col-sm-auto">
                     @hasrole('Admin')
-                            <a href="/beers/{{ $beer->id }}/duplicate?packaging={{ request()->packaging }} " class="btn-primary"> Duplica </a>
-
+                            <a  href="{{str_replace('?', '/'.$beer->id.'/duplicate?' , request()->getRequestUri() )}}" class="btn-primary ml-2"> Duplica </a>
                             <a  href="{{str_replace('?', '/'.$beer->id.'/edit?' , request()->getRequestUri() )}}" class="btn-primary ml-2"> Modifica </a>
                             <a  href="{{str_replace('?', '/'.$beer->id.'/delete?' , request()->getRequestUri() )}}" class="btn-danger ml-2 mr-2"> Elimina </a>
-
                     @endhasrole
                         <a class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }}  aria-expanded="false" aria-controls={{ "beer".$beer->id }} > Espandi </a>
 
