@@ -8,6 +8,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VerificationController extends Controller
 {
@@ -106,6 +107,8 @@ class VerificationController extends Controller
             event(new Verified($user));
         }
 
-        return redirect($this->redirectPath())->with('verified', true);
+        Auth::login($user);
+
+        return redirect($this->redirectPath())->with('status', 'La tua email è stata verificata.');
     }
 }

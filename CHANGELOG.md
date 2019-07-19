@@ -9,6 +9,11 @@ Log of unreleased changes.
 ### Added
 
 - Requires email verification.
+- Sends `Approval` email when Ho.Re.Ca. user is verified.
+
+### Changed
+
+- Temporarily remove Facebook and Google login.
 
 ### Fixed
 
