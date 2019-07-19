@@ -1,7 +1,7 @@
 @component('mail::message')
 # Ciao {{ $user->name }}!
 
-Verifica il tuo indirizzo e-mail cliccando sul bottone.
+Per completare la registrazione verifica il tuo indirizzo e-mail cliccando sul bottone sottostante.
 
 @component('mail::button', ['url' => $url])
 Verifica indirizzo e-mail

@@ -4,7 +4,7 @@
     <div class="container">
         <h1><em>Nuova</em> Birra</h1>
 
-        <form method="POST" action="{{str_replace('/create?', '?' , request()->getRequestUri() )}}" >
+        <form method="POST" action="{{str_replace('/'.$beer->id.'/duplicate?','?',str_replace('/create?', '?' , request()->getRequestUri() ))}}" >
 
 
             @csrf
