@@ -71,9 +71,9 @@ class RegisterController extends Controller
             $horeca = request([
                 'horecaname',
                 'vatnumber',
-            ] + [
+            ]) + [
                 'ishoreca' => request()->has('ishoreca'),
-            ]);
+            ];
         }
 
         return User::create([
