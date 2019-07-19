@@ -8,6 +8,7 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
+                    <!--
                     <div class="row justify-content-center">
                         <div class="col-6">
                             <a href="/login/google" class="btn btn-danger btn-block">Google</a>
@@ -20,6 +21,7 @@
                         <div class="col-auto">O</div>
                         <div class="col"><hr></div>
                     </div>
+                    -->
 
                     <form method="POST" action="{{ route('login') }}">
                         @csrf

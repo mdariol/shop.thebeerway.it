@@ -11,6 +11,10 @@ Log of unreleased changes.
 - Requires email verification.
 - Sends `Approval` email when Ho.Re.Ca. user is verified.
 
+### Changed
+
+- Temporarily remove Facebook and Google login.
+
 ### Fixed
 
 - Fixes `Taste` import in `TasteController`.
