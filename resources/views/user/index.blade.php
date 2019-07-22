@@ -13,7 +13,7 @@
 
                 <div class="card mb-2">
                     <div class="card-body">
-                        <p class="float-left mr-5">{{ $user->name }} {{ $user->ishoreca ? '( '.$user->horecaname.' - '.$user->vatnumber.' )' : ''}} </p>
+                        <p class="float-left mr-5">{{ $user->name }} {{ $user->ishoreca ? '( '.$user->horecaname.' - '.$user->vatnumber.' )'.' - '.$user->email : ''}} </p>
                         <div class="float-right">
                             <button class="btn btn-primary">Assegna Ruoli</button>
                         </div>

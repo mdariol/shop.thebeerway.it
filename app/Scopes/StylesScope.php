@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class BreweriesScope implements Scope
+class StylesScope implements Scope
 {
     /**
      * Apply the scope to a given Eloquent query builder.
@@ -18,9 +18,6 @@ class BreweriesScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        if (!(auth()->user() && auth()->user()->hasrole('Admin'))) {
-            $builder->where('isactive', '=', true);
-        }
         $builder->orderBy('name','asc');
     }
 }
