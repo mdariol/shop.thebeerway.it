@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Events\Autorized;
 use App\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -44,6 +45,10 @@ class UserController extends Controller
         $user = User::find(request()->assign_user);
 
         $user->syncRoles(request()->roles);
+
+        if ($user->hasanyrole('Publican|Admin|Distributor')) {
+            event(new Autorized($user));
+        }
         return back();
     }
 

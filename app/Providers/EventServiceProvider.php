@@ -19,6 +19,10 @@ class EventServiceProvider extends ServiceProvider
         \Illuminate\Auth\Events\Verified::class => [
             \App\Listeners\SendEmailApprovalNotification::class,
         ],
+
+        \App\Events\Autorized::class => [
+            \App\Listeners\SendEmailAutorizeNotification::class,
+        ],
     ];
 
     /**
