@@ -12,7 +12,7 @@
                 <div class="form-group row">
                         <label for="horecaname" class="col-md-4 col-form-label text-md-right">{{ ('Nome Ho.Re.Ca.') }}</label>
                         <div class="col-md-6">
-                                <input  class="form-control" type="text" :readonly=" ! ishoreca" name="horecaname" id="horecaname" >
+                                <input  class="form-control" type="text" v-model="horecaname" :readonly=" ! ishoreca" name="horecaname" id="horecaname" >
                         </div>
                 </div>
                 <div class="form-group row">
@@ -33,15 +33,18 @@
             /* ----------------------------------------------------------------------------------------------------------
             Data
             ---------------------------------------------------------------------------------------------------------- */
+            props: {
+                    'user': Object,
+            },
 
         data() {
             return {
-                ishoreca: false,
-                horecaname: null,
-                vatnumber: null,
+                ishoreca: this.user.ishoreca,
+                horecaname: this.user.horecaname,
+                vatnumber: this.user.vatnumber,
                 vatError: null,
                 vatErrorMsg: null,
-                form: {}
+                form: { vat_id: this.user.vatnumber }
             }
         },
 

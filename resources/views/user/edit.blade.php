@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1><em>Modifica</em> Utente</h1>
+        <h1><em>Modifica</em> Utente  {{$user->email}}</h1>
 
         <form method="POST" action="/users/{{ $user->id }}">
             @csrf
@@ -13,14 +13,9 @@
                 <input type="text" name="name" id="name" value="{{ $user->name }}">
             </div>
 
-            @if($user->ishoreca)
-                <label for="horecaname">Nome Ho.Re.Ca.</label>
-                <input type="text" name="horecaname" id="horecaname" value="{{ $user->horecaname }}">
-                @hasrole('Admin')
-                    <label for="vatnumber">Partita Iva</label>
-                    <input type="text" name="vatnumber" id="vatnumber" value="{{ $user->vatnumber}}">
-                @endhasrole
-            @endif
+
+            <horeca-user :user='@json($user)'  > </horeca-user>
+
 
             <button class="btn btn-primary">Conferma</button>
         </form>
