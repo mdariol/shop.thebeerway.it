@@ -31,6 +31,11 @@ class BeerController extends Controller
             ->orderBy('style_name', 'ASC')
             ->get();
 
+        activity()
+          ->causedBy(request()->user())
+          ->withProperties(request()->all())
+          ->log('Beer search');
+
         return view('beer.index')->with([
             'beers' => $beers,
             'styles' => Style::all(),

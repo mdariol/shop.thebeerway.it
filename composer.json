@@ -17,6 +17,7 @@
         "laravel/socialite": "^4.1",
         "laravel/tinker": "^1.0",
         "league/flysystem-webdav": "^1.0",
+        "spatie/laravel-activitylog": "^3.7",
         "spatie/laravel-backup": "^6.2",
         "spatie/laravel-permission": "^2.37"
     },

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+Log of unreleased changes.
+
+### Changed
+
+- Logs user searches. 
+
 ## v0.3.0
 
 Released on **2019/07/19**.
