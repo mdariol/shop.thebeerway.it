@@ -59,6 +59,8 @@ Route::get('/roles/{role}/delete', 'RoleController@delete')
 Route::resource('users', 'UserController');
 Route::post('/roleassign', 'UserController@roleassign')
     ->name('users.roleassign');
+Route::get('/users/{user}/delete', 'UserController@delete')
+    ->name('users.delete');
 
 Route::get('/stocksync', function () {
     $exitCode = Artisan::call('fatture:sync beers --field=stock');

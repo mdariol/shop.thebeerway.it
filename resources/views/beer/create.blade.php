@@ -27,6 +27,11 @@
                     <input class="form-control form-control-lg" type="checkbox" name="isactive" id="isactive" {{ $beer->isactive ? 'checked' : ''}}>
                 </div>
 
+                <div class="form-group col-sm-2">
+                    <label for="barrel_label">Bollo Spina</label>
+                    <input class="form-control" type="file" name="barrel_label" id="barrel-label" >
+                </div>
+
             </div>
 
             <div class="form-group">
