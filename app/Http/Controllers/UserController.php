@@ -82,8 +82,35 @@ class UserController extends Controller
     {
         $user->update(request(['name','ishoreca','horecaname','vatnumber']));
 
-        return redirect(  $user->hasrole('Admin') ? '/users' : '/');
+            return redirect(  auth()->user()->hasrole('Admin') ? '/users' : '/');
     }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(User $user)
+    {
+        return view('user.delete')->with('user', $user);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\Response
+     *
+     * @throws \Exception
+     */
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return redirect(  '/users' );
+
+    }
+
 
 
 

@@ -39,12 +39,12 @@
 
         data() {
             return {
-                ishoreca: this.user.ishoreca,
-                horecaname: this.user.horecaname,
-                vatnumber: this.user.vatnumber,
+                ishoreca: this.user ? this.user.ishoreca : null,
+                horecaname: this.user ? this.user.horecaname : null,
+                vatnumber: this.user ? this.user.vatnumber : null,
                 vatError: null,
                 vatErrorMsg: null,
-                form: { vat_id: this.user.vatnumber }
+                form: { vat_id: this.user ? this.user.vatnumber : null }
             }
         },
 
