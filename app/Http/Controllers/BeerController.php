@@ -183,6 +183,7 @@ class BeerController extends Controller
             'fixed_margin' => request()->has('fixed_margin') ? true : false
         ]);
 
+        $filePath = $beer->image;
         if (request()->has('image')) {
             // Get image file
             $filePath = request()->file('image')->storeas('beers_images', request()->code.'.'.request()->file('image')->getClientOriginalExtension(), 'public');
