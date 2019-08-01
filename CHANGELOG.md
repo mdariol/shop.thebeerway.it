@@ -8,7 +8,11 @@ Log of unreleased changes.
 
 ### Changed
 
-- Logs user searches. 
+- Logs user searches.
+
+### Fixed
+
+- Fixes backup strategy. 
 
 ## v0.3.0
 
