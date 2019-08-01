@@ -27,6 +27,7 @@ Route::get('/beers/{beer}/delete', 'BeerController@delete')
     ->name('beers.delete');
 Route::get('/beers/{beer}/duplicate', 'BeerController@duplicate')
     ->name('beers.duplicate');
+Route::get('/datapricing', 'BeerController@beersdatapricing')->name('beers.datapricing');
 
 Route::resource('breweries', 'BreweryController');
 Route::get('/breweries/{brewery}/delete', 'BreweryController@delete')

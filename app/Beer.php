@@ -14,7 +14,7 @@ class Beer extends Model
         'code', 'name', 'description', 'isactive',
         'abv', 'ibu', 'plato', 'stock', 'taste_id',
         'brewery_id', 'packaging_id', 'color_id',
-        'style_id', 'price_id',
+        'style_id', 'price_id', 'image' ,
     ];
 
     protected $with = [
@@ -69,4 +69,6 @@ class Beer extends Model
     {
         return $this->stock > 0;
     }
+
+
 }

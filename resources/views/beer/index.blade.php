@@ -54,7 +54,14 @@
 
             <div class="row align-items-center mb-0 mt-0" data-toggle="collapse" href={{ "#beer".$beer->id }} aria-expanded="false" aria-controls={{ "beer".$beer->id }} >
                 <div class="col-sm mb-0 mt-0" >
-                    <h5 class="text-primary" >{{ $beer->name }}<small class="text-secondary"> - {{ $beer->brewery->name }}
+
+                    <h5 class="text-primary" >
+                        @if ($beer->image)
+                            <img src="{{ asset('storage/'.$beer->image) }}" style="width: 40px; height: 40px; ">
+                        @endif
+
+
+                        {{ $beer->name }}<small class="text-secondary"> - {{ $beer->brewery->name }}
                             @if(auth()->user())
                             [{{$beer->stock}}]
                             @endif
