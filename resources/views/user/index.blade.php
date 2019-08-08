@@ -8,6 +8,8 @@
         <a class="btn btn-primary mb-2" href="/roles/create">Nuovo</a>
         -->
         @foreach($users as $user)
+            @if (!(request()->autorize) or (($user->ishoreca) and !($user->hasrole('Publican'))))
+
             <form method="POST" action="/roleassign">
                 @csrf
 
@@ -33,6 +35,7 @@
                     </div>
                 </div>
             </form>
+            @endif
         @endforeach
     </div>
 @endsection
