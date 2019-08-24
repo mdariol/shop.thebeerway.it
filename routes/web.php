@@ -28,6 +28,7 @@ Route::get('/beers/{beer}/delete', 'BeerController@delete')
 Route::get('/beers/{beer}/duplicate', 'BeerController@duplicate')
     ->name('beers.duplicate');
 Route::get('/datapricing', 'BeerController@beersdatapricing')->name('beers.datapricing');
+Route::get('/beers/{beer}/addtocart', 'BeerController@getAddToCart')->name('beers.addtocart');
 
 Route::resource('breweries', 'BreweryController');
 Route::get('/breweries/{brewery}/delete', 'BreweryController@delete')
@@ -72,3 +73,8 @@ Route::get('/stocksync', function () {
 
     return back()->withErrors($exitCode);
 });
+
+Route::resource('purchaseorders', 'PurchaseorderController');
+Route::get('/purchaseorders/{purchaseorder}/delete', 'PurchaseorderController@delete')
+    ->name('purchaseorders.delete');
+

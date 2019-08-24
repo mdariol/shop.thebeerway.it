@@ -8,12 +8,18 @@ use App\Color;
 use App\Packaging;
 use App\Style;
 use App\Taste;
+use Illuminate\Http\Request;
+use App\Http\Requests;
+use Session;
+use App\Cart;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 class BeerController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('admin', ['except' => ['index', 'show']]);
+        $this->middleware('admin', ['except' => ['index', 'show','getAddToCart']]);
     }
 
     /**
@@ -231,4 +237,20 @@ class BeerController extends Controller
         return redirect(str_replace('/'.$beer->id.'?','?',request()->getRequestUri()));
 
     }
+
+    public function getAddToCart(Request $request, Beer $beer){
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+        $cart->add($beer, $beer->id);
+//        dd($beer);
+        $addedBeer = $beer->getAttribute('name').' di '.$beer->getRelation('brewery')->getAttribute('name') ;
+        $request->session()->put('cart', $cart);
+//        dd($cart);
+
+//        return redirect(str_replace('/'.$beer->id.'/addtocart?','?',request()->getRequestUri()));
+       return back()->with('success', 'Birra '.$addedBeer.' aggiunta al carrello');
+
+    }
+
+
 }
