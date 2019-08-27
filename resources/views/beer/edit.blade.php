@@ -4,7 +4,7 @@
     <div class="container">
         <h1><em>Modifica</em> Birra</h1>
 
-        <form method="POST" action="{{str_replace('/edit', '', request()->getRequestUri() )}}">
+        <form method="POST" action="{{str_replace('/edit', '', request()->getRequestUri() )}}" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
 
@@ -27,6 +27,17 @@
                     <label for="isactive">Attiva</label>
                     <input class="form-control form-control-lg" type="checkbox" name="isactive" id="isactive" {{ $beer->isactive ? 'checked' : ''}}>
                 </div>
+
+                <div class="form-group ">
+                    <div class="col-md-12">
+                        @if ($beer->image)
+                            <img src="{{ asset('storage/'.$beer->image) }}" style="width: 80px; height: 80px; border-radius: 50%;">
+                        @endif
+                        <label for="image">Immagine</label>
+                        <input id="image" type="file" class="form-control" name="image" >
+                    </div>
+                </div>
+
 
             </div>
 

@@ -45,6 +45,35 @@ class BeerController extends Controller
         ]);
     }
 
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function beersdatapricing()
+    {
+
+        $beers = Beer::queryFilter()
+            ->join('breweries', 'beers.brewery_id', '=', 'breweries.id' )
+            ->leftJoin('styles', 'beers.style_id', '=', 'styles.id' )
+            ->select('beers.*', 'breweries.name as brewery_name', 'styles.name as style_name')
+            ->orderBy('brewery_name', 'ASC')
+            ->orderBy('style_name', 'ASC')
+            ->get();
+
+        return view('beer.datapricing')->with([
+            'beers' => $beers,
+            'styles' => Style::all(),
+            'breweries' => Brewery::all(),
+            'colors' => Color::all(),
+            'tastes' => Taste::all(),
+        ]);
+    }
+
+
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -154,13 +183,21 @@ class BeerController extends Controller
             'fixed_margin' => request()->has('fixed_margin') ? true : false
         ]);
 
+        $filePath = $beer->image;
+        if (request()->has('image')) {
+            // Get image file
+            $filePath = request()->file('image')->storeas('beers_images', request()->code.'.'.request()->file('image')->getClientOriginalExtension(), 'public');
+        }
+
         $beer->update(request([
             'code', 'name', 'description', 'color_id',
             'abv', 'ibu', 'plato', 'stock', 'taste_id',
             'brewery_id', 'packaging_id', 'style_id'
         ])+ [
-            'isactive' => request()->has('isactive')
-        ]);
+            'isactive' => request()->has('isactive'),
+            'image'=>$filePath
+        ]
+        );
 
 
         return redirect(str_replace('/'.$beer->id.'?','?',request()->getRequestUri()));
