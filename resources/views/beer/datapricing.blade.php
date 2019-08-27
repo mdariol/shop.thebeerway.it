@@ -3,18 +3,30 @@
 @section('content')
     <div class="container">
 
+        <div class="col-sm mb-0 mt-0 row">
+            {{ 'Birra' }};
+            {{ 'Birrificio' }};
+            {{ 'Formato' }};
+            {{ 'Stock' }};
+            {{ 'Horeca' }};
+            {{ 'Acquisto' }};
+            {{ 'Sconto' }};
+            {{ 'Distribuzione' }};
+            {{ 'Margine' }};
+        </div>
 
-    @foreach($beers as $beer)
+        @foreach($beers as $beer)
             <div class="col-sm mb-0 mt-0 row">
                     {{ $beer->name }};
                     {{ $beer->brewery->name }};
                     {{ $beer->packaging ? $beer->packaging->name : '' }};
+                    {{ $beer->stock }};
                     @if ($beer->price)
-                        {{$beer->price->horeca ? $beer->price->horeca : 0}};
-                        {{$beer->price->purchase ? $beer->price->purchase : 0}};
-                        {{$beer->price->discount ? $beer->price->discount : 0}};
-                        {{$beer->price->distribution ? $beer->price->distribution : 0}};
-                        {{$beer->price->margin ? $beer->price->margin : 0}};
+                        {{$beer->price->horeca ? number_format($beer->price->horeca,2,',','.') : 0}};
+                        {{$beer->price->purchase ? number_format($beer->price->purchase,2,',','.') : 0}};
+                        {{$beer->price->discount ? number_format($beer->price->discount,2,',','.') : 0}};
+                        {{$beer->price->distribution ? number_format($beer->price->distribution,2,',','.') : 0}};
+                        {{$beer->price->margin ? number_format($beer->price->margin,2,',','.') : 0}};
                     @endif
             </div>
         @endforeach

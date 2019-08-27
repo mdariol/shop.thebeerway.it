@@ -28,19 +28,19 @@
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="Home-icon-yellow.png" alt="Home" width="40px" >
+                    <img src="/Home-icon-yellow.png" alt="Home" width="40px" >
                 </a>
                 <a class="navbar-brand" href="{{ url(request()->exists('packaging') ? str_replace('bottiglie','fusti',request()->getRequestUri()) : '/beers?packaging=fusti&stock=on')}}">
-                    <img src="Fusto.png" alt="Fusti" height="40px" >
+                    <img src="/Fusto.png" alt="Fusti" height="40px" >
                 </a>
                 <a class="navbar-brand" href="{{ url(request()->exists('packaging') ? str_replace('fusti','bottiglie',request()->getRequestUri()) : '/beers?packaging=fusti&stock=on')}}">
-                    <img src="Bottiglia512.png" alt="Bottiglie" height="40px" >
+                    <img src="/Bottiglia512.png" alt="Bottiglie" height="40px" >
                 </a>
 
 
                 @hasanyrole('Publican|Admin|Distributor')
-                    <a class="navbar-brand" href="#" data-container="body" data-toggle="popover" data-placement="bottom" data-content="test test">
-                        <img src="Carrello-TheBeerWay.png" alt="Carrello" height="40px" >
+                    <a class="navbar-brand" href="{{route('beers.shoppingcart')}}" data-container="body" data-toggle="popover" data-placement="bottom" data-content="test test">
+                        <img src="/Carrello-TheBeerWay.png" alt="Carrello" height="40px" >
                         <span class="badge badge-pill btn-warning shadow-sm mt-1 px-2" >
                             {{Session::has('cart') ? Session::get('cart')->totalQty : ''}}
                         </span>

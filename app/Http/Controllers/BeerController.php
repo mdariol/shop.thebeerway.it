@@ -19,7 +19,7 @@ class BeerController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('admin', ['except' => ['index', 'show','getAddToCart']]);
+        $this->middleware('admin', ['except' => ['index', 'show','getAddToCart','getCart','fixupCart','fixdownCart']]);
     }
 
     /**
@@ -242,15 +242,70 @@ class BeerController extends Controller
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
         $cart = new Cart($oldCart);
         $cart->add($beer, $beer->id);
-//        dd($beer);
-        $addedBeer = $beer->getAttribute('name').' di '.$beer->getRelation('brewery')->getAttribute('name') ;
-        $request->session()->put('cart', $cart);
-//        dd($cart);
 
-//        return redirect(str_replace('/'.$beer->id.'/addtocart?','?',request()->getRequestUri()));
-       return back()->with('success', 'Birra '.$addedBeer.' aggiunta al carrello');
+        $addedBeer = $beer->getRelation('packaging')->getAttribute('name').', '.$beer->getAttribute('name').' di '.$beer->getRelation('brewery')->getAttribute('name') ;
+        $request->session()->put('cart', $cart);
+
+       return back()->with('success', $addedBeer.' aggiunto al carrello');
 
     }
+
+    public function fixupCart(Request $request, Beer $beer){
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+
+        $id = $beer->id;
+
+        if (array_key_exists($id, $cart->items)) {
+            $storedItem = $cart->items[$id];
+        }
+
+        $storedItem['qty']++;
+        $storedItem['price'] = $storedItem['unit_price'] * $storedItem['qty'];
+
+        $cart->items[$id] = $storedItem;
+
+        $cart->totalQty++;
+        $cart->totalPrice+= $storedItem['unit_price'];
+        $request->session()->put('cart', $cart);
+        return back();
+    }
+
+    public function fixdownCart(Request $request, Beer $beer){
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+
+        $id = $beer->id;
+
+
+        if (array_key_exists($id, $cart->items)) {
+            $storedItem = $cart->items[$id];
+        }
+
+        $storedItem['qty']--;
+        $storedItem['price'] = $storedItem['unit_price'] * $storedItem['qty'];
+
+
+        $cart->items[$id] = $storedItem;
+
+        $cart->totalQty--;
+        $cart->totalPrice-= $storedItem['unit_price'];
+        $request->session()->put('cart', $cart);
+        return back();
+    }
+
+
+    public function getCart(){
+//        dd(Session::get('cart'));
+        if (!Session::has('cart')){
+            return view('beer.shoppingcart');
+        }
+        $oldCart = Session::get('cart');
+        $cart = new Cart($oldCart);
+        return view('beer.shoppingcart',['products' => $cart->items, 'totalPrice' => $cart->totalPrice]);
+
+    }
+
 
 
 }

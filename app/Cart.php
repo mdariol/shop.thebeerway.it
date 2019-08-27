@@ -27,10 +27,16 @@ class Cart
             }
         }
         $storedItem['qty']++;
+        $storedItem['unit_price'] = $item->price->distribution;
         $storedItem['price'] = $item->price->distribution * $storedItem['qty'];
+        $storedItem['beer'] = $item->name;
+        $storedItem['brewery'] = $item->getRelation('brewery')->getAttribute('name');
+        $storedItem['packaging'] = $item->getRelation('packaging')->getAttribute('name');
+
         $this->items[$id] = $storedItem;
         $this->totalQty++;
         $this->totalPrice+= $item->price->distribution;
     }
+
 
 }

@@ -22,6 +22,8 @@ Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCall
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+
+Route::get('/beers/shoppingcart', 'BeerController@getCart')->name('beers.shoppingcart');
 Route::resource('beers', 'BeerController');
 Route::get('/beers/{beer}/delete', 'BeerController@delete')
     ->name('beers.delete');
@@ -29,6 +31,8 @@ Route::get('/beers/{beer}/duplicate', 'BeerController@duplicate')
     ->name('beers.duplicate');
 Route::get('/datapricing', 'BeerController@beersdatapricing')->name('beers.datapricing');
 Route::get('/beers/{beer}/addtocart', 'BeerController@getAddToCart')->name('beers.addtocart');
+Route::get('/beers/{beer}/fixupcart', 'BeerController@fixupCart')->name('beers.fixupshoppingcart');
+Route::get('/beers/{beer}/fixdowncart', 'BeerController@fixdownCart')->name('beers.fixdownshoppingcart');
 
 Route::resource('breweries', 'BreweryController');
 Route::get('/breweries/{brewery}/delete', 'BreweryController@delete')
