@@ -72,3 +72,7 @@ Route::get('/stocksync', function () {
 
     return back()->withErrors($exitCode);
 });
+
+Route::resource('companies', 'CompanyController');
+Route::get('/companies/{company}delete', 'CompanyController@delete')
+    ->name('companies.delete');

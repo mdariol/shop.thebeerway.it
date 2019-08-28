@@ -2,25 +2,19 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Events\Autorized;
 use App\User;
-use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
     /**
-     * Control if is Admin role defined in middleware.
-     *
-     * @return \Illuminate\Http\Response
+     * UserController constructor.
      */
-
     public function __construct()
     {
         $this->middleware('admin')->except('edit', 'update');
     }
-
 
     /**
      * Display a listing of the resource.
@@ -55,34 +49,37 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\user  $user
+     * @param  \App\User $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(user $user)
+    public function edit(User $user)
     {
         return view('user.edit')->with('user', $user);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Display the specified resource.
      *
-     * @param  \App\user  $user
+     * @param  \App\User  $user
+     *
      * @return \Illuminate\Http\Response
      */
+    public function show(User $user)
+    {
+        //
+    }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\user  $user
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-
-    public function update(Request $request, user $user)
+    public function update(User $user)
     {
         $user->update(request(['name','ishoreca','horecaname','vatnumber']));
 
-            return redirect(  auth()->user()->hasrole('Admin') ? '/users' : '/');
+        return redirect(  auth()->user()->hasrole('Admin') ? '/users' : '/');
     }
 
     /**
@@ -107,11 +104,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
+
         return redirect(  '/users' );
-
     }
-
-
-
-
 }
