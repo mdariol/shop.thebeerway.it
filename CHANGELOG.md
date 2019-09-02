@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 Log of unreleased changes.
 
+### Added
+
+- Adds `Company` model.
+
 ### Changed
 
 - Logs user searches.

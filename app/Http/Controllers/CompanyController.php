@@ -24,7 +24,9 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+        return view('company.index')->with([
+            'companies' => auth()->user()->companies,
+        ]);
     }
 
     /**
@@ -61,7 +63,7 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        //
+        return view('company.show')->with(['company' => $company]);
     }
 
     /**
@@ -101,7 +103,7 @@ class CompanyController extends Controller
      */
     public function delete(Company $company)
     {
-        //
+        return view('company.delete')->with(['company' => $company]);
     }
 
     /**
@@ -110,9 +112,13 @@ class CompanyController extends Controller
      * @param  \App\Company  $company
      *
      * @return \Illuminate\Http\Response
+     *
+     * @throws \Exception
      */
     public function destroy(Company $company)
     {
-        //
+        $company->delete();
+
+        return redirect()->route('companies.index');
     }
 }

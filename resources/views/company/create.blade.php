@@ -2,7 +2,9 @@
 
 @section('content')
     <div class="container">
-        <h1><em>Nuovo</em> Profilo di Fatturazione</h1>
+        <h1><em>Nuova</em> Società</h1>
+
+        <p>I dati inseriti verranno utilizzati per la fatturazione.</p>
 
         <form method="POST" action="/companies">
             @csrf
@@ -40,6 +42,7 @@
             </div>
 
             <button class="btn btn-primary">Salva</button>
+            <a href="{{ route('companies.index') }}" class="btn btn-link">Annulla</a>
         </form>
     </div>
 @endsection

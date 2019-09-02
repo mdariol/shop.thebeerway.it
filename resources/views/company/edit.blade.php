@@ -40,6 +40,7 @@
             </div>
 
             <button class="btn btn-primary">Salva</button>
+            <a href="{{ route('companies.delete', ['id' => $company->id]) }}" class="btn btn-link">Elimina</a>
         </form>
     </div>
 @endsection
