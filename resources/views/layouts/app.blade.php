@@ -34,8 +34,6 @@
                     <img src="/Bottiglia512.png" alt="Bottiglie" height="40px" >
                 </a>
 
-<<<<<<< HEAD
-
                 @hasanyrole('Publican|Admin|Distributor')
                     <a class="navbar-brand" href="{{route('beers.shoppingcart')}}" data-container="body" data-toggle="popover" data-placement="bottom" data-content="test test">
                         <img src="/Carrello-TheBeerWay.png" alt="Carrello" height="40px" >
@@ -45,9 +43,6 @@
                     </a>
                 @endhasanyrole
 
-
-=======
->>>>>>> master
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
