@@ -4,7 +4,7 @@
     <div class="container">
         <h1><em>Nuovo</em> Indirizzo di Spedizione</h1>
 
-        <form method="POST" action="{{ route('shipping-addresses.create', ['company' => $company->id]) }}">
+        <form method="POST" action="{{ route('shipping-addresses.store', ['company' => $company->id]) }}">
             @csrf
 
             <div class="form-group">
