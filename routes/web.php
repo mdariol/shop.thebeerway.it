@@ -73,6 +73,16 @@ Route::get('/stocksync', function () {
     return back()->withErrors($exitCode);
 });
 
+/* ----- Company ----- */
+
 Route::resource('companies', 'CompanyController');
 Route::get('/companies/{company}/delete', 'CompanyController@delete')
     ->name('companies.delete');
+
+/* ----- Shipping Address ----- */
+
+Route::resource('/companies/{company}/shipping-addresses', 'ShippingAddressController', [
+    'except' => ['show', 'index']
+]);
+Route::get('/companies/{company}/shipping-addresses/{shipping_address}/delete', 'ShippingAddressController@delete')
+    ->name('shipping-addresses.delete');

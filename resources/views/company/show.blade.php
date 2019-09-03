@@ -17,10 +17,26 @@
             <h3>Indirizzi di Spedizione</h3>
 
             <div class="d-flex overflow-auto">
+                @foreach($company->shippingAddresses as $shippingAddress)
+                    <article class="card mr-3" style="width: 19rem;">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ $shippingAddress->name }}</h4>
+                            <hr>
+                            <p><strong>Indirizzo:</strong><br>
+                                {{ $shippingAddress->address }}</p>
+                            <p class="mb-0"><strong>Telefono:</strong><br>
+                                {{ $shippingAddress->phone }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ route('shipping-addresses.edit', ['company' => $company->id, 'shippind-address' => $shippingAddress->id]) }}">Modifica</a>
+                        </div>
+                    </article>
+                @endforeach
+
                 <article class="card text-center flex-shrink-0" style="width: 19rem; border-style: dashed;">
                     <div class="card-body d-flex flex-column align-items-center justify-content-center">
                         <h4 class="card-title mb-4">Aggiungi un nuovo Indirizzo di Spedizione</h4>
-                        <a href="#" class="btn btn-primary">Aggiungi</a>
+                        <a href="{{ route('shipping-addresses.create', ['company' => $company->id]) }}" class="btn btn-primary">Aggiungi</a>
                     </div>
                 </article>
             </div>

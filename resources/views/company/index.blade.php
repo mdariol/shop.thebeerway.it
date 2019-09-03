@@ -12,8 +12,8 @@
             <article class="d-md-flex border-bottom mb-3">
                 <div class="flex-grow-1">
                     <h4 class="text-truncate">
-                        {{ $company->business_name }}
-                        <small class="text-muted ml-2">IT-{{ $company->vat_number }} | {{ $company->sdi }}</small>
+                        <a href="{{ route('companies.show', ['id' => $company->id]) }}">{{ $company->business_name }}</a>
+                        <small class="text-muted ml-2">IT-{{ $company->vat_number }}</small>
                     </h4>
                     <p>{{ $company->address }}</p>
                 </div>

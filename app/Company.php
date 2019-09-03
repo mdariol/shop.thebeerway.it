@@ -19,4 +19,14 @@ class Company extends Model
     public function users() {
         return $this->belongsToMany(User::class, 'company_has_users');
     }
+
+    /**
+     * Get related shipping addresses.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function shippingAddresses()
+    {
+        return $this->hasMany(ShippingAddress::class);
+    }
 }

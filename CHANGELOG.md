@@ -8,6 +8,7 @@ Log of unreleased changes.
 
 ### Added
 
+- Adds `ShippingAddress` model.
 - Adds `Company` model.
 
 ### Changed
