@@ -82,3 +82,16 @@ Route::resource('purchaseorders', 'PurchaseorderController');
 Route::get('/purchaseorders/{purchaseorder}/delete', 'PurchaseorderController@delete')
     ->name('purchaseorders.delete');
 
+/* ----- Company ----- */
+
+Route::resource('companies', 'CompanyController');
+Route::get('/companies/{company}/delete', 'CompanyController@delete')
+    ->name('companies.delete');
+
+/* ----- Shipping Address ----- */
+
+Route::resource('/companies/{company}/shipping-addresses', 'ShippingAddressController', [
+    'except' => ['show', 'index']
+]);
+Route::get('/companies/{company}/shipping-addresses/{shipping_address}/delete', 'ShippingAddressController@delete')
+    ->name('shipping-addresses.delete');

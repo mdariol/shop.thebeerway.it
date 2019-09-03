@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1><em>Modifica</em> Utente  {{$user->email}}</h1>
+        <h1><em>Modifica</em> {{$user->email}}</h1>
 
         <form method="POST" action="/users/{{ $user->id }}">
             @csrf
@@ -13,9 +13,7 @@
                 <input type="text" name="name" id="name" value="{{ $user->name }}">
             </div>
 
-
-            <horeca-user :user='@json($user)'  > </horeca-user>
-
+            <horeca-user :user='@json($user)'></horeca-user>
 
             <button class="btn btn-primary">Conferma</button>
         </form>

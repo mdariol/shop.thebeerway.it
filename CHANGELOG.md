@@ -6,9 +6,18 @@ All notable changes to this project will be documented in this file.
 
 Log of unreleased changes.
 
+### Added
+
+- Adds `ShippingAddress` model.
+- Adds `Company` model.
+
 ### Changed
 
-- Logs user searches. 
+- Logs user searches.
+
+### Fixed
+
+- Fixes backup strategy. 
 
 ## v0.3.0
 

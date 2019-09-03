@@ -43,6 +43,16 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
+     * Get related companies.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, 'company_has_users');
+    }
+
+    /**
      * Send the email verification notification.
      *
      * @return void
