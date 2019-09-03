@@ -7,6 +7,7 @@
 @section('content')
 
     @if(Session::has('cart'))
+
         <div class="container">
             <div class="row bg-primary">
                 <div class="col-7 text-left">{{ 'Prodotto' }}</div>
@@ -17,7 +18,7 @@
                 <div class="row">
                     <div class="col-7 text-left">{{ $product['packaging'] }} - {{ $product['beer'] }} - {{ $product['brewery'] }} </div>
                     <div class="col-1 border-0 p-0">
-                        <a  href="{{'/beers/'.$product['item']->getAttribute('id').'/fixdowncart?'}}" >
+                        <a  href="{{'/beers/'.$product['item']->getAttribute('id').'/fixdowncart'}}" >
                             <img src="/Decrementa-TheBeerWay.png" alt="Diminuisci" height="20px" class="p-0">
                         </a>
                     </div>
@@ -25,7 +26,7 @@
                         {{$product['qty']}}
                     </div>
                     <div class="col-1 border-0 p-0">
-                        <a  href="{{'/beers/'.$product['item']->getAttribute('id').'/fixupcart?'}}" >
+                        <a  href="{{'/beers/'.$product['item']->getAttribute('id').'/fixupcart'}}" >
                             <img src="/Incrementa-TheBeerWay.png" alt="Aumenta" height="20px" class="p-0">
                         </a>
                     </div>
@@ -37,7 +38,16 @@
             <div class="row btn-warning">
                 <div class="col-8 text-left">{{ 'Totale Carrello Iva e Spese Escluse' }}</div>
                 <div class="col-4 text-right">{{ $totalPrice }}</div>
-        </div>
+            </div>
+            <form method="POST" action="/beers/saveorder">
+                @csrf
+                <div class="form-group">
+                    <label class="pt-3" for="delivetynote">Note per la consegna</label>
+                    <textarea class="form-control form-control-lg" type="text" name="deliverynote" id="deliverynote" rows="5">{{ $deliverynote}}</textarea>
+                    <button class="btn btn-primary mt-2">Conferma l'acquisto</button>
+
+                </div>
+            </form>
     @else
 
     @endif

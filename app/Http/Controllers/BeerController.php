@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Beer;
 use App\Brewery;
 use App\Color;
+use App\Line;
+use App\Order;
 use App\Packaging;
 use App\Style;
 use App\Taste;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
 use Session;
 use App\Cart;
 use Illuminate\Support\Facades\Redirect;
@@ -19,7 +22,7 @@ class BeerController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('admin', ['except' => ['index', 'show','getAddToCart','getCart','fixupCart','fixdownCart']]);
+        $this->middleware('admin', ['except' => ['index', 'show','getAddToCart','getCart','fixupCart','fixdownCart', 'savedeliverynote','saveOrder']]);
     }
 
     /**
@@ -294,18 +297,79 @@ class BeerController extends Controller
         return back();
     }
 
+    public function savedeliverynote(Request $request){
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+        $cart->deliverynote = $request->deliverynote;
+        $request->session()->put('cart', $cart);
+        return back();
+    }
+
+
+    public function saveOrder(Request $request){
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+        $cart->deliverynote = $request->deliverynote;
+        $request->session()->put('cart', $cart);
+
+
+        DB::transaction(function () use ($request, $cart) {
+            $new_number = DB::table('orders')->max('number') + 1;
+            if (request()->number > 0) {
+                $new_number = request()->number;
+            } else {
+                $new_number = DB::table('orders')->max('number') + 1;
+            }
+
+            $order = Order::create([
+                'date' => today(),
+                'number' => $new_number,
+                'status' => 'complete',
+                'deliverynote' => $cart->deliverynote,
+                'user_id' => auth()->user()->id,
+            ]);
+
+            foreach ($cart->items as $item) {
+                //            dd($order->id);
+
+                if (!$item['qty']) {
+                    continue;
+                }
+
+                $line = Line::create([
+                    'qty' => $item['qty'],
+                    'unit_price' => $item['unit_price'],
+                    'price' => $item['price'],
+                    'order_id' => $order->id,
+                    'beer_id' => $item['item']->getAttribute('id')
+                ]);
+
+            }
+
+            $request->session()->remove('cart');
+        });
+        if (Session::has('cart')) {
+            return redirect('/')->with('error', 'Acquisto non andato a buon fine');
+        }
+        return redirect('/')->with('success', 'Acquisto completato con successo');
+    }
+
+
 
     public function getCart(){
-//        dd(Session::get('cart'));
         if (!Session::has('cart')){
             return view('beer.shoppingcart');
         }
         $oldCart = Session::get('cart');
         $cart = new Cart($oldCart);
-        return view('beer.shoppingcart',['products' => $cart->items, 'totalPrice' => $cart->totalPrice]);
+        return view('beer.shoppingcart',['products' => $cart->items, 'totalPrice' => $cart->totalPrice, 'deliverynote' => $cart->deliverynote]);
 
     }
 
 
 
 }
+
+
+
+

@@ -81,9 +81,11 @@
                             @hasanyrole('Publican|Admin|Distributor')
 
                             @else
-                                <a class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }}  aria-expanded="false" aria-controls={{ "beer".$beer->id }} >
-                                    <img src="/Espandi-TheBeerWay.png" alt="Espandi" height="20px" >
-                                </a>
+                                <div class="col-sm-auto " >
+                                    <a class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }}  aria-expanded="false" aria-controls={{ "beer".$beer->id }} >
+                                        <img src="/Espandi-TheBeerWay.png" alt="Espandi" height="20px" >
+                                    </a>
+                                </div>
                             @endhasanyrole
                         </h6>
 

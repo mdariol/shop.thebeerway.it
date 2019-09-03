@@ -27,4 +27,11 @@ class Brewery extends Model
     {
         return $this->hasMany(Beer::class);
     }
+
+    public function purchaseorders()
+    {
+        return $this->hasMany(Purchaseorder::class);
+    }
+
+
 }

@@ -70,5 +70,10 @@ class Beer extends Model
         return $this->stock > 0;
     }
 
+    public function lines()
+    {
+        return $this->hasMany(Line::class);
+    }
+
 
 }

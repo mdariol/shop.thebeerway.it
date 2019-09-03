@@ -31,5 +31,9 @@ class BeerImage extends Migration
         Schema::table('beers', function (Blueprint $table) {
             $table->dropColumn('image');
         });
+
+        Schema::table('beers', function (Blueprint $table) {
+            $table->string('barrel_label_filename')->nullable();
+        });
     }
 }

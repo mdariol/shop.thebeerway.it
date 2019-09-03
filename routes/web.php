@@ -24,6 +24,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::get('/beers/shoppingcart', 'BeerController@getCart')->name('beers.shoppingcart');
+Route::post('/beers/saveorder', 'BeerController@saveOrder')->name('beers.saveorder');
+Route::post('/beers/savedeliverynote', 'BeerController@savedeliverynote')->name('beers.savedeliverynote');
+Route::get('/beers/savedeliverynote', 'BeerController@savedeliverynote')->name('beers.savedeliverynote');
 Route::resource('beers', 'BeerController');
 Route::get('/beers/{beer}/delete', 'BeerController@delete')
     ->name('beers.delete');
@@ -82,3 +85,6 @@ Route::resource('purchaseorders', 'PurchaseorderController');
 Route::get('/purchaseorders/{purchaseorder}/delete', 'PurchaseorderController@delete')
     ->name('purchaseorders.delete');
 
+
+Route::resource('orders', 'OrderController');
+Route::resource('lines', 'LineController');

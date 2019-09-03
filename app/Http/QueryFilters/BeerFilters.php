@@ -19,7 +19,7 @@ class BeerFilters extends QueryFilter
         {
             return $this->builder;
         }
-}
+    }
     public function style(array $search): Builder
     {
         return $this->builder->whereHas('style', function ($query) use ($search) {
