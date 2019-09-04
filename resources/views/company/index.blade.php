@@ -8,6 +8,10 @@
 
         <a href="{{ route('companies.create') }}" class="btn btn-primary mb-5">Aggiungi</a>
 
+        @if( ! $companies->count())
+            <p class="text-muted">Non hai ancora aggiunto alcuna società...</p>
+        @endif
+
         @foreach($companies as $company)
             <article class="d-md-flex border-bottom mb-3">
                 <div class="flex-grow-1">

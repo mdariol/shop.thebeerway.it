@@ -18,7 +18,7 @@
 
             <div class="d-flex overflow-auto">
                 @foreach($company->shippingAddresses as $shippingAddress)
-                    <article class="card mr-3" style="width: 19rem;">
+                    <article class="card flex-shrink-0 mr-3" style="width: 19rem;">
                         <div class="card-body">
                             <h4 class="card-title">{{ $shippingAddress->name }}</h4>
                             <hr>

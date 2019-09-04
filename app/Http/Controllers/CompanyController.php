@@ -12,7 +12,7 @@ class CompanyController extends Controller
     const RULES = [
         'business_name' => 'required',
         'address' => 'required',
-        'vat_number' => 'required|alpha_num|max:11',
+        'vat_number' => 'required|alpha_num|size:11',
         'pec' => 'nullable|email',
         'sdi' => 'nullable|alpha_num|min:6|max:7',
     ];

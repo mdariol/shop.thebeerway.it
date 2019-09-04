@@ -9,14 +9,24 @@
 
             <div class="form-group">
                 <label for="name">Nome</label>
-                <input type="text" name="name" id="name" class="form-control" placeholder="Mario Rossi" required>
+                <input type="text" name="name" id="name" placeholder="Mario Rossi" required
+                       class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}">
+                @if($erros->has('name'))
+                    <div class="invalid-feedback">{{ $errors->first('name') }}</div>
+                @endif
             </div>
 
             <place></place>
 
             <div class="form-group">
                 <label for="phone">Telefono</label>
-                <input type="tel" name="phone" class="form-control" id="phone" required pattern="^[0-9 ]*$">
+                <input type="tel" name="phone" id="phone" required pattern="^[0-9 ]*$"
+                       class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}">
+                @if($errors->has('phone'))
+                    <div class="invalid-feedback">{{ $errors->first('phone') }}</div>
+                @else
+                    <small class="text-muted">Il numero di telefono potrebbe essere usato dal corriere per eventuali comunicazioni sulla consegna.</small>
+                @endif
             </div>
 
             <button class="btn btn-primary">Salva</button>
