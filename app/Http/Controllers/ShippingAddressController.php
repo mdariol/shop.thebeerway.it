@@ -14,6 +14,7 @@ class ShippingAddressController extends Controller
         'name' => 'required', 'route' => 'required',
         'postal_code' => 'required', 'city' => 'required',
         'district' => 'required', 'country' => 'required',
+        'phone' => 'nullable|regex:/^\+?[0-9 ]*/'
     ];
 
     /**

@@ -24,8 +24,10 @@
                             <hr>
                             <p><strong>Indirizzo:</strong><br>
                                 {{ $shippingAddress->address }}</p>
-                            <p class="mb-0"><strong>Telefono:</strong><br>
-                                {{ $shippingAddress->phone }}</p>
+                            @if($shippingAddress->phone)
+                                <p class="mb-0"><strong>Telefono:</strong><br>
+                                    {{ $shippingAddress->phone }}</p>
+                            @endif
                         </div>
                         <div class="card-footer">
                             <a href="{{ route('shipping-addresses.edit', ['company' => $company->id, 'shippind-address' => $shippingAddress->id]) }}">Modifica</a>

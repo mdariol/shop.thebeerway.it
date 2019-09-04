@@ -21,7 +21,7 @@ class CreateShippingAddressesTable extends Migration
             $table->string('city');
             $table->string('district');
             $table->string('country');
-            $table->string('phone');
+            $table->string('phone')->nullable();
             $table->unsignedBigInteger('company_id');
             $table->timestamps();
 
