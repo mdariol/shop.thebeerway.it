@@ -29,4 +29,17 @@ class Company extends Model
     {
         return $this->hasMany(ShippingAddress::class);
     }
+
+    /**
+     * Get formatted address.
+     *
+     * @return string
+     */
+    public function getAddressAttribute()
+    {
+        return join(', ', [
+            $this->route, $this->city,
+            $this->district, $this->country,
+        ]);
+    }
 }

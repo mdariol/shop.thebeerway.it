@@ -16,7 +16,11 @@ class CreateShippingAddressesTable extends Migration
         Schema::create('shipping_addresses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('address');
+            $table->string('route');
+            $table->string('postal_code');
+            $table->string('city');
+            $table->string('district');
+            $table->string('country');
             $table->string('phone');
             $table->unsignedBigInteger('company_id');
             $table->timestamps();

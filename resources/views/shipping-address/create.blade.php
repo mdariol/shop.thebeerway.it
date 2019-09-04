@@ -11,7 +11,7 @@
                 <label for="name">Nome</label>
                 <input type="text" name="name" id="name" placeholder="Mario Rossi" required
                        class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}">
-                @if($erros->has('name'))
+                @if($errors->has('name'))
                     <div class="invalid-feedback">{{ $errors->first('name') }}</div>
                 @endif
             </div>
@@ -25,7 +25,7 @@
                 @if($errors->has('phone'))
                     <div class="invalid-feedback">{{ $errors->first('phone') }}</div>
                 @else
-                    <small class="text-muted">Il numero di telefono potrebbe essere usato dal corriere per eventuali comunicazioni sulla consegna.</small>
+                    <small class="text-muted">Verrà usato per eventuali comunicazioni sulla consegna.</small>
                 @endif
             </div>
 

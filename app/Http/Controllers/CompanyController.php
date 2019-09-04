@@ -10,8 +10,9 @@ class CompanyController extends Controller
      * Validation rules.
      */
     const RULES = [
-        'business_name' => 'required',
-        'address' => 'required',
+        'business_name' => 'required', 'route' => 'required',
+        'postal_code' => 'required', 'city' => 'required',
+        'district' => 'required', 'country' => 'required',
         'vat_number' => 'required|alpha_num|size:11',
         'pec' => 'nullable|email',
         'sdi' => 'nullable|alpha_num|min:6|max:7',
@@ -58,7 +59,6 @@ class CompanyController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Company  $company
-     *
      * @return \Illuminate\Http\Response
      */
     public function show(Company $company)
@@ -70,7 +70,6 @@ class CompanyController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Company $company
-     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Company $company)
@@ -84,7 +83,6 @@ class CompanyController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Company  $company
-     *
      * @return \Illuminate\Http\Response
      */
     public function update(Company $company)
@@ -98,7 +96,6 @@ class CompanyController extends Controller
      * Show the form for deleting the specified resource.
      *
      * @param \App\Company $company
-     *
      * @return \Illuminate\Http\Response
      */
     public function delete(Company $company)
@@ -110,13 +107,15 @@ class CompanyController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Company  $company
-     *
      * @return \Illuminate\Http\Response
      *
      * @throws \Exception
      */
     public function destroy(Company $company)
     {
+        // TODO: Use model event to detach the relationship.
+        $company->users()->detach();
+
         $company->delete();
 
         return redirect()->route('companies.index');

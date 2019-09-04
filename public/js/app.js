@@ -1902,29 +1902,138 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Place",
+
+  /* ----------------------------------------------------------------------------------------------------------
+     Props & Data
+     ---------------------------------------------------------------------------------------------------------- */
   props: {
-    'value': String
+    'address': Object
+  },
+  data: function data() {
+    return {
+      'route': null,
+      'postal_code': null,
+      'city': null,
+      'district': null,
+      'country': 'Italia'
+    };
+  },
+
+  /* ----------------------------------------------------------------------------------------------------------
+     Methods
+     ---------------------------------------------------------------------------------------------------------- */
+  methods: {
+    /**
+     * Fill the address form with the given place.
+     *
+     * @param {array} place
+     */
+    fillAddressForm: function fillAddressForm(place) {
+      var route = this.getPlaceComponent('route', place);
+      var street_number = this.getPlaceComponent('street_number', place);
+
+      if (street_number) {
+        route = route.concat(', ', street_number);
+      }
+
+      this.route = route;
+      this.postal_code = this.getPlaceComponent('postal_code', place);
+      this.city = this.getPlaceComponent('city', place);
+      this.district = this.getPlaceComponent('district', place);
+      this.country = this.getPlaceComponent('country', place, 'long_name');
+    },
+
+    /**
+     * Get the specified component of a given place.
+     *
+     * @param {string} component
+     * @param {array} place
+     * @param {string} name
+     * @returns {string}
+     */
+    getPlaceComponent: function getPlaceComponent(component, place) {
+      var name = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'short_name';
+      var values = {
+        'route': 'route',
+        'street_number': 'street_number',
+        'postal_code': 'postal_code',
+        'city': 'administrative_area_level_3',
+        'district': 'administrative_area_level_2',
+        'country': 'country'
+      };
+      var value = '';
+      place.address_components.forEach(function (address_component) {
+        if (address_component.types.includes(values[component])) {
+          value = address_component[name];
+        }
+      });
+      return value;
+    }
   },
   mounted: function mounted() {
-    var input = this.$el.querySelector('#address');
+    var _this = this;
+
+    if (this.address) {
+      this.route = this.address.route;
+      this.postal_code = this.address.postal_code;
+      this.city = this.address.city;
+      this.district = this.address.district;
+      this.country = this.address.country;
+    }
+
+    var input = this.$el.querySelector('#route');
     var autocomplete = new google.maps.places.Autocomplete(input, {
       types: ['address'],
       componentRestrictions: {
         'country': 'IT'
       }
     });
+    autocomplete.setFields(['address_component']);
     input.addEventListener('keydown', function (event) {
       if (event.keyCode === 13) {
         event.preventDefault();
       }
     });
     autocomplete.addListener('place_changed', function () {
-      if (!autocomplete.getPlace().geometry) {
+      var place = autocomplete.getPlace();
+
+      if (!place.address_components) {
         input.setCustomValidity('L\'indirizzo inserito non è valido.');
       } else {
         input.setCustomValidity('');
+
+        _this.fillAddressForm(place);
       }
     });
   }
@@ -38678,14 +38787,78 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "form-group" }, [
-    _c("label", { attrs: { for: "address" } }, [_vm._v("Indirizzo")]),
+  return _c("div", [
+    _c("div", { staticClass: "form-row" }, [
+      _c("div", { staticClass: "form-group col-md" }, [
+        _c("label", { attrs: { for: "route" } }, [_vm._v("Indirizzo")]),
+        _vm._v(" "),
+        _c("input", {
+          staticClass: "form-control",
+          attrs: { type: "text", name: "route", id: "route", required: "" },
+          domProps: { value: _vm.route }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group col-md-3" }, [
+        _c("label", { attrs: { for: "postal-code" } }, [
+          _vm._v("Codice Postale")
+        ]),
+        _vm._v(" "),
+        _c("input", {
+          staticClass: "form-control",
+          attrs: {
+            type: "text",
+            name: "postal_code",
+            id: "postal-code",
+            required: ""
+          },
+          domProps: { value: _vm.postal_code }
+        })
+      ])
+    ]),
     _vm._v(" "),
-    _c("input", {
-      staticClass: "form-control",
-      attrs: { type: "text", name: "address", id: "address", required: "" },
-      domProps: { value: _vm.value }
-    })
+    _c("div", { staticClass: "form-row" }, [
+      _c("div", { staticClass: "form-group col-12 col-md" }, [
+        _c("label", { attrs: { for: "city" } }, [_vm._v("Città")]),
+        _vm._v(" "),
+        _c("input", {
+          staticClass: "form-control",
+          attrs: { type: "text", name: "city", id: "city", required: "" },
+          domProps: { value: _vm.city }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group col-6 col-md" }, [
+        _c("label", { attrs: { for: "district" } }, [_vm._v("Provincia")]),
+        _vm._v(" "),
+        _c("input", {
+          staticClass: "form-control",
+          attrs: {
+            type: "text",
+            name: "district",
+            id: "district",
+            required: ""
+          },
+          domProps: { value: _vm.district }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group col-6 col-md-2" }, [
+        _c("label", { attrs: { for: "country" } }, [_vm._v("Stato")]),
+        _vm._v(" "),
+        _c("input", {
+          staticClass: "form-control",
+          attrs: {
+            type: "text",
+            name: "country",
+            id: "country",
+            required: "",
+            readonly: ""
+          },
+          domProps: { value: _vm.country }
+        })
+      ])
+    ])
   ])
 }
 var staticRenderFns = []

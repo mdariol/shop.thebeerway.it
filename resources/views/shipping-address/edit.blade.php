@@ -12,12 +12,12 @@
                 <label for="name">Nome</label>
                 <input type="text" name="name" id="name" placeholder="Mario Rossi" value="{{ $shippingAddress->name }}"
                        class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" required>
-                @if($erros->has('name'))
+                @if($errors->has('name'))
                     <div class="invalid-feedback">{{ $errors->first('name') }}</div>
                 @endif
             </div>
 
-            <place :value='@json($shippingAddress->address)'></place>
+            <place :address='@json($shippingAddress)'></place>
 
             <div class="form-group">
                 <label for="phone">Telefono</label>
@@ -26,7 +26,7 @@
                 @if($errors->has('phone'))
                     <div class="invalid-feedback">{{ $errors->first('phone') }}</div>
                 @else
-                    <small class="text-muted">Il numero di telefono potrebbe essere usato dal corriere per eventuali comunicazioni sulla consegna.</small>
+                    <small class="text-muted">Verrà usato per eventuali comunicazioni sulla consegna.</small>
                 @endif
             </div>
 

@@ -11,8 +11,9 @@ class ShippingAddressController extends Controller
      * Validation rules.
      */
     const RULES = [
-        'name' => 'required',
-        'address' => 'required',
+        'name' => 'required', 'route' => 'required',
+        'postal_code' => 'required', 'city' => 'required',
+        'district' => 'required', 'country' => 'required',
         'phone' => 'required',
     ];
 
