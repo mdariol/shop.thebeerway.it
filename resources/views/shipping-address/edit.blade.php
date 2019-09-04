@@ -20,9 +20,9 @@
             <place :address='@json($shippingAddress)'></place>
 
             <div class="form-group">
-                <label for="phone">Telefono</label>
+                <label for="phone">Telefono <span class="text-muted">(Opzionale)</span></label>
                 <input type="tel" name="phone" id="phone" pattern="^[0-9 ]*$" value="{{ $shippingAddress->phone }}"
-                       required class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}">
+                       class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}">
                 @if($errors->has('phone'))
                     <div class="invalid-feedback">{{ $errors->first('phone') }}</div>
                 @else

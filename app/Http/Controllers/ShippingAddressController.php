@@ -14,7 +14,6 @@ class ShippingAddressController extends Controller
         'name' => 'required', 'route' => 'required',
         'postal_code' => 'required', 'city' => 'required',
         'district' => 'required', 'country' => 'required',
-        'phone' => 'required',
     ];
 
     /**
@@ -90,9 +89,11 @@ class ShippingAddressController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Company $company
+     * @param  \App\Company  $company
      * @param  \App\ShippingAddress  $shippingAddress
      * @return \Illuminate\Http\Response
+     *
+     * @throws \Exception
      */
     public function destroy(Company $company, ShippingAddress $shippingAddress)
     {
