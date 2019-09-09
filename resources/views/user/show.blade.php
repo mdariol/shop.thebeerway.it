@@ -15,7 +15,7 @@
 
         <section>
             <h2>Le tue società</h2>
-            <div class="d-flex overflow-auto pb-3">
+            <div class="d-flex overflow-auto">
                 @foreach($user->companies as $company)
                     <div class="card mr-3 flex-shrink-0" style="width: 19rem;">
                         <div class="card-body">

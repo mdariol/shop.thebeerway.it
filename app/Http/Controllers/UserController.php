@@ -9,14 +9,6 @@ use Spatie\Permission\Models\Role;
 class UserController extends Controller
 {
     /**
-     * UserController constructor.
-     */
-    public function __construct()
-    {
-        $this->middleware('admin')->except('edit', 'update');
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -27,6 +19,21 @@ class UserController extends Controller
             'users' => User::all(),
             'roles' => Role::all(),
         ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\User  $user
+     *
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function show(User $user)
+    {
+        $this->authorize('view', $user);
+
+        return view('user.show')->with(['user' => $user]);
     }
 
     /**
@@ -43,53 +50,54 @@ class UserController extends Controller
         if ($user->hasanyrole('Publican|Admin|Distributor')) {
             event(new Autorized($user));
         }
+
         return back();
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        return view('user.edit')->with('user', $user);
-    }
-
-    /**
-     * Display the specified resource.
-     *
      * @param  \App\User  $user
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function show(User $user)
+    public function edit(User $user)
     {
-        return view('user.show')->with(['user' => $user]);
+        $this->authorize('update', $user);
+
+        return view('user.edit')->with('user', $user);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \App\User  $user
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(User $user)
     {
+        $this->authorize('update', $user);
+
         $user->update(request(['name','ishoreca','horecaname','vatnumber']));
 
-        return redirect(  auth()->user()->hasrole('Admin') ? '/users' : '/');
+        return redirect()->route('users.show', ['user' => $user->id]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\User  $user
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function delete(User $user)
     {
+        $this->authorize('delete', $user);
+
         return view('user.delete')->with('user', $user);
     }
 
@@ -103,8 +111,11 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        // TODO: Implement soft delete.
+        $this->authorize('delete', $user);
+
         $user->delete();
 
-        return redirect(  '/users' );
+        return redirect('/users');
     }
 }

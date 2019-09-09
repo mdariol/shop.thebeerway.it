@@ -34,7 +34,7 @@
 
             <div class="form-row">
                 <div class="col-md-6 form-group">
-                    <label for="pec">PEC</label>
+                    <label for="pec">PEC <span class="text-muted">(Opzionale)</span></label>
                     <input type="email" name="pec" id="pec"
                            class="form-control {{ $errors->has('pec') ? 'is-invalid' : '' }}">
                     @if($errors->has('pec'))
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="col-md-6 form-group">
-                    <label for="sdi">SDI</label>
+                    <label for="sdi">SDI <span class="text-muted">(Opzionale)</span></label>
                     <input type="text" name="sdi" id="sdi" minlength="6" maxlength="7" pattern="^[a-zA-Z0-9]*$"
                            class="form-control {{ $errors->has('sdi') ? 'is-invalid' : '' }}">
                     @if($errors->has('sdi'))
