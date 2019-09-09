@@ -56,8 +56,15 @@
                 </div>
             </div>
 
+            <div class="form-group custom-control custom-switch">
+                <input type="checkbox" name="is_default" id="is-default" class="custom-control-input"
+                    {{ $company->is_default ? 'checked' : '' }}>
+                <label class="custom-control-label" for="is-default">Società predefinita</label>
+                <small class="form-text text-muted">Verrà utilizzata come socità di default.</small>
+            </div>
+
             <button class="btn btn-primary">Salva</button>
-            <a href="{{ route('companies.index') }}" class="btn btn-link">Annulla</a>
+            <a href="{{ back() }}" class="btn btn-link">Annulla</a>
         </form>
     </div>
 @endsection

@@ -47,15 +47,14 @@ class Company extends Model
     }
 
     /**
-     * Set this company as default for specified user. If none user is
-     * specified, use the logged-in user.
+     * Set this company as default for logged-in user.
      *
      * @return $this
      */
     public function default()
     {
         DB::table('user_default_company')->updateOrInsert(
-            ['user_id' => auth()->user()->id],
+            ['user_id' => auth()->id()],
             ['company_id' => $this->id]
         );
 
@@ -70,7 +69,7 @@ class Company extends Model
     public function getIsDefaultAttribute()
     {
         return DB::table('user_default_company')->where([
-            ['user_id', '=', auth()->user()->id],
+            ['user_id', '=', auth()->id()],
             ['company_id', '=', $this->id]
         ])->exists();
     }

@@ -19,6 +19,14 @@ class CompanyController extends Controller
     ];
 
     /**
+     * CompanyController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -50,11 +58,11 @@ class CompanyController extends Controller
         /** @var \App\Company $company */
         $company = Company::create(request()->validate(self::RULES));
 
+        $company->users()->attach(auth()->user());
+
         if (request()->has('is_default')) {
             $company->default();
         }
-
-        $company->users()->attach(auth()->user());
 
         return back();
     }
@@ -63,21 +71,29 @@ class CompanyController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Company  $company
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Company $company)
     {
+        $this->authorize('view', $company);
+
         return view('company.show')->with(['company' => $company]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Company $company
+     * @param  \App\Company  $company
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function edit(Company $company)
     {
+        $this->authorize('update', $company);
+
         return view('company.edit')->with([
             'company' => $company,
         ]);
@@ -87,10 +103,14 @@ class CompanyController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Company  $company
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Company $company)
     {
+        $this->authorize('update', $company);
+
         $company->update(request()->validate(self::RULES));
 
         if (request()->has('is_default')) {
@@ -103,11 +123,15 @@ class CompanyController extends Controller
     /**
      * Show the form for deleting the specified resource.
      *
-     * @param \App\Company $company
+     * @param  \App\Company  $company
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function delete(Company $company)
     {
+        $this->authorize('delete', $company);
+
         return view('company.delete')->with(['company' => $company]);
     }
 
@@ -115,12 +139,16 @@ class CompanyController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Company  $company
-     * @return \Illuminate\Http\Response
      *
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Exception
      */
     public function destroy(Company $company)
     {
+        // TODO: Implement soft delete.
+        $this->authorize('delete', $company);
+
         // TODO: Use model event to detach the relationship.
         $company->users()->detach();
 
@@ -133,10 +161,14 @@ class CompanyController extends Controller
      * Set the specified resource as default.
      *
      * @param  \App\Company  $company
+     *
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function default(Company $company)
     {
+        $this->authorize('default', $company);
+
         if (request()->has('is_default')) {
             $company->default();
         }
