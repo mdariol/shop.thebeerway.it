@@ -6,6 +6,7 @@ use App\Mail\Verify;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -53,6 +54,19 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get related default company.
+     *
+     * @return \App\Company|null
+     */
+    public function getDefaultCompanyAttribute()
+    {
+        $id = DB::table('user_default_company')
+            ->where('user_id', $this->id)->value('company_id');
+
+        return Company::find($id);
+    }
+
+    /**
      * Send the email verification notification.
      *
      * @return void
@@ -62,9 +76,13 @@ class User extends Authenticatable implements MustVerifyEmail
         Mail::to($this)->send(new Verify($this));
     }
 
+    /**
+     * Get related orders.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function orders()
     {
         return $this->hasMany(Order::class);
     }
-
 }

@@ -18,18 +18,26 @@
             <div class="d-flex overflow-auto pb-3">
                 @foreach($user->companies as $company)
                     <div class="card mr-3 flex-shrink-0" style="width: 19rem;">
-                        <div class="card-body text-center">
-                            <h4 class="card-title">
+                        <div class="card-body">
+                            <form action="{{ route('companies.default', ['company' => $company->id]) }}"
+                                  method="POST" class="float-right">
+                                @csrf
+                                @method('PATCH')
+
+                                <label class="{{ $company->is_default ? 'fas' : 'far' }} fa-star" style="cursor: pointer;"
+                                       for="is-default-{{ $company->id }}"></label>
+                                <input type="checkbox" name="is_default" id="is-default-{{ $company->id }}"
+                                       class="d-none" onchange="this.form.submit()">
+                            </form>
+                            <h4 class="card-title text-truncate mr-4">
                                 <a href="{{ route('companies.show', ['id' => $company->id]) }}">{{ $company->business_name }}</a>
                             </h4>
                             <hr>
-
                             <small class="text-muted">IT-{{ $company->vat_number }}</small>
                             <p class="mb-0">{{ $company->address }}</p>
                         </div>
-
                         <div class="card-footer">
-                            <a href="{{ route('companies.show', ['id' => $company->id]) }}" class="card-link">Modifica</a>
+                            <a href="{{ route('companies.edit', ['company' => $company->id]) }}" class="card-link">Modifica</a>
                         </div>
                     </div>
                 @endforeach

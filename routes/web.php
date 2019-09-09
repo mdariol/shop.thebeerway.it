@@ -93,11 +93,15 @@ Route::resource('lines', 'LineController');
 Route::resource('companies', 'CompanyController');
 Route::get('/companies/{company}/delete', 'CompanyController@delete')
     ->name('companies.delete');
+Route::patch('/companies/{company}/default', 'CompanyController@default')
+    ->name('companies.default');
 
 /* ----- Shipping Address ----- */
 
-Route::resource('/companies/{company}/shipping-addresses', 'ShippingAddressController', [
+Route::resource('companies.shipping-addresses', 'ShippingAddressController', [
     'except' => ['show', 'index']
 ]);
 Route::get('/companies/{company}/shipping-addresses/{shipping_address}/delete', 'ShippingAddressController@delete')
-    ->name('shipping-addresses.delete');
+    ->name('companies.shipping-addresses.delete');
+Route::patch('/companies/{company}/shipping-addresses/{shipping_address}/default', 'ShippingAddressController@default')
+    ->name('companies.shipping-addresses.default');

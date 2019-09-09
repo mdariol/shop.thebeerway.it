@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Company extends Model
 {
@@ -25,9 +26,53 @@ class Company extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function shippingAddresses()
+    public function shipping_addresses()
     {
-        return $this->hasMany(ShippingAddress::class);
+        return $this->hasMany(ShippingAddress::class)
+            ->orderBy('name');
+    }
+
+    /**
+     * Get related default shipping address.
+     *
+     * @return \App\ShippingAddress|null
+     */
+    public function getDefaultShippingAddressAttribute()
+    {
+        $id = DB::table('company_default_shipping_address')
+            ->where('company_id', $this->id)
+            ->value('shipping_address_id');
+
+        return ShippingAddress::find($id);
+    }
+
+    /**
+     * Set this company as default for specified user. If none user is
+     * specified, use the logged-in user.
+     *
+     * @return $this
+     */
+    public function default()
+    {
+        DB::table('user_default_company')->updateOrInsert(
+            ['user_id' => auth()->user()->id],
+            ['company_id' => $this->id]
+        );
+
+        return $this;
+    }
+
+    /**
+     * Whether is default company or not for logged-in user.
+     *
+     * @return bool
+     */
+    public function getIsDefaultAttribute()
+    {
+        return DB::table('user_default_company')->where([
+            ['user_id', '=', auth()->user()->id],
+            ['company_id', '=', $this->id]
+        ])->exists();
     }
 
     /**

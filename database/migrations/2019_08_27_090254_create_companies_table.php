@@ -35,6 +35,6 @@ class CreateCompaniesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('billing_profiles');
+        Schema::dropIfExists('companies');
     }
 }

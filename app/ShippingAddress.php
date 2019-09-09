@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ShippingAddress extends Model
 {
@@ -32,5 +33,33 @@ class ShippingAddress extends Model
             $this->route, $this->city,
             $this->district, $this->country,
         ]);
+    }
+
+    /**
+     * Set current shipping address as default.
+     *
+     * @return $this
+     */
+    public function default()
+    {
+        DB::table('company_default_shipping_address')->updateOrInsert(
+            ['company_id' => $this->company->id],
+            ['shipping_address_id' => $this->id]
+        );
+
+        return $this;
+    }
+
+    /**
+     * Whether is default shipping address for related company or not.
+     *
+     * @return bool
+     */
+    public function getIsDefaultAttribute()
+    {
+        return DB::table('company_default_shipping_address')->where([
+            ['company_id', '=', $this->company->id],
+            ['shipping_address_id', '=', $this->id],
+        ])->exists();
     }
 }

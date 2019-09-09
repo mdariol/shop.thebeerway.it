@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <h1>Elimina l'indirizzo <em>{{ $shippingAddress->name }}</em></h1>
-        <form method="POST" action="{{ route('shipping-addresses.destroy', ['company' => $company->id, 'shipping_address' => $shippingAddress->id]) }}">
+        <form method="POST" action="{{ route('companies.shipping-addresses.destroy', ['company' => $company->id, 'shipping_address' => $shippingAddress->id]) }}">
             @csrf
             @method('DELETE')
 

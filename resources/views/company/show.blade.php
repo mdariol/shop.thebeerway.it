@@ -17,10 +17,20 @@
             <h3>Indirizzi di Spedizione</h3>
 
             <div class="d-flex overflow-auto">
-                @foreach($company->shippingAddresses as $shippingAddress)
+                @foreach($company->shipping_addresses as $shippingAddress)
                     <article class="card flex-shrink-0 mr-3" style="width: 19rem;">
                         <div class="card-body">
-                            <h4 class="card-title">{{ $shippingAddress->name }}</h4>
+                            <form action="{{ route('companies.shipping-addresses.default', ['company' => $company->id, 'shipping_address' => $shippingAddress->id]) }}"
+                                  method="POST" class="float-right">
+                                @csrf
+                                @method('PATCH')
+
+                                <label class="{{ $shippingAddress->is_default ? 'fas' : 'far' }} fa-star" style="cursor: pointer;"
+                                       for="is-default-{{ $shippingAddress->id }}"></label>
+                                <input type="checkbox" name="is_default" id="is-default-{{ $shippingAddress->id }}"
+                                       class="d-none" onchange="this.form.submit()">
+                            </form>
+                            <h4 class="card-title text-truncate mr-4">{{ $shippingAddress->name }}</h4>
                             <hr>
                             <p><strong>Indirizzo:</strong><br>
                                 {{ $shippingAddress->address }}</p>
@@ -30,7 +40,7 @@
                             @endif
                         </div>
                         <div class="card-footer">
-                            <a href="{{ route('shipping-addresses.edit', ['company' => $company->id, 'shippind-address' => $shippingAddress->id]) }}">Modifica</a>
+                            <a href="{{ route('companies.shipping-addresses.edit', ['company' => $company->id, 'shippind_address' => $shippingAddress->id]) }}">Modifica</a>
                         </div>
                     </article>
                 @endforeach
@@ -38,7 +48,7 @@
                 <article class="card text-center flex-shrink-0" style="width: 19rem; border-style: dashed;">
                     <div class="card-body d-flex flex-column align-items-center justify-content-center">
                         <h4 class="card-title mb-4">Aggiungi un nuovo Indirizzo di Spedizione</h4>
-                        <a href="{{ route('shipping-addresses.create', ['company' => $company->id]) }}" class="btn btn-primary">Aggiungi</a>
+                        <a href="{{ route('companies.shipping-addresses.create', ['company' => $company->id]) }}" class="btn btn-primary">Aggiungi</a>
                     </div>
                 </article>
             </div>

@@ -4,7 +4,7 @@
     <div class="container">
         <h1><em>Nuovo</em> Indirizzo di Spedizione</h1>
 
-        <form method="POST" action="{{ route('shipping-addresses.store', ['company' => $company->id]) }}">
+        <form method="POST" action="{{ route('companies.shipping-addresses.store', ['company' => $company->id]) }}">
             @csrf
 
             <div class="form-group">
@@ -27,6 +27,12 @@
                 @else
                     <small class="text-muted">Verrà usato per eventuali comunicazioni sulla consegna.</small>
                 @endif
+            </div>
+
+            <div class="form-group custom-control custom-switch">
+                <input type="checkbox" name="is_default" id="is-default" class="custom-control-input">
+                <label class="custom-control-label" for="is-default">Indirizzo predefinito</label>
+                <small class="form-text text-muted">Verrà utilizzato come indirizzo di default.</small>
             </div>
 
             <button class="btn btn-primary">Salva</button>

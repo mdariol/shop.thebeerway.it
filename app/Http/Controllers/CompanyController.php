@@ -50,9 +50,13 @@ class CompanyController extends Controller
         /** @var \App\Company $company */
         $company = Company::create(request()->validate(self::RULES));
 
+        if (request()->has('is_default')) {
+            $company->default();
+        }
+
         $company->users()->attach(auth()->user());
 
-        return redirect()->route('companies.show', ['id' => $company->id]);
+        return back();
     }
 
     /**
@@ -89,7 +93,11 @@ class CompanyController extends Controller
     {
         $company->update(request()->validate(self::RULES));
 
-        return redirect()->route('companies.show', ['id' => $company->id]);
+        if (request()->has('is_default')) {
+            $company->default();
+        }
+
+        return back();
     }
 
     /**
@@ -118,6 +126,21 @@ class CompanyController extends Controller
 
         $company->delete();
 
-        return redirect()->route('companies.index');
+        return back();
+    }
+
+    /**
+     * Set the specified resource as default.
+     *
+     * @param  \App\Company  $company
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function default(Company $company)
+    {
+        if (request()->has('is_default')) {
+            $company->default();
+        }
+
+        return back();
     }
 }

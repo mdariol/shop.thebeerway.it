@@ -36,9 +36,14 @@ class ShippingAddressController extends Controller
      */
     public function store(Company $company)
     {
-        ShippingAddress::create(request()->validate(self::RULES) + [
+        /** @var \App\ShippingAddress $shippingAddress */
+        $shippingAddress = ShippingAddress::create(request()->validate(self::RULES) + [
             'company_id' => $company->id
         ]);
+
+        if (request()->has('is_default')) {
+            $shippingAddress->default();
+        }
 
         return redirect()->route('companies.show', ['company' => $company->id]);
     }
@@ -68,6 +73,10 @@ class ShippingAddressController extends Controller
     public function update(Company $company, ShippingAddress $shippingAddress)
     {
         $shippingAddress->update(request()->validate(self::RULES));
+
+        if (request()->has('is_default')) {
+            $shippingAddress->default();
+        }
 
         return redirect()->route('companies.show', ['company' => $company->id]);
     }
@@ -101,5 +110,21 @@ class ShippingAddressController extends Controller
         $shippingAddress->delete();
 
         return redirect()->route('companies.show', ['company' => $company->id]);
+    }
+
+    /**
+     * Set the specified resource as default.
+     *
+     * @param  \App\Company  $company
+     * @param  \App\ShippingAddress  $shippingAddress
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function default(Company $company, ShippingAddress $shippingAddress)
+    {
+        if (request()->has('is_default')) {
+            $shippingAddress->default();
+        }
+
+        return redirect()->route('companies.show', [$company->id]);
     }
 }
