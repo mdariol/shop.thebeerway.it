@@ -2,14 +2,26 @@
 
 namespace App;
 
+use App\Traits\HasState;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Company extends Model
 {
+    use HasState;
+
+    const WORKFLOW = 'approval';
+
     protected $fillable = [
-        'vat_number', 'pec', 'sdi',
-        'business_name', 'address',
+        'business_name',
+        'vat_number',
+        'route',
+        'postal_code',
+        'city',
+        'district',
+        'country',
+        'pec',
+        'sdi',
     ];
 
     /**
