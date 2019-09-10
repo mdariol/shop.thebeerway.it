@@ -64,7 +64,7 @@
             </div>
 
             <button class="btn btn-primary">Salva</button>
-            <a href="{{ back() }}" class="btn btn-link">Elimina</a>
+            <a href="{{ route('companies.delete', ['company' => $company->id]) }}" class="btn btn-link">Elimina</a>
         </form>
     </div>
 @endsection

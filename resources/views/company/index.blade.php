@@ -21,8 +21,9 @@
                     </h4>
                     <p>{{ $company->address }}</p>
                 </div>
-                <div class="align-self-center">
-                    <a href="{{ route('companies.edit', ['id' => $company->id]) }}" class="btn btn-primary mb-3">Modifica</a>
+                <div class="align-self-center mb-3">
+                    <a href="{{ route('companies.edit', ['id' => $company->id]) }}" class="btn btn-primary">Modifica</a>
+                    <a href="{{ route('companies.delete', ['company' => $company->id]) }}" class="btn btn-link">Elimina</a>
                 </div>
             </article>
         @endforeach

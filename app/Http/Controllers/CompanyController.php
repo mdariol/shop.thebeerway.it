@@ -10,9 +10,12 @@ class CompanyController extends Controller
      * Validation rules.
      */
     const RULES = [
-        'business_name' => 'required', 'route' => 'required',
-        'postal_code' => 'required', 'city' => 'required',
-        'district' => 'required', 'country' => 'required',
+        'business_name' => 'required',
+        'route' => 'required',
+        'postal_code' => 'required',
+        'city' => 'required',
+        'district' => 'required',
+        'country' => 'required',
         'vat_number' => 'required|alpha_num|size:11',
         'pec' => 'nullable|email',
         'sdi' => 'nullable|alpha_num|min:6|max:7',
@@ -64,7 +67,7 @@ class CompanyController extends Controller
             $company->default();
         }
 
-        return back();
+        return redirect()->route('companies.show', ['company' => $company->id]);
     }
 
     /**
@@ -117,7 +120,7 @@ class CompanyController extends Controller
             $company->default();
         }
 
-        return back();
+        return redirect()->route('companies.show', ['company' => $company->id]);
     }
 
     /**
@@ -154,7 +157,7 @@ class CompanyController extends Controller
 
         $company->delete();
 
-        return back();
+        return redirect()->route('companies.index');
     }
 
     /**
