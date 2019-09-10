@@ -57,8 +57,7 @@
             </div>
 
             <div class="form-group custom-control custom-switch">
-                <input type="checkbox" name="is_default" id="is-default" class="custom-control-input"
-                    {{ $company->is_default ? 'checked' : '' }}>
+                <input type="checkbox" name="is_default" id="is-default" class="custom-control-input">
                 <label class="custom-control-label" for="is-default">Società predefinita</label>
                 <small class="form-text text-muted">Verrà utilizzata come socità di default.</small>
             </div>
