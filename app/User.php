@@ -85,4 +85,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Order::class);
     }
+
+    /**
+     * Whether user owns specified company or not.
+     *
+     * @return bool
+     */
+    public function owns(Company $company)
+    {
+        return $this->is($company->owner);
+    }
 }

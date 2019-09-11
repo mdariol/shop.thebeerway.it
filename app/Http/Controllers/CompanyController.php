@@ -59,7 +59,9 @@ class CompanyController extends Controller
     public function store()
     {
         /** @var \App\Company $company */
-        $company = Company::create(request()->validate(self::RULES));
+        $company = Company::create(request()->validate(self::RULES) + [
+            'owner_id' => auth()->id(),
+        ]);
 
         $company->users()->attach(auth()->user());
 

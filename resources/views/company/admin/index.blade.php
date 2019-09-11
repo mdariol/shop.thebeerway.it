@@ -16,8 +16,8 @@
                 <tr>
                     <th class="d-none d-md-table-cell">#</th>
                     <th>Nome</th>
+                    <th class="d-none d-md-table-cell">Proprietario</th>
                     <th class="d-none d-md-table-cell">Indirizzo</th>
-                    <th class="d-none d-md-table-cell">P.IVA</th>
                     <th>Stato</th>
                     <th>Operazioni</th>
                 </tr>
@@ -27,8 +27,8 @@
                     <tr>
                         <td class="d-none d-md-table-cell align-middle">{{ $company->id }}</td>
                         <td class="align-middle align-middle">{{ $company->business_name }}</td>
+                        <td class="d-none d-md-table-cell align-middle">{{ $company->owner->name }}</td>
                         <td class="d-none d-md-table-cell align-middle">{{ $company->address }}</td>
-                        <td class="d-none d-md-table-cell align-middle">{{ $company->vat_number }}</td>
                         @if($company->is_pending)
                             <td class="align-middle"><span class="far fa-question-circle text-info" style="font-size: 1.5rem;"></span></td>
                         @elseif($company->is_approved)

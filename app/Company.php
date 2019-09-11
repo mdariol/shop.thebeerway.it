@@ -22,6 +22,7 @@ class Company extends Model
         'country',
         'pec',
         'sdi',
+        'owner_id',
     ];
 
     /**
@@ -127,5 +128,15 @@ class Company extends Model
     public function getIsRejectedAttribute()
     {
         return $this->state === 'rejected';
+    }
+
+    /**
+     * Get the owner.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function owner()
+    {
+        return $this->belongsTo(User::class);
     }
 }
