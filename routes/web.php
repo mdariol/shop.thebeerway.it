@@ -95,6 +95,8 @@ Route::get('/companies/{company}/delete', 'CompanyController@delete')
     ->name('companies.delete');
 Route::patch('/companies/{company}/default', 'CompanyController@default')
     ->name('companies.default');
+Route::patch('/companies/{company}/approve', 'CompanyController@approve')
+    ->name('companies.approve');
 
 /* ----- Shipping Address ----- */
 

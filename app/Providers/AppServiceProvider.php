@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use League\Flysystem\Filesystem;
 use League\Flysystem\WebDAV\WebDAVAdapter;
 use Sabre\DAV\Client;
+use SM\Factory\Factory;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,11 +20,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        /* ----- Fatture in Cloud ----- */
+
         $this->app->singleton(FattureInCloud::class, function () {
             return new FattureInCloud(
               config('services.fatture_in_cloud.key'),
               config('services.fatture_in_cloud.secret')
             );
+        });
+
+        /* ----- State Machine ----- */
+
+        $this->app->singleton(Factory::class, function () {
+            return new Factory(config('workflow'));
         });
     }
 
@@ -47,10 +56,6 @@ class AppServiceProvider extends ServiceProvider
             $adapter = new WebDAVAdapter($client, $root);
 
             return new Filesystem($adapter);
-        });
-
-        Blade::directive('ClToLt', function($expression){
-            return "<?php echo $expression/100?>";
         });
     }
 }

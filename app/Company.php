@@ -98,4 +98,34 @@ class Company extends Model
             $this->district, $this->country,
         ]);
     }
+
+    /**
+     * Whether is pending or not.
+     *
+     * @return bool
+     */
+    public function getIsPendingAttribute()
+    {
+        return $this->state === 'approval';
+    }
+
+    /**
+     * Whether is approved or not.
+     *
+     * @return bool
+     */
+    public function getIsApprovedAttribute()
+    {
+        return $this->state === 'approved';
+    }
+
+    /**
+     * Whether is rejected or not.
+     *
+     * @return bool
+     */
+    public function getIsRejectedAttribute()
+    {
+        return $this->state === 'rejected';
+    }
 }

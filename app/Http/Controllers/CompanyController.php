@@ -82,7 +82,10 @@ class CompanyController extends Controller
     {
         $this->authorize('view', $company);
 
-        return view('company.show')->with(['company' => $company]);
+        return view('company.show')->with([
+            'company' => $company,
+            'state' => $this->prepareState($company),
+        ]);
     }
 
     /**
@@ -177,5 +180,61 @@ class CompanyController extends Controller
         }
 
         return back();
+    }
+
+    /**
+     * Approve or reject the specified resource.
+     *
+     * @param  \App\Company  $company
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function approve(Company $company)
+    {
+        $this->authorize('approve', $company);
+
+        if ($company->state_machine->can(request()->transition)) {
+            $company->state_machine->apply(request()->transition);
+            $company->save();
+        }
+
+        return back();
+    }
+
+    /**
+     * Prepare state variable for company.show view.
+     *
+     * @param  \App\Company  $company
+     *
+     * @return object
+     */
+    protected function prepareState(Company $company)
+    {
+        $state = (object) [
+            'color' => 'info',
+            'icon' => 'fa-question-circle',
+            'title' => 'Verifica',
+            'text' => 'Questa società deve essere verificata. Cosa vuoi fare?',
+            'button' => 'btn-primary',
+        ];
+
+        if ($company->is_approved) {
+            $state->color = 'success';
+            $state->icon = 'fa-check-circle';
+            $state->title = 'Approvato';
+            $state->text = 'Questa società è stata approvata. Hai cambiato idea?';
+            $state->button = 'btn-success';
+        }
+
+        if ($company->is_rejected) {
+            $state->color = 'danger';
+            $state->icon = 'fa-times-circle';
+            $state->title = 'Rifiutato';
+            $state->text = 'Questa società è stata rifiutata. Hai cambiato idea?';
+            $state->button = 'btn-danger';
+        }
+
+        return $state;
     }
 }

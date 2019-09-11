@@ -2,7 +2,16 @@
 
 @section('content')
     <div class="container">
-        <h1 class="mb-3">{{ $company->business_name }}</h1>
+        <h1>{{ $company->business_name }}
+            @role('Admin')
+                <small class="far {{ $state->icon }} text-{{ $state->color }}" data-toggle="collapse"
+                       data-target="#company-approval" style="cursor: pointer;"></small>
+            @endrole
+        </h1>
+
+        @role('Admin')
+            @include('company.components.approve')
+        @endrole
 
         <dl class="row">
             <dt class="col-md-2">Partita IVA</dt><dd class="col-md-10">IT-{{ $company->vat_number }}</dd>

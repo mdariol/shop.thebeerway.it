@@ -61,4 +61,17 @@ class CompanyPolicy
     {
         return $company->users->contains($user);
     }
+
+    /**
+     * Determine whether the user can approve or reject the company.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Company  $company
+     *
+     * @return mixed
+     */
+    public function approve(User $user, Company $company)
+    {
+        return $user->hasRole('Admin');
+    }
 }

@@ -19,7 +19,8 @@
         "league/flysystem-webdav": "^1.0",
         "spatie/laravel-activitylog": "^3.7",
         "spatie/laravel-backup": "^6.2",
-        "spatie/laravel-permission": "^2.37"
+        "spatie/laravel-permission": "^2.37",
+        "winzou/state-machine": "^0.3.3"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
