@@ -107,3 +107,20 @@ Route::get('/companies/{company}/shipping-addresses/{shipping_address}/delete', 
     ->name('companies.shipping-addresses.delete');
 Route::patch('/companies/{company}/shipping-addresses/{shipping_address}/default', 'ShippingAddressController@default')
     ->name('companies.shipping-addresses.default');
+
+/* --------------------------------------------------------------------------
+    Admin
+   -------------------------------------------------------------------------- */
+
+Route::group([
+    'prefix' => 'admin',
+    'middleware' => 'admin',
+    'name' => 'admin.',
+    'namespace' => 'Admin',
+], function () {
+
+    /* ----- Company ----- */
+
+    Route::get('/companies', 'CompanyController@index')
+        ->name('companies.index');
+});
