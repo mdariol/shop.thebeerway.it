@@ -1,4 +1,4 @@
-<div class="card border-{{ $state->color }} mb-3 collapse collapsed" id="company-approval" style="max-width: 18rem;">
+<div class="card border-{{ $state->color }} mb-3" style="max-width: 18rem;">
     <div class="card-body text-{{ $state->color }}">
         <h3 class="card-title"><span class="far {{ $state->icon }}"></span> {{ $state->title }}</h3>
 

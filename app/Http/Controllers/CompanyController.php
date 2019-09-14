@@ -104,6 +104,7 @@ class CompanyController extends Controller
 
         return view('company.edit')->with([
             'company' => $company,
+            'state' => $this->prepareState($company),
         ]);
     }
 

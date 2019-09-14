@@ -10,7 +10,9 @@
         </h1>
 
         @role('Admin')
-            @include('company.components.approve')
+            <div class="collapse collapsed" id="company-approval">
+                @include('company.components.approve')
+            </div>
         @endrole
 
         <dl class="row">
@@ -24,6 +26,12 @@
 
         <section class="mb-5">
             <h3>Indirizzi di Spedizione</h3>
+
+            @if( ! $company->shipping_addresses->count())
+                <p>Non hai alcun indirizzo di spedizione per questa azienda...</p>
+            @else
+                <p>Gli indirizzi di spedizione della tua azienda.</p>
+            @endif
 
             <div class="d-flex overflow-auto">
                 @foreach($company->shipping_addresses as $shippingAddress)
