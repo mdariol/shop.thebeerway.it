@@ -10,7 +10,8 @@ class CompanyController extends Controller
     public function index()
     {
         return view('company.admin.index')->with([
-            'companies' => Company::all()->sortBy('business_name')
+            'companies' => Company::queryFilter()->orderBy('business_name')->get(),
+            'users' => \App\User::all()
         ]);
     }
 }

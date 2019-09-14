@@ -4,13 +4,46 @@
     <div class="container">
         <h1>Società</h1>
 
-        <p>Elenco delle società.</p>
+        <p class="mb-4">Elenco delle società.</p>
 
-        @if( ! $companies->count())
-            <p class="text-muted">Non c'è alcuna società...</p>
-        @endif
+        <div class="card bg-light mb-4">
+            <div class="card-body">
+                <form class="mb-0" action="{{ route('admin.companies.index') }}">
+                    <div class="form-row">
+                        <div class="form-group col-md">
+                            <label for="name">Nome</label>
+                            <input type="text" name="name" id="name" class="form-control" value="{{ request()->name }}">
+                        </div>
 
-        <div class="table-responsive mt-5">
+                        <div class="form-group col-md">
+                            <label for="state">Stato</label>
+                            <select name="state" id="state" class="form-control">
+                                <option selected value> -- seleziona un valore -- </option>
+                                <option value="approval" {{ request()->state == 'approval' ? 'selected' : '' }}>Approvazione</option>
+                                <option value="approved" {{ request()->state == 'approved' ? 'selected' : '' }}>Approvato</option>
+                                <option value="rejected" {{ request()->state == 'rejected' ? 'selected' : '' }}>Respinto</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md">
+                            <label for="owner">Proprietario</label>
+                            <select name="owner" id="owner" class="form-control">
+                                <option value selected> -- seleziona un valore -- </option>
+                                @foreach(\App\User::all() as $user)
+                                    <option {{ request()->owner == $user->id ? 'selected' : ''}}
+                                            value="{{ $user->id }}">{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary">Filtra</button>
+                    <a href="{{ route('admin.companies.index') }}" class="btn btn-link">Reset</a>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-responsive">
             <table class="table">
                 <thead>
                 <tr>
@@ -26,7 +59,9 @@
                 @foreach($companies as $company)
                     <tr>
                         <td class="d-none d-md-table-cell align-middle">{{ $company->id }}</td>
-                        <td class="align-middle align-middle">{{ $company->business_name }}</td>
+                        <td class="align-middle align-middle">
+                            <a href="{{ route('companies.show', ['company' => $company->id]) }}">{{ $company->business_name }}</a>
+                        </td>
                         <td class="d-none d-md-table-cell align-middle">{{ $company->owner->name }}</td>
                         <td class="d-none d-md-table-cell align-middle">{{ $company->address }}</td>
                         @if($company->is_pending)
@@ -47,6 +82,16 @@
                 </tbody>
             </table>
         </div>
+
+        @if( ! $companies->count())
+            <p style="padding-left: .75rem;">Non c'è alcuna società...</p>
+        @endif
     </div>
 @endsection
 
+<script>
+    import Optionlist from "../../../js/components/Optionlist";
+    export default {
+        components: {Optionlist}
+    }
+</script>

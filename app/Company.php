@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\HasFilters;
 use App\Traits\HasState;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 class Company extends Model
 {
     use HasState;
+    use HasFilters;
 
     const WORKFLOW = 'approval';
 

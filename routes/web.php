@@ -115,12 +115,11 @@ Route::patch('/companies/{company}/shipping-addresses/{shipping_address}/default
 Route::group([
     'prefix' => 'admin',
     'middleware' => 'admin',
-    'name' => 'admin.',
     'namespace' => 'Admin',
 ], function () {
 
     /* ----- Company ----- */
 
     Route::get('/companies', 'CompanyController@index')
-        ->name('companies.index');
+        ->name('admin.companies.index');
 });
