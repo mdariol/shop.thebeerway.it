@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Company;
+use App\Events\CompanyApproved;
 
 class CompanyController extends Controller
 {
@@ -197,10 +198,7 @@ class CompanyController extends Controller
     {
         $this->authorize('approve', $company);
 
-        if ($company->state_machine->can(request()->transition)) {
-            $company->state_machine->apply(request()->transition);
-            $company->save();
-        }
+        $company->apply(request()->transition);
 
         return back();
     }

@@ -95,4 +95,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->is($company->owner);
     }
+
+    /**
+     * Whether user has approved companies or not.
+     *
+     * @return bool
+     */
+    public function getIsHorecaAttribute()
+    {
+        return $this->companies()->where('state', 'approved')
+            ->exists();
+    }
 }

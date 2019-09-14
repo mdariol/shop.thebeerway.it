@@ -10,6 +10,7 @@ Log of unreleased changes.
 
 - Adds `ShippingAddress` model.
 - Adds `Company` model.
+- Adds `StateMachine` functionality.
 
 ### Changed
 

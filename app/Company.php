@@ -141,4 +141,22 @@ class Company extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Apply the specified transition.
+     *
+     * @param string $transition
+     *
+     * @return $this
+     */
+    public function apply($transition)
+    {
+        $this->state_machine->apply($transition);
+        $this->save();
+
+        if ($this->is_approved) event(new Events\CompanyApproved($this));
+        if ($this->is_rejected) event(new Events\CompanyRejected($this));
+
+        return $this;
+    }
 }
