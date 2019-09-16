@@ -10,6 +10,18 @@ class UserPolicy
     use HandlesAuthorization;
 
     /**
+     * Determine whether the user can view the index.
+     *
+     * @param \App\User  $user
+     *
+     * @return mixed
+     */
+    public function index(User $user)
+    {
+        return $user->hasRole('Admin');
+    }
+
+    /**
      * Determine whether the user can view the model.
      *
      * @param  \App\User  $user
@@ -46,5 +58,17 @@ class UserPolicy
     public function delete(User $user, User $model)
     {
         return $user->id === $model->id;
+    }
+
+    /**
+     * Determine whether the user can assign roles.
+     *
+     * @param  \App\User  $user
+     *
+     * @return bool
+     */
+    public function role(User $user)
+    {
+        return $user->hasRole('Admin');
     }
 }

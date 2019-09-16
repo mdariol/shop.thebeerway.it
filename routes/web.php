@@ -15,11 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes(['verify' => true]);
-
-Route::get('/login/{provider}', 'Auth\LoginController@redirectToProvider');
-Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
-
 Route::get('/home', 'HomeController@index')->name('home');
 
 
@@ -65,12 +60,6 @@ Route::resource('roles', 'RoleController');
 Route::get('/roles/{role}/delete', 'RoleController@delete')
     ->name('roles.delete');
 
-Route::resource('users', 'UserController');
-Route::post('/roleassign', 'UserController@roleassign')
-    ->name('users.roleassign');
-Route::get('/users/{user}/delete', 'UserController@delete')
-    ->name('users.delete');
-
 Route::get('/stocksync', function () {
     $exitCode = Artisan::call('fatture:sync beers --field=stock');
 
@@ -87,6 +76,19 @@ Route::get('/purchaseorders/{purchaseorder}/delete', 'PurchaseorderController@de
 
 Route::resource('orders', 'OrderController');
 Route::resource('lines', 'LineController');
+
+/* ----- User & Authenticatable ----- */
+
+Auth::routes(['verify' => true]);
+
+Route::get('/login/{provider}', 'Auth\LoginController@redirectToProvider');
+Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
+
+Route::resource('users', 'UserController');
+Route::get('/users/{user}/delete', 'UserController@delete')
+    ->name('users.delete');
+Route::patch('/users/{user}/role', 'UserController@role')
+    ->name('users.role');
 
 /* ----- Company ----- */
 

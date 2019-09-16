@@ -4,39 +4,52 @@
     <div class="container">
         <h1>Utenti</h1>
 
-        <!--
-        <a class="btn btn-primary mb-2" href="/roles/create">Nuovo</a>
-        -->
-        @foreach($users as $user)
-            @if (!(request()->autorize) or (($user->ishoreca) and !($user->hasrole('Publican'))))
+        <p class="mb-4">Elenco degli utenti.</p>
 
-            <form method="POST" action="/roleassign">
-                @csrf
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th class="d-none d-md-table-cell">Email</th>
+                    @foreach($roles as $role)
+                        <th>{{ $role->name }}</th>
+                    @endforeach
+                    <th>Operazioni</th>
+                </tr>
+                </thead>
+                <tbody>
+                    @foreach($users as $user)
+                        <tr>
+                            <td class="align-middle">{{ $user->name }}</td>
+                            <td class="d-none d-md-table-cell align-middle">{{ $user->email }}</td>
+                            @foreach($roles as $role)
+                                <td class="align-baseline">
+                                    <form method='POST' action="{{ route('users.role', ['user' => $user->id]) }}">
+                                        @csrf
+                                        @method('PATCH')
 
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <p class="float-left mr-5">{{ $user->name }} {{ $user->ishoreca ? '( '.$user->horecaname.' - '.$user->vatnumber.' )' : ''}} {{' - '.$user->email}}</p>
-                        <div class="float-right">
-                            <button class="btn btn-primary">Assegna Ruoli</button>
-                        </div>
-                        @foreach ($roles as $role)
-                            <div class="form-check form-check-inline" >
-                                <input class="form-check-input" type="checkbox" name="roles[]" value="{{ $role->name }}" {{ $user->hasRole($role->name) ? 'checked' : ''}}  aria-label="Checkbox for following text input">
-                                <label class="form-check-label">{{$role->name}} </label>
-                                <input class="form-control" type=text" name="assign_user" value="{{ $user->id }}"  hidden>
-                            </div>
-                        @endforeach
-
-                        <div class="float-right">
-                            <a href="/users/{{ $user->id }}/edit" class="btn btn-primary">Modifica</a>
-                            <a href="/users/{{ $user->id }}/delete" class="btn btn-danger">Elimina</a>
-                        </div>
-
-                    </div>
-                </div>
-            </form>
-            @endif
-        @endforeach
-    </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="remove" class="form-check-input d-none"
+                                                   value="{{ $role->name }}" checked>
+                                            <input class="form-check-input" type="checkbox" name="role"
+                                                   {{ $user->hasRole($role->name) ? 'checked' : '' }}
+                                                   id="role-{{ $role->name . '-' . $user->id }}"
+                                                   value="{{ $role->name }}" onchange="this.form.submit()">
+                                            <label for="role-{{ $role->name . '-' . $user->id }}"
+                                                   class="form-check-label d-none">{{ $role->name }}</label>
+                                        </div>
+                                    </form>
+                                </td>
+                            @endforeach
+                            <td class="align-middle">
+                                <a href="{{ route('users.edit', ['user' => $user->id]) }}" class="btn btn-primary">Modifica</a>
+                                <a href="{{ route('users.delete', ['user' => $user->id]) }}" class="btn btn-link">Elimina</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 @endsection
 

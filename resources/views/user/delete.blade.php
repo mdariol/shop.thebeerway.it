@@ -7,8 +7,9 @@
             @csrf
             @method('DELETE')
 
-            <button type="submit" class="btn btn-primary">Conferma Elimina</button>
-            <a href="/users" class="btn btn-link">Annulla</a>
+            <p>Sei sicuro di voler eliminare {{ $user->name }}? Questa azione è <em>irreversibile</em>.</p>
+            <button type="submit" class="btn btn-primary">Elimina</button>
+            <a href="{{ route('users.index') }}" class="btn btn-link">Annulla</a>
         </form>
     </div>
 @endsection

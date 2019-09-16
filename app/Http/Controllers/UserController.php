@@ -2,19 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\Autorized;
 use App\User;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
     /**
+     * CompanyController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index()
     {
+        $this->authorize('index');
+
         return view('user.index')->with([
             'users' => User::all(),
             'roles' => Role::all(),
@@ -39,17 +49,22 @@ class UserController extends Controller
     /**
      * Assign user roles.
      *
+     * @param  \App\User  $user
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function roleassign()
+    public function role(User $user)
     {
-        $user = User::find(request()->assign_user);
+        $this->authorize('role');
 
-        $user->syncRoles(request()->roles);
+        if (request()->has('role')){
+            $user->assignRole(request()->role);
 
-        if ($user->hasanyrole('Publican|Admin|Distributor')) {
-            event(new Autorized($user));
+            return back();
         }
+
+        $user->removeRole(request()->remove);
 
         return back();
     }
