@@ -3,22 +3,27 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class Autorize extends Mailable
+class AuthRegistered extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $user;
+    /**
+     * @var \Illuminate\Contracts\Auth\Authenticatable
+     */
+    public $user;
 
     /**
      * Create a new message instance.
      *
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user
+     *
      * @return void
      */
-    public function __construct($user)
+    public function __construct(Authenticatable $user)
     {
         $this->user = $user;
     }
@@ -30,9 +35,7 @@ class Autorize extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.user.autorize')->with([
-            'user' => $this->user,
-            'url' => route('users.index'),
-        ]);
+        return $this->subject('Nuovo utente!')
+            ->markdown('emails.auth.registered');
     }
 }

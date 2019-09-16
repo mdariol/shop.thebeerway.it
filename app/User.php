@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Mail\Verify;
+use App\Mail\UserVerifyEmail;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -73,7 +73,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function sendEmailVerificationNotification()
     {
-        Mail::to($this)->send(new Verify($this));
+        Mail::to($this)->send(new UserVerifyEmail($this));
     }
 
     /**

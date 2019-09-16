@@ -15,14 +15,6 @@ class EventServiceProvider extends ServiceProvider
         \Illuminate\Auth\Events\Registered::class => [
             \Illuminate\Auth\Listeners\SendEmailVerificationNotification::class,
         ],
-
-        \Illuminate\Auth\Events\Verified::class => [
-            \App\Listeners\SendEmailApprovalNotification::class,
-        ],
-
-        \App\Events\Autorized::class => [
-            \App\Listeners\SendEmailAutorizeNotification::class,
-        ],
     ];
 
     /**
@@ -32,6 +24,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $subscribe = [
         \App\Listeners\CompanyEventSubscriber::class,
+        \App\Listeners\AuthEventSubscriber::class,
     ];
 
     /**

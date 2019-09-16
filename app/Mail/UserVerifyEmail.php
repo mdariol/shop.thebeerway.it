@@ -3,25 +3,30 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
 
-class Verify extends Mailable
+class UserVerifyEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $user;
+    /**
+     * @var \Illuminate\Contracts\Auth\Authenticatable
+     */
+    public $user;
 
     /**
      * Create a new message instance.
      *
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user
+     *
      * @return void
      */
-    public function __construct($user)
+    public function __construct(Authenticatable $user)
     {
         $this->user = $user;
     }
@@ -33,10 +38,9 @@ class Verify extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.user.verify')->with([
-          'user' => $this->user,
-          'url' => $this->verificationUrl(),
-        ]);
+        return $this->subject('Verifica indirizzo email')
+            ->markdown('emails.user.verify-email')
+            ->with(['url' => $this->verificationUrl()]);
     }
 
     /**
