@@ -26,7 +26,7 @@ class UserController extends Controller
         $this->authorize('index');
 
         return view('user.index')->with([
-            'users' => User::all(),
+            'users' => User::queryFilter()->orderBy('name')->get(),
             'roles' => Role::all(),
         ]);
     }

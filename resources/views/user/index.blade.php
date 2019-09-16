@@ -6,10 +6,43 @@
 
         <p class="mb-4">Elenco degli utenti.</p>
 
+        <div class="card bg-light mb-4">
+            <div class="card-body">
+                <form class="mb-0" action="{{ route('users.index') }}">
+                    <div class="form-row">
+                        <div class="form-group col-md">
+                            <label for="name">Nome</label>
+                            <input type="text" name="name" id="name" class="form-control" value="{{ request()->name }}">
+                        </div>
+
+                        <div class="form-group col-md">
+                            <label for="email">Email</label>
+                            <input type="text" name="email" id="email" class="form-control" value="{{ request()->email }}">
+                        </div>
+
+                        <div class="form-group col-md">
+                            <label for="role">Ruolo</label>
+                            <select name="role" id="role" class="form-control">
+                                <option selected value> -- seleziona un valore -- </option>
+                                @foreach($roles as $role)
+                                    <option {{ request()->role == $role->id ? 'selected' : '' }}
+                                            value="{{ $role->id }}">{{ $role->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary">Filtra</button>
+                    <a href="{{ route('users.index') }}" class="btn btn-link">Reset</a>
+                </form>
+            </div>
+        </div>
+
         <div class="table-responsive">
             <table class="table">
                 <thead>
                 <tr>
+                    <th class="d-none d-md-table-cell">#</th>
                     <th>Nome</th>
                     <th class="d-none d-md-table-cell">Email</th>
                     @foreach($roles as $role)
@@ -21,7 +54,10 @@
                 <tbody>
                     @foreach($users as $user)
                         <tr>
-                            <td class="align-middle">{{ $user->name }}</td>
+                            <td class="d-none d-md-table-cell align-middle">{{ $user->id }}</td>
+                            <td class="align-middle">
+                                <a href="{{ route('users.show', ['user' => $user->id]) }}">{{ $user->name }}</a>
+                            </td>
                             <td class="d-none d-md-table-cell align-middle">{{ $user->email }}</td>
                             @foreach($roles as $role)
                                 <td class="align-baseline">
