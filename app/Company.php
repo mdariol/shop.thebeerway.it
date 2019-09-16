@@ -28,6 +28,15 @@ class Company extends Model
     ];
 
     /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'created' => \App\Events\CompanyCreated::class,
+    ];
+
+    /**
      * Get related users.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

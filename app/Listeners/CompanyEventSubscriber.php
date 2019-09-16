@@ -3,6 +3,8 @@
 namespace App\Listeners;
 
 use App\Events\CompanyApproved;
+use App\Events\CompanyCreated;
+use App\User;
 use Illuminate\Support\Facades\Mail;
 
 class CompanyEventSubscriber
@@ -23,6 +25,11 @@ class CompanyEventSubscriber
             CompanyApproved::class,
             'App\Listeners\CompanyEventSubscriber@sendCompanyApprovedEmail'
         );
+
+        $events->listen(
+            CompanyCreated::class,
+            'App\Listeners\CompanyEventSubscriber@sendCompanyApprovalEmail'
+        );
     }
 
     /**
@@ -34,6 +41,18 @@ class CompanyEventSubscriber
     {
         Mail::to($event->company->users)
             ->send(new \App\Mail\CompanyApproved($event->company));
+    }
+
+    /**
+     * Send approval email to admins.
+     *
+     * @param  \App\Events\CompanyCreated  $event
+     */
+    public function sendCompanyApprovalEmail(CompanyCreated $event)
+    {
+        $admins = User::role('Admin')->get();
+
+        Mail::to($admins)->send(new \App\Mail\CompanyCreated($event->company));
     }
 
     /**
