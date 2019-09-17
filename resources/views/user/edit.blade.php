@@ -9,14 +9,14 @@
                     <h5 class="card-title">Modifica le Info</h5>
                     <hr>
 
-                    <form method="POST" action="{{ route('users.edit', ['user' => $user->id]) }}">
+                    <form method="POST" action="{{ route('users.update', ['user' => $user->id]) }}">
                         @csrf
                         @method('PATCH')
 
                         <div class="form-group">
                             <label for="name">Nome</label>
                             <input type="text" name="name" id="name" value="{{ $user->name }}" required
-                                   class="form-control @error('name') is-valid @enderror">
+                                   class="form-control @error('name') is-invalid @enderror">
                             @error('name')
                                 <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
                             @enderror

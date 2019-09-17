@@ -10,6 +10,13 @@ use Spatie\Permission\Models\Role;
 class UserController extends Controller
 {
     /**
+     * Validation rules.
+     */
+    const RULES = [
+        'name' => ['required', 'string', 'max:255', 'min:3'],
+    ];
+
+    /**
      * CompanyController constructor.
      */
     public function __construct()
@@ -98,7 +105,7 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        $user->update(request(['name','ishoreca','horecaname','vatnumber']));
+        $user->update(request()->validate(self::RULES));
 
         return redirect()->route('users.show', ['user' => $user->id]);
     }
