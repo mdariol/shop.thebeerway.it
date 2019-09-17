@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class Company extends Model
 {
-    use HasState;
-    use HasFilters;
+    use HasState, HasFilters;
 
     const WORKFLOW = 'approval';
 
@@ -167,5 +166,15 @@ class Company extends Model
         if ($this->is_rejected) event(new Events\CompanyRejected($this));
 
         return $this;
+    }
+
+    /**
+     * Get related orders.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

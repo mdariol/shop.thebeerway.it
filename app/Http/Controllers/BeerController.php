@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Beer;
 use App\Brewery;
 use App\Color;
+use App\Company;
 use App\Line;
 use App\Order;
 use App\Packaging;
+use App\ShippingAddress;
 use App\Style;
 use App\Taste;
 use Illuminate\Http\Request;
@@ -308,11 +310,15 @@ class BeerController extends Controller
 
     public function saveOrder(Request $request){
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
+
+
         $cart = new Cart($oldCart);
         $cart->deliverynote = $request->deliverynote;
         $request->session()->put('cart', $cart);
 
+ //       dd($cart);
 
+// dd($request);
         DB::transaction(function () use ($request, $cart) {
             $new_number = DB::table('orders')->max('number') + 1;
             if (request()->number > 0) {
@@ -327,6 +333,11 @@ class BeerController extends Controller
                 'status' => 'complete',
                 'deliverynote' => $cart->deliverynote,
                 'user_id' => auth()->user()->id,
+                'company_id' => $request->company_id,
+                'shipping_address_id' => $request->shipping_address_id,
+                'total_amount' => $cart->totalPrice,
+
+
             ]);
 
             foreach ($cart->items as $item) {
@@ -349,9 +360,9 @@ class BeerController extends Controller
             $request->session()->remove('cart');
         });
         if (Session::has('cart')) {
-            return redirect('/')->with('error', 'Acquisto non andato a buon fine');
+            return redirect('/')->with('error', 'Richiesta di Acquisto Fallita');
         }
-        return redirect('/')->with('success', 'Acquisto completato con successo');
+        return redirect('/')->with('success', 'Richiesta di Acquisto completata con successo');
     }
 
 
@@ -362,7 +373,13 @@ class BeerController extends Controller
         }
         $oldCart = Session::get('cart');
         $cart = new Cart($oldCart);
-        return view('beer.shoppingcart',['products' => $cart->items, 'totalPrice' => $cart->totalPrice, 'deliverynote' => $cart->deliverynote]);
+        return view('beer.shoppingcart',[
+            'products' => $cart->items,
+            'totalPrice' => $cart->totalPrice,
+            'deliverynote' => $cart->deliverynote,
+            'companies' => Company::all(),
+            'shipping_addresses' => ShippingAddress::all(),
+        ]);
 
     }
 

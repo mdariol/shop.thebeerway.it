@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Company;
-use App\Events\CompanyApproved;
 
 class CompanyController extends Controller
 {

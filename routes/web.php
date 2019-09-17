@@ -17,7 +17,6 @@ Route::get('/', function () {
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
 Route::get('/beers/shoppingcart', 'BeerController@getCart')->name('beers.shoppingcart');
 Route::post('/beers/saveorder', 'BeerController@saveOrder')->name('beers.saveorder');
 Route::post('/beers/savedeliverynote', 'BeerController@savedeliverynote')->name('beers.savedeliverynote');
@@ -124,4 +123,19 @@ Route::group([
 
     Route::get('/companies', 'CompanyController@index')
         ->name('admin.companies.index');
+});
+
+/* --------------------------------------------------------------------------
+    API
+   -------------------------------------------------------------------------- */
+
+Route::group([
+    'prefix' => 'api',
+    'namespace' => 'Api'
+], function () {
+
+    /* ----- Company ----- */
+
+    Route::get('/companies/{company}/shipping-address', 'CompanyController@shippingAddress')
+        ->name('api.companies.shipping-address');
 });

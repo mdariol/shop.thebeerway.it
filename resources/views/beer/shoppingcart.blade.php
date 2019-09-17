@@ -41,15 +41,23 @@
             </div>
             <form method="POST" action="/beers/saveorder">
                 @csrf
+
+                <cart :options='@json(auth()->user()->companies)' :default_company='@json(auth()->user()->default_company)' :shipping_addresses='@json($shipping_addresses)' ></cart>
+
                 <div class="form-group">
                     <label class="pt-3" for="delivetynote">Note per la consegna</label>
                     <textarea class="form-control form-control-lg" type="text" name="deliverynote" id="deliverynote" rows="5">{{ $deliverynote}}</textarea>
                     <button class="btn btn-primary mt-2">Conferma l'acquisto</button>
-
                 </div>
-            </form>
-    @else
 
+            </form>
+        </div>
+    @else
+        <div class="container">
+            <div class="row bg-primary">
+                <h1>Il carrello è vuoto</h1>
+            </div>
+        </div>
     @endif
 
 

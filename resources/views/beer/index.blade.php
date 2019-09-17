@@ -62,7 +62,9 @@
 
                     <h5 class="text-primary" >
                         @if ($beer->image)
-                            <img src="{{ asset('storage/'.$beer->image) }}" style="width: 40px; height: 40px; ">
+                            <div class="d-inline-block text-center" style="height: 40px; width: 40px">
+                                <img src="{{ asset('storage/'.$beer->image) }}" style="height: 40px; ">
+                            </div>
                         @endif
 
 
