@@ -144,7 +144,7 @@
             return {
                 packaging_id: this.beer.packaging ? this.beer.packaging.id : null,
                 discount: this.beer.price ? this.beer.price.discount : 0,
-                fixedMargin: this.beer.price ? Boolean(parseInt(this.beer.price.fixed_margin)) : false,
+                fixedMargin: this.beer.price ? this.beer.price.fixed_margin : false,
                 margin: this.beer.price ? this.beer.price.margin : 0,
 
                 horeca: {
@@ -172,14 +172,10 @@
             calculatePrices() {
                 if (this.horeca.total) {
                     this.calculateHorecaUnitPrice();
-
-                    return;
-                }
+             }
 
                 if (this.horeca.unit) {
                     this.calculateHorecaTotalPrice();
-
-                    return;
                 }
 
                 if (this.purchase.total) {
@@ -200,6 +196,7 @@
 
                 if (this.discount) {
                     this.calculatePurchasePricesFromDiscount();
+                    this.calculateDistributionTotalPrice();
                 }
             },
 
@@ -208,6 +205,7 @@
 
                 if (this.discount) {
                     this.calculatePurchasePricesFromDiscount();
+                    this.calculateDistributionUnitPrice();
                 }
             },
 

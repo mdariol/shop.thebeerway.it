@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Beer;
+use App\Line;
 use App\Order;
+use App\Packaging;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -14,7 +17,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        return view('order.index')->with('orders', Order::all());
     }
 
     /**

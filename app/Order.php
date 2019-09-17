@@ -14,7 +14,7 @@ class Order extends Model
         'cancelled' => 'annullato'
     ];
 
-    protected $fillable = ['date','number','status','deliverynote','user_id'];
+    protected $fillable = ['date','number','status','deliverynote','user_id','company_id','shipping_address_id','total_amount'];
     //
 
     protected static function boot()
@@ -29,13 +29,20 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-
     public function lines()
     {
         return $this->hasMany(Line::class);
     }
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 
+    public function shipping_address()
+    {
+        return $this->belongsTo(ShippingAddress::class);
+    }
 
     //
 }

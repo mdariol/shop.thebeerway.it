@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class Company extends Model
 {
-    use HasState;
+//    use HasState;
 
-    const WORKFLOW = 'approval';
+//    const WORKFLOW = 'approval';
 
     protected $fillable = [
         'business_name',
@@ -98,4 +98,10 @@ class Company extends Model
             $this->district, $this->country,
         ]);
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
 }

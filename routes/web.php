@@ -105,3 +105,8 @@ Route::get('/companies/{company}/shipping-addresses/{shipping_address}/delete', 
     ->name('companies.shipping-addresses.delete');
 Route::patch('/companies/{company}/shipping-addresses/{shipping_address}/default', 'ShippingAddressController@default')
     ->name('companies.shipping-addresses.default');
+
+/* ----- API ----- */
+Route::get('/companies/{company}/shipping-address', 'CompanyController@shippingAddress')
+    ->name('companies.api.shipping-address');
+

@@ -178,4 +178,21 @@ class CompanyController extends Controller
 
         return back();
     }
+
+    /**
+     * Get default shipping address.
+     *
+     * @param  \App\Company  $company
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function shippingAddress(Company $company)
+    {
+        return $company->default_shipping_address;
+    }
+
+
+
+
 }
