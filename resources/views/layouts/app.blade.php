@@ -102,26 +102,16 @@
             </div>
         </nav>
 
-        @if ($errors->any())
-            @foreach($errors->all() as $error)
-                <div class="alert alert-danger">
-                    {{ $error }}
-                </div>
-            @endforeach
-        @endif
-        @if ($message = Session::get('success'))
-
-            <div class="alert alert-success alert-block">
-
-                <button type="button" class="close" data-dismiss="alert">×</button>
-
-                <strong>{{ $message }}</strong>
-
-            </div>
-
-        @endif
-
         <main class="py-4">
+            @if ($message = Session::get('success'))
+                <div class="container mb-4">
+                    <div class="alert alert-success alert-block">
+                        {{ $message }}
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                    </div>
+                </div>
+            @endif
+
             @yield('content')
         </main>
     </div>

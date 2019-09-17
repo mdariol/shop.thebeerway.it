@@ -6,9 +6,9 @@
 
         <div class="row">
             @role('Admin')
-            <div class="col-md-4 order-md-1">
-                @include('company.components.approve')
-            </div>
+                <div class="col-md-4 order-md-1">
+                    @include('company.components.approve')
+                </div>
             @endrole
 
             <form class="col" method="POST" action="{{ route('companies.update', ['company' => $company->id]) }}">
@@ -18,11 +18,11 @@
                 <div class="form-group">
                     <label for="business-name">Ragione sociale</label>
                     <input type="text" name="business_name" id="business-name" placeholder="BrewPub S.p.A." required
-                           class="form-control {{ $errors->has('business_name') ? 'is-invalid' : '' }}"
+                           class="form-control @error('business_name') is-invalid @enderror"
                            value="{{ $company->business_name }}">
-                    @if($errors->has('business_name'))
+                    @error('business_name')
                         <div class="invalid-feedback">{{ $errors->first('business_name') }}</div>
-                    @endif
+                    @enderror
                 </div>
 
                 <div class="form-group">
@@ -30,10 +30,10 @@
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text">IT</span></div>
                         <input type="text" name="vat_number" id="vat-number" required pattern="[0-9]{11}"
-                               value="{{ $company->vat_number }}" class="form-control {{ $errors->has('vat_number') ? 'is-invalid' : '' }}">
-                        @if($errors->has('vat_number'))
+                               value="{{ $company->vat_number }}" class="form-control @error('vat_number') is-invalid @enderror">
+                        @error('vat_number')
                             <div class="invalid-feedback">{{ $errors->first('vat_number') }}</div>
-                        @endif
+                        @enderror
                     </div>
                 </div>
 
@@ -43,23 +43,23 @@
                     <div class="col-md-6 form-group">
                         <label for="pec">PEC <span class="text-muted">(Opzionale)</span></label>
                         <input type="email" name="pec" id="pec"  value="{{ $company->pec }}"
-                               class="form-control {{ $errors->has('pec') ? 'is-invalid' : '' }}">
-                        @if($errors->has('pec'))
-                            <div class="invalid-feedback">{{ $errors->first('pec') }}</div>
+                               class="form-control @error('pec') is-invalid @enderror">
+                        @error('pec')
+                            <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
                         @else
                             <small class="form-text text-muted">Indirizzo di posta elettronica certificato.</small>
-                        @endif
+                        @enderror
                     </div>
 
                     <div class="col-md-6 form-group">
                         <label for="sdi">SDI <span class="text-muted">(Opzionale)</span></label>
                         <input type="text" name="sdi" id="sdi" minlength="6" maxlength="7" pattern="^[a-zA-Z0-9]*$"
-                               class="form-control {{ $errors->has('sdi') ? 'is-invalid' : '' }}" value="{{ $company->sdi }}">
-                        @if($errors->has('sdi'))
-                            <div class="invalid-feedback">{{ $errors->first('sdi') }}</div>
+                               class="form-control @error('sdi') is-invalid @enderror" value="{{ $company->sdi }}">
+                        @error('sdi')
+                            <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
                         @else
                             <small class="form-text text-muted">Codice del Sistema di Interscambio per la fatturazione elettronica.</small>
-                        @endif
+                        @enderror
                     </div>
                 </div>
 

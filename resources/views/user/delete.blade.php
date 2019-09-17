@@ -9,7 +9,7 @@
 
             <p>Sei sicuro di voler eliminare {{ $user->name }}? Questa azione è <em>irreversibile</em>.</p>
             <button type="submit" class="btn btn-primary">Elimina</button>
-            <a href="{{ route('users.index') }}" class="btn btn-link">Annulla</a>
+            <a href="{{ route('users.show', ['user' => $user->id]) }}" class="btn btn-link">Annulla</a>
         </form>
     </div>
 @endsection

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Rules\Password;
 use App\User;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -132,5 +134,26 @@ class UserController extends Controller
         $user->delete();
 
         return redirect('/users');
+    }
+
+    /**
+     * Update the specified resource password in storage.
+     *
+     * @param  \App\User  $user
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function password(User $user)
+    {
+        request()->validate([
+            'current_password' => ['required', 'string', new Password($user)],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user->update([
+            'password' => Hash::make(request()->password),
+        ]);
+
+        return back()->with('success', 'Password cambiata!');
     }
 }

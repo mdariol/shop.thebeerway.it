@@ -88,6 +88,8 @@ Route::get('/users/{user}/delete', 'UserController@delete')
     ->name('users.delete');
 Route::patch('/users/{user}/role', 'UserController@role')
     ->name('users.role');
+Route::patch('/users/{user}/password', 'UserController@password')
+    ->name('users.password');
 
 /* ----- Company ----- */
 

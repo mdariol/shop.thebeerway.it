@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Company;
+use App\Http\Controllers\Controller;
 
-class CompanyController
+class CompanyController extends Controller
 {
     public function __construct()
     {
@@ -17,6 +18,7 @@ class CompanyController
      * @param  \App\Company  $company
      *
      * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function shippingAddress(Company $company)
     {
