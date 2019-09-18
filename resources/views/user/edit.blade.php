@@ -9,7 +9,8 @@
                     <h5 class="card-title">Modifica le Info</h5>
                     <hr>
 
-                    <form method="POST" action="{{ route('users.update', ['user' => $user->id]) }}">
+                    <form method="POST" action="{{ route('users.update', ['user' => $user->id]) }}"
+                          enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
 
@@ -19,6 +20,17 @@
                                    class="form-control @error('name') is-invalid @enderror">
                             @error('name')
                                 <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="profile-image">Immagine del Profilo</label>
+                            <input type="file" name="profile_image" id="profile-image"
+                                   class="form-control-file @error('profile_image') is-invalid @enderror">
+                            @error('profile_image')
+                                <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
+                            @else
+                                <small class="form-text text-muted">L'immagine non deve essere più grande di 2MB.</small>
                             @enderror
                         </div>
 

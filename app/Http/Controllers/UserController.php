@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Rules\Password;
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -107,6 +109,8 @@ class UserController extends Controller
 
         $user->update(request()->validate(self::RULES));
 
+        $this->upload('profile_image', $user);
+
         return redirect()->route('users.show', ['user' => $user->id]);
     }
 
@@ -162,5 +166,32 @@ class UserController extends Controller
         ]);
 
         return back()->with('success', 'Password cambiata!');
+    }
+
+    /* ----------------------------------------------------------------------
+        Helper
+       ---------------------------------------------------------------------- */
+
+    protected function upload(string $file, User $user)
+    {
+        if ( ! request()->has($file)) {
+            return;
+        }
+
+        request()->validate([$file => ['image', 'max:2048']]);
+
+        if ($user->profile_image) {
+            Storage::disk('public')->delete($user->profile_image);
+        }
+
+        $name = request()->file($file)->hashName();
+        $name = str_replace(pathinfo($name, 4), 'jpg', $name);
+
+        $file = Image::make(request()->file($file))->fit(500)
+            ->encode('jpg', 75);
+
+        Storage::disk('public')->put("profile_images/$name", $file);
+
+        $user->update(['profile_image' => "profile_images/$name"]);
     }
 }

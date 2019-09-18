@@ -2,16 +2,17 @@
 
 @section('content')
     <div class="container">
-        <h1 class="mb-3">{{ $user->name }}</h1>
+        <div class="d-md-flex mb-5">
+            <div style="width: 10rem; height: 10rem; border-radius: 50%; background-image: url({{ "/storage/$user->profile_image" }}); background-color: rgba(0, 0, 0, 0.03); background-size: cover;"
+                 class="mx-auto mx-md-0 mr-md-3 mb-3 mb-md-0"></div>
 
-        <dl class="row">
-            <dt class="col-md-2">Nome</dt><dd class="col-md-10">{{ $user->name }}</dd>
-            <dt class="col-md-2">E-mail</dt><dd class="col-md-10">{{ $user->email }}</dd>
-            <dt class="col-md-2">Password</dt><dd class="col-md-10">*******</dd>
-            <dt class="col-md-2">Iscritto</dt><dd class="col-md-10">{{ $user->created_at }}</dd>
-        </dl>
+            <div class="flex-grow-1 align-self-center text-center text-md-left">
+                <h1>{{ $user->name }}</h1>
+                <p>{{ $user->email }}</p>
 
-        <a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-primary mb-5">Modifica</a>
+                <a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-primary">Modifica</a>
+            </div>
+        </div>
 
         <section>
             <h2>Le tue società</h2>

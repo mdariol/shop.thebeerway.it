@@ -10,7 +10,9 @@ Log of unreleased changes.
 
 - Adds `ShippingAddress` model.
 - Adds `Company` model.
-- Adds `StateMachine` functionality.
+- Use [winzou/state-machine](https://github.com/winzou/state-machine) library to manage states.
+- Use [intervention/image](https://github.com/Intervention/image) library to resize images.
+- Adds 'profile_image' to users.
 
 ### Changed
 

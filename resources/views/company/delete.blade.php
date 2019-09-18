@@ -9,7 +9,7 @@
 
             <p>Sei sicuro di voler eliminare {{ $company->business_name }}? Questa azione è <em>irreversibile</em>.</p>
             <button type="submit" class="btn btn-primary">Elimina</button>
-            <a href="{{ route('companies.index' }}" class="btn btn-link">Annulla</a>
+            <a href="{{ route('companies.index') }}" class="btn btn-link">Annulla</a>
         </form>
     </div>
 @endsection
