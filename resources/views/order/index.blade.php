@@ -16,7 +16,7 @@
                 <div class="p-2 col-sm-2 text-right">{{ $order->total_amount }}</div>
             </div>
             <div class="text-secondary d-flex w-100 flex-column align-items-end" >
-                <div class="text-dark d-flex flex-row w-100 " >
+                <div class="text-primary d-flex flex-row w-100 " >
                     <div class="pl-4 col-8 text-left">Birra</div>
                     <div class="col-1 text-right">Qtà</div>
                     <div class="col-3 text-right">Imponibile</div>

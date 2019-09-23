@@ -11,7 +11,7 @@ class Order extends Model
         'draft' => 'bozza',
         'complete' => 'completato',
         'delivered' => 'consegnato',
-        'cancelled' => 'annullato'
+        'canceled' => 'annullato'
     ];
 
     protected $fillable = ['date','number','status','deliverynote','user_id','company_id','shipping_address_id','total_amount'];

@@ -14,7 +14,7 @@ class BeerFilters extends QueryFilter
     public function stock(string $search): Builder
     {
         if ($search =='on') {
-            return $this->builder->where('beers.stock', '>', 0);
+            return $this->builder->whereRaw('beers.stock - beers.requested_stock > 0');
         } else
         {
             return $this->builder;

@@ -369,6 +369,10 @@ class BeerController extends Controller
                     'beer_id' => $item['item']->getAttribute('id')
                 ]);
 
+                $beer = Beer::find($line->beer_id);
+                $new_requested_stock = $beer->requested_stock + $line->qty;
+                $beer->update(['requested_stock' => $new_requested_stock]);
+
             }
 
             $request->session()->remove('cart');
