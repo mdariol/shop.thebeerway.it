@@ -4,6 +4,7 @@
     <div class="container">
 
         <div class="col-sm mb-0 mt-0 row">
+            {{ 'Codice' }};
             {{ 'Birra' }};
             {{ 'Birrificio' }};
             {{ 'Formato' }};
@@ -17,6 +18,7 @@
 
         @foreach($beers as $beer)
             <div class="col-sm mb-0 mt-0 row">
+                    {{ $beer->code }};
                     {{ $beer->name }};
                     {{ $beer->brewery->name }};
                     {{ $beer->packaging ? $beer->packaging->name : '' }};

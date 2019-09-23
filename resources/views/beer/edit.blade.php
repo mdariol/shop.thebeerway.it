@@ -69,7 +69,7 @@
             <div class="form-row">
                 <div class="form-group col-sm-4">
                     <label for="brewery-id">Birrificio</label>
-                    <select class="form-control" name="brewery_id" id="brewery-id">
+                    <select class="form-control @error('brewery_id') is-invalid @enderror" name="brewery_id" id="brewery-id">
                         <option value=" ">-- seleziona un birrificio --</option>
                         @foreach($breweries as $brewery)
                             <option value="{{ $brewery->id }}" {{ $beer->brewery == $brewery ? 'selected' : '' }}>
@@ -77,6 +77,9 @@
                             </option>
                         @endforeach
                     </select>
+                    @error('brewery_id')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="form-group col-sm-4">

@@ -36,6 +36,11 @@
                 </a>
 
                 @hasanyrole('Publican|Admin|Distributor')
+
+                    <a class="navbar-brand" href="{{route('orders.index')}}" data-container="body" data-toggle="popover" data-placement="bottom" data-content="test test">
+                        <img src="/Ordini_TBW.png" alt="Ordini" height="40px" >
+                    </a>
+
                     <a class="navbar-brand" href="{{route('beers.shoppingcart')}}" data-container="body" data-toggle="popover" data-placement="bottom" data-content="test test">
                         <img src="/Carrello-TheBeerWay.png" alt="Carrello" height="40px" >
                         <span class="badge badge-pill btn-warning shadow-sm mt-1 px-2" >
@@ -51,7 +56,6 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"><span class="nav-link">Per Ordinare:</span></li>
                         <li class="nav-item"><a class="nav-link" href="mailto:massimo@thebeerway.it">massimo@thebeerway.it</a> </li>
                         <li class="nav-item"><a class="nav-link" href="tel:+393356371167">+39 335 637 1167</a> </li>
                         <li class="nav-item">

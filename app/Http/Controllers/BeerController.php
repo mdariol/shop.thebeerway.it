@@ -35,8 +35,9 @@ class BeerController extends Controller
     public function index()
     {
         $beers = Beer::queryFilter()
-            ->join('breweries', 'beers.brewery_id', '=', 'breweries.id' )
+            ->leftJoin('breweries', 'beers.brewery_id', '=', 'breweries.id' )
             ->leftJoin('styles', 'beers.style_id', '=', 'styles.id' )
+            ->leftJoin('packagings', 'beers.packaging_id', '=', 'packagings.id' )
             ->select('beers.*', 'breweries.name as brewery_name', 'styles.name as style_name')
             ->orderBy('brewery_name', 'ASC')
             ->orderBy('style_name', 'ASC')
@@ -126,6 +127,12 @@ class BeerController extends Controller
      */
     public function store()
     {
+
+        request()->validate([
+            'brewery_id'=>['required'],
+            'packaging_id'=>['required']
+        ]);
+
         $beer = Beer::create(request([
             'code', 'name', 'description',
             'abv', 'ibu', 'plato', 'stock',
@@ -185,6 +192,13 @@ class BeerController extends Controller
     public function update(Beer $beer)
     {
 //        dd(request()->getRequestUri());
+
+
+        request()->validate([
+            'brewery_id'=>['required'],
+            'packaging_id'=>['required']
+            ]);
+
 
         $beer->price()->updateOrCreate(['beer_id' => $beer->id], request([
             'horeca', 'horeca_unit', 'discount',
@@ -360,9 +374,9 @@ class BeerController extends Controller
             $request->session()->remove('cart');
         });
         if (Session::has('cart')) {
-            return redirect('/')->with('error', 'Richiesta di Acquisto Fallita');
+            return redirect('/orders')->with('error', 'Richiesta di Acquisto Fallita');
         }
-        return redirect('/')->with('success', 'Richiesta di Acquisto completata con successo');
+        return redirect('/orders')->with('success', 'Richiesta di Acquisto completata con successo');
     }
 
 
