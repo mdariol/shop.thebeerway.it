@@ -16,16 +16,16 @@ window.Vue = require('vue');
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+const files = require.context('./', true, /\.vue$/i);
+files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('price-edit', require('./components/PriceEdit.vue').default);
-Vue.component('price-create', require('./components/PriceCreate.vue').default);
-Vue.component('horeca-user', require('./components/HorecaUser.vue').default);
-Vue.component('autocomplete', require('./components/Autocomplete.vue').default);
-Vue.component('place', require('./components/Place.vue').default);
-Vue.component('cart', require('./components/Cart.vue').default);
+// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// Vue.component('price-edit', require('./components/PriceEdit.vue').default);
+// Vue.component('price-create', require('./components/PriceCreate.vue').default);
+// Vue.component('horeca-user', require('./components/HorecaUser.vue').default);
+// Vue.component('autocomplete', require('./components/Autocomplete.vue').default);
+// Vue.component('place', require('./components/Place.vue').default);
+// Vue.component('cart', require('./components/Cart.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

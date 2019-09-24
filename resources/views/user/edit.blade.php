@@ -23,16 +23,9 @@
                             @enderror
                         </div>
 
-                        <div class="form-group">
-                            <label for="profile-image">Immagine del Profilo</label>
-                            <input type="file" name="profile_image" id="profile-image"
-                                   class="form-control-file @error('profile_image') is-invalid @enderror">
-                            @error('profile_image')
-                                <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
-                            @else
-                                <small class="form-text text-muted">L'immagine non deve essere più grande di 2MB.</small>
-                            @enderror
-                        </div>
+                        <image-input :name='@json('profile_image')' :label='@json('Immagine del Profilo')'
+                                     :default='@json(asset("storage/$user->profile_image"))'
+                                     @error('profile_image') :error='@json($message)' @enderror></image-input>
 
                         <button class="btn btn-primary">Salva</button>
                         <a href="{{ route('users.delete', ['user' => $user->id]) }}" class="btn btn-link">Elimina</a>

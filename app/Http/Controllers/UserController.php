@@ -109,7 +109,9 @@ class UserController extends Controller
 
         $user->update(request()->validate(self::RULES));
 
-        $this->upload('profile_image', $user);
+        if (request()->has('profile_image')) {
+            $this->upload('profile_image', $user);
+        }
 
         return redirect()->route('users.show', ['user' => $user->id]);
     }
@@ -174,11 +176,7 @@ class UserController extends Controller
 
     protected function upload(string $file, User $user)
     {
-        if ( ! request()->has($file)) {
-            return;
-        }
-
-        request()->validate([$file => ['image', 'max:2048']]);
+        request()->validate([$file => ['image', 'max:1024']]);
 
         if ($user->profile_image) {
             Storage::disk('public')->delete($user->profile_image);
