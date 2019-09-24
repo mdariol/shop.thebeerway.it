@@ -4,13 +4,15 @@
         <div class="card-body">
             <div class="form-group">
                 <label for="packaging-id">Packaging</label>
-                <select class="form-control" @change="calculatePrices" v-model="packaging_id" name="packaging_id"
+                <select class="form-control" required @change="calculatePrices" v-model="packaging_id" name="packaging_id"
                         id="packaging-id">
                     <option value=" ">-- seleziona un packaging --</option>
                     <option v-for="packaging in packagings" :value="packaging.id">
                         {{ packaging.quantity }} {{ packaging.type }} x {{ packaging.capacity }}l
                     </option>
                 </select>
+
+
             </div>
 
             <div class="form-row">

@@ -17,7 +17,9 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return view('order.index')->with('orders', Order::all());
+        return view('order.index')->with([
+            'orders' => auth()->user()->orders,
+        ]);
     }
 
     /**

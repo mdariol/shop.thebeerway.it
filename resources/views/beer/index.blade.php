@@ -68,9 +68,9 @@
                         @endif
 
 
-                        {{ $beer->name }}<small class="text-secondary"> - {{ $beer->brewery->name }}
+                        {{ $beer->name }}<small class="text-secondary"> - {{ $beer->brewery ? $beer->brewery->name : ''}}
                             @if(auth()->user())
-                            [{{$beer->stock}}]
+                            [{{$beer->stock - $beer->requested_stock}}]
                             @endif
 
                             </small></h5>
