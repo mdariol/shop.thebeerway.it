@@ -13,7 +13,7 @@
                     <input type="radio" name="transition" id="transition-{{ $transition }}" value="{{ $transition }}"
                            class="form-check-input d-none" onchange="this.form.submit()">
                     <label class="form-check-label btn {{ $loop->first ? $state->button : 'btn-link' }}" style="cursor: pointer;"
-                           for="transition-{{ $transition }}">{{ $transition === 'approve' ? 'Approva' : 'Rifiuta' }}</label>
+                           for="transition-{{ $transition }}">{{ ucfirst(__("states.$transition")) }}</label>
                 </div>
             @endforeach
         </form>

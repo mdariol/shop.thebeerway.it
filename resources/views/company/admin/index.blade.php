@@ -19,9 +19,10 @@
                             <label for="state">Stato</label>
                             <select name="state" id="state" class="form-control">
                                 <option selected value> -- seleziona un valore -- </option>
-                                <option value="approval" {{ request()->state == 'approval' ? 'selected' : '' }}>Approvazione</option>
-                                <option value="approved" {{ request()->state == 'approved' ? 'selected' : '' }}>Approvato</option>
-                                <option value="rejected" {{ request()->state == 'rejected' ? 'selected' : '' }}>Respinto</option>
+                                @foreach(config('state-machine.approval.states') as $state)
+                                    <option {{ request()->state == $state ? 'selected' : '' }}
+                                            value="{{ $state }}">{{ __("states.$state") }}</option>
+                                @endforeach
                             </select>
                         </div>
 
@@ -88,10 +89,3 @@
         @endif
     </div>
 @endsection
-
-<script>
-    import Optionlist from "../../../js/components/Optionlist";
-    export default {
-        components: {Optionlist}
-    }
-</script>

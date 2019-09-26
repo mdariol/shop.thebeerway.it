@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use SM\Factory\Factory;
+use Sebdesign\SM\Facade;
 
 trait HasState
 {
@@ -13,6 +13,6 @@ trait HasState
      */
     public function getStateMachineAttribute()
     {
-        return resolve(Factory::class)->get($this, self::WORKFLOW);
+        return Facade::get($this, self::WORKFLOW);
     }
 }
