@@ -47,7 +47,15 @@
                 <div class="form-group">
                     <label class="pt-3" for="delivetynote">Note per la consegna</label>
                     <textarea class="form-control form-control-lg" type="text" name="deliverynote" id="deliverynote" rows="5">{{ $deliverynote}}</textarea>
-                    <button class="btn btn-primary mt-2">Conferma l'acquisto</button>
+
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="transition" id="transition-send" value="send" class="form-check-input d-none" onchange="this.form.submit()">
+                        <label for="transition-send" class="form-check-label btn btn-primary">
+                            Invia
+                        </label>
+                    </div>
+
+                    <button class="btn btn-primary mt-2">Salva per dopo</button>
                 </div>
 
             </form>

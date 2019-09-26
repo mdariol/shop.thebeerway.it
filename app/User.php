@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Session;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -107,4 +108,43 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->companies()->where('state', 'approved')
             ->exists();
     }
+
+    public function getDraftOrder(){
+
+
+        $order = $this->orders()->where('state','draft')->first();
+
+        if ($order) {
+            $oldCart = new Cart(null);
+            $oldCart->order_id = $order->id;
+            $oldCart->totalPrice = $order->total_amount;
+            $oldCart->deliverynote = $order->deliverynote;
+            $oldCart->company_id = $order->company_id;
+            $oldCart->shipping_address_id = $order->shipping_address_id;
+
+            $storedItem = null;
+
+            $oldCart->totalQty = 0;
+
+            foreach ($order->lines as $line){
+                $storedItem['item'] = Beer::find($line->beer_id);
+                $storedItem['qty'] = $line->qty;
+                $storedItem['unit_price'] = $line->unit_price;
+                $storedItem['price'] = $line->price;
+                $storedItem['beer'] = $storedItem['item']->name;
+                $storedItem['brewery'] = $line->beer->getRelation('brewery')->getAttribute('name');
+                $storedItem['packaging'] = $line->beer->getRelation('packaging')->getAttribute('name');
+                $oldCart->items[$line->beer_id] = $storedItem;
+                $oldCart->totalQty += $line->qty;
+            }
+
+            $cart = new Cart($oldCart);
+
+            request()->session()->put('cart', $cart);
+        }
+
+    }
+
+
+
 }

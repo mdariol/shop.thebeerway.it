@@ -2,19 +2,19 @@
 
 namespace App;
 
+use App\Traits\HasFilters;
+use App\Traits\HasState;
 use Illuminate\Database\Eloquent\Model;
 use App\Scopes\OrdersScope;
 
 class Order extends Model
 {
-    const STATUS = [
-        'draft' => 'bozza',
-        'complete' => 'completato',
-        'delivered' => 'consegnato',
-        'canceled' => 'annullato'
-    ];
+    use HasFilters;
+    use HasState;
 
-    protected $fillable = ['date','number','status','deliverynote','user_id','company_id','shipping_address_id','total_amount'];
+    const WORKFLOW = 'orderflow';
+
+    protected $fillable = ['date','number','state','deliverynote','user_id','company_id','shipping_address_id','total_amount'];
     //
 
     protected static function boot()
@@ -43,6 +43,12 @@ class Order extends Model
     {
         return $this->belongsTo(ShippingAddress::class);
     }
+
+    public function apply($transition)
+    {
+
+    }
+
 
     //
 }

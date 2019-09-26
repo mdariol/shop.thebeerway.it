@@ -259,20 +259,20 @@ class BeerController extends Controller
 
     public function getAddToCart(Request $request, Beer $beer){
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
+
         $cart = new Cart($oldCart);
         $cart->add($beer, $beer->id);
 
         $addedBeer = $beer->getRelation('packaging')->getAttribute('name').', '.$beer->getAttribute('name').' di '.$beer->getRelation('brewery')->getAttribute('name') ;
         $request->session()->put('cart', $cart);
 
-       return back()->with('success', $addedBeer.' aggiunto al carrello');
-
+        return back()->with('success', $addedBeer.' aggiunto al carrello');
     }
 
     public function fixupCart(Request $request, Beer $beer){
+
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
         $cart = new Cart($oldCart);
-
         $id = $beer->id;
 
         if (array_key_exists($id, $cart->items)) {
@@ -325,42 +325,42 @@ class BeerController extends Controller
     public function saveOrder(Request $request){
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
 
-
         $cart = new Cart($oldCart);
         $cart->deliverynote = $request->deliverynote;
+        $cart->company_id = $request->company_id;
+        $cart->shipping_address_id = $request->shipping_address_id;
+
         $request->session()->put('cart', $cart);
 
- //       dd($cart);
+        $order = DB::transaction(function () use ($request, $cart) {
 
-// dd($request);
-        DB::transaction(function () use ($request, $cart) {
-            $new_number = DB::table('orders')->max('number') + 1;
-            if (request()->number > 0) {
-                $new_number = request()->number;
+            if ($cart->order_id) {
+                $new_number = DB::table('orders')->find($cart->order_id)->number;
             } else {
                 $new_number = DB::table('orders')->max('number') + 1;
+            }
+
+
+            if ($cart->order_id) {
+                DB::table('lines')->where('order_id', '=', $cart->order_id)->delete();
+                DB::table('orders')->where('id', '=', $cart->order_id)->delete();
             }
 
             $order = Order::create([
                 'date' => today(),
                 'number' => $new_number,
-                'status' => 'complete',
+                'state' => 'draft',
                 'deliverynote' => $cart->deliverynote,
                 'user_id' => auth()->user()->id,
                 'company_id' => $request->company_id,
                 'shipping_address_id' => $request->shipping_address_id,
                 'total_amount' => $cart->totalPrice,
-
-
             ]);
 
             foreach ($cart->items as $item) {
-                //            dd($order->id);
-
                 if (!$item['qty']) {
                     continue;
                 }
-
                 $line = Line::create([
                     'qty' => $item['qty'],
                     'unit_price' => $item['unit_price'],
@@ -369,18 +369,36 @@ class BeerController extends Controller
                     'beer_id' => $item['item']->getAttribute('id')
                 ]);
 
-                $beer = Beer::find($line->beer_id);
-                $new_requested_stock = $beer->requested_stock + $line->qty;
-                $beer->update(['requested_stock' => $new_requested_stock]);
-
+//                $beer = Beer::find($line->beer_id);
+//                $new_requested_stock = $beer->requested_stock + $line->qty;
+//                $beer->update(['requested_stock' => $new_requested_stock]);
             }
 
-            $request->session()->remove('cart');
+            return $order;
         });
+
+        if ($request->has('transition')) {
+            // aggiorna l'impegnato delle birre e manda email
+            $order->state_machine->apply($request->transition);
+            dd('pippo');
+            $request->session()->remove('cart');
+
+            return redirect('/orders')->with('success', 'Richiesta di Acquisto completata con successo');
+        }
+        else {
+            $cart->order_id = $order->id;    // mette id del draft
+            $request->session()->put('cart', $cart);  // memorizza il carrello con id del draft
+
+        };
+
+
+
+
         if (Session::has('cart')) {
             return redirect('/orders')->with('error', 'Richiesta di Acquisto Fallita');
-        }
-        return redirect('/orders')->with('success', 'Richiesta di Acquisto completata con successo');
+        };
+
+
     }
 
 

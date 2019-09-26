@@ -17,8 +17,14 @@ class OrderController extends Controller
      */
     public function index()
     {
+
+        $orders = Order::queryFilter()
+            ->join('company_has_users', 'orders.company_id', '=', 'company_has_users.company_id' )
+            ->where('company_has_users.user_id', '=', auth()->user()->id )
+            ->get();
+
         return view('order.index')->with([
-            'orders' => auth()->user()->orders,
+            'orders' => $orders,
         ]);
     }
 
@@ -87,4 +93,5 @@ class OrderController extends Controller
     {
         //
     }
+
 }
