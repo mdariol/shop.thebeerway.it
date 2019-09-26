@@ -17,7 +17,7 @@
                     <label for="state">Stato</label>
                     <select name="state" id="state" class="form-control">
                         <option selected value> -- seleziona un valore -- </option>
-                        @foreach(config('workflow.orderflow.states') as $state)
+                        @foreach(config('state-machine.orderflow.states') as $state)
                             <option value="{{ $state }}"
                                 {{ request()->state == $state ? 'selected' : '' }}>
                                 {{__("states.$state")}}

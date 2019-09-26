@@ -335,7 +335,7 @@ class BeerController extends Controller
         $order = DB::transaction(function () use ($request, $cart) {
 
             if ($cart->order_id) {
-                $new_number = DB::table('orders')->find($cart->order_id)->number;
+                $new_number = Order::find($cart->order_id)->number;
             } else {
                 $new_number = DB::table('orders')->max('number') + 1;
             }
@@ -369,32 +369,25 @@ class BeerController extends Controller
                     'beer_id' => $item['item']->getAttribute('id')
                 ]);
 
-//                $beer = Beer::find($line->beer_id);
-//                $new_requested_stock = $beer->requested_stock + $line->qty;
-//                $beer->update(['requested_stock' => $new_requested_stock]);
             }
 
+//            $cart->order_id = $order->id;    // mette id del nuovo ordine
+//            $request->session()->put('cart', $cart);  // memorizza il carrello con id del nuovo ordine
             return $order;
         });
+
+//        dd($order, Session::get('cart'), $cart);
+
+        $request->session()->remove('cart');
 
         if ($request->has('transition')) {
             // aggiorna l'impegnato delle birre e manda email
             $order->state_machine->apply($request->transition);
-            dd('pippo');
-            $request->session()->remove('cart');
-
+            $order->save();
+            auth()->user()->getDraftOrder();
             return redirect('/orders')->with('success', 'Richiesta di Acquisto completata con successo');
-        }
-        else {
-            $cart->order_id = $order->id;    // mette id del draft
-            $request->session()->put('cart', $cart);  // memorizza il carrello con id del draft
-
-        };
-
-
-
-
-        if (Session::has('cart')) {
+        } else {
+            auth()->user()->getDraftOrder();
             return redirect('/orders')->with('error', 'Richiesta di Acquisto Fallita');
         };
 
