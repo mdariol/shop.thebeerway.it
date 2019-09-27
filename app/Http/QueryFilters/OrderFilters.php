@@ -11,9 +11,14 @@ class OrderFilters extends QueryFilter
         return $this->builder->where('state', $search);
     }
 
-    public function total_amount(string $search): Builder
+    public function total_amount_from(string $search): Builder
     {
         return $this->builder->where('total_amount', '>', $search);
+    }
+
+    public function total_amount_to(string $search): Builder
+    {
+        return $this->builder->where('total_amount', '<', $search);
     }
 
 }

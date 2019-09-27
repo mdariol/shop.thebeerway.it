@@ -35,22 +35,22 @@ return [
         ],
         'transitions' => [
             'send' => [
-                'from' => ['draft', 'canceled'],
+                'from' => ['draft'],
                 'to' => 'sent'
             ],
             'confirm' => [
-                'from' => ['sent', 'canceled'],
+                'from' => ['sent'],
                 'to' => 'confirmed'
             ],
             'ship' => [
-                'from' => ['confirmed', 'sent', 'canceled'],
+                'from' => ['confirmed', 'sent'],
                 'to' => 'shipped'
             ],
             'cancel' => [
                 'from' => ['sent', 'confirmed'],
                 'to' => 'canceled'
             ],
-            'canceledtodraft' => [
+            'reset' => [
                 'from' => ['canceled'],
                 'to' => 'draft'
             ],

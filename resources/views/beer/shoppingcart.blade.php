@@ -50,12 +50,20 @@
 
                     <div class="form-check form-check-inline">
                         <input type="radio" name="transition" id="transition-send" value="send" class="form-check-input d-none" onchange="this.form.submit()">
-                        <label for="transition-send" class="form-check-label btn btn-primary">
-                            Invia
+                        <label for="transition-send" class="form-check-label btn btn-primary mt-2">
+                            Invia richiesta
+                        </label>
+                        <input type="radio" name="save_cart" id="save-cart" value="savecart" class="form-check-input d-none" onchange="this.form.submit()">
+                        <label for="save-cart" class="form-check-label btn btn-warning mt-2 ml-2">
+                            Salva il carrello
+                        </label>
+
+                        <input type="radio" name="reset_cart" id="reset-cart" value="resetcart" class="form-check-input d-none" onchange="this.form.submit()">
+                        <label for="reset-cart" class="form-check-label btn btn-danger mt-2 ml-2">
+                            Svuota il carrello
                         </label>
                     </div>
 
-                    <button class="btn btn-primary mt-2">Salva per dopo</button>
                 </div>
 
             </form>

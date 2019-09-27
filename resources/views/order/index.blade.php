@@ -27,8 +27,12 @@
                 </div>
 
                 <div class="form-group col-md">
-                    <label for="total_amount">Totale maggiore di</label>
-                    <input type="text" class="form-control" name="total_amount" id="total_amount" value="{{ request()->total_amount }}">
+                    <label for="total_amount_from">Totale maggiore di</label>
+                    <input type="text" class="form-control" name="total_amount_from" id="total_amount_from" value="{{ request()->total_amount_from }}">
+                </div>
+                <div class="form-group col-md">
+                    <label for="total_amount_to">Totale minore di</label>
+                    <input type="text" class="form-control" name="total_amount_to" id="total_amount_to" value="{{ request()->total_amount_to }}">
                 </div>
 
 

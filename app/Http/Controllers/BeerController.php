@@ -322,7 +322,8 @@ class BeerController extends Controller
     }
 
 
-    public function saveOrder(Request $request){
+    public function saveOrder(Request $request)
+    {
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
 
         $cart = new Cart($oldCart);
@@ -340,45 +341,61 @@ class BeerController extends Controller
                 $new_number = DB::table('orders')->max('number') + 1;
             }
 
+            /**
+             * delete older draft if exists
+             */
 
             if ($cart->order_id) {
                 DB::table('lines')->where('order_id', '=', $cart->order_id)->delete();
                 DB::table('orders')->where('id', '=', $cart->order_id)->delete();
             }
 
-            $order = Order::create([
-                'date' => today(),
-                'number' => $new_number,
-                'state' => 'draft',
-                'deliverynote' => $cart->deliverynote,
-                'user_id' => auth()->user()->id,
-                'company_id' => $request->company_id,
-                'shipping_address_id' => $request->shipping_address_id,
-                'total_amount' => $cart->totalPrice,
-            ]);
+            $order = null;
 
-            foreach ($cart->items as $item) {
-                if (!$item['qty']) {
-                    continue;
-                }
-                $line = Line::create([
-                    'qty' => $item['qty'],
-                    'unit_price' => $item['unit_price'],
-                    'price' => $item['price'],
-                    'order_id' => $order->id,
-                    'beer_id' => $item['item']->getAttribute('id')
+            /**
+             * insert new draft
+             */
+
+            if (!$request->has('reset_cart')) {
+
+                $order = Order::create([
+                    'date' => today(),
+                    'number' => $new_number,
+                    'state' => 'draft',
+                    'deliverynote' => $cart->deliverynote,
+                    'user_id' => auth()->user()->id,
+                    'company_id' => $request->company_id,
+                    'shipping_address_id' => $request->shipping_address_id,
+                    'total_amount' => $cart->totalPrice,
                 ]);
 
-            }
+                foreach ($cart->items as $item) {
+                    if (!$item['qty']) {
+                        continue;
+                    }
+                    $line = Line::create([
+                        'qty' => $item['qty'],
+                        'unit_price' => $item['unit_price'],
+                        'price' => $item['price'],
+                        'order_id' => $order->id,
+                        'beer_id' => $item['item']->getAttribute('id')
+                    ]);
 
-//            $cart->order_id = $order->id;    // mette id del nuovo ordine
-//            $request->session()->put('cart', $cart);  // memorizza il carrello con id del nuovo ordine
+                }
+
+            }
             return $order;
         });
 
-//        dd($order, Session::get('cart'), $cart);
+        /**
+         * delete cart
+         */
 
         $request->session()->remove('cart');
+
+        /**
+         * execute transition if necessary
+         */
 
         if ($request->has('transition')) {
             // aggiorna l'impegnato delle birre e manda email
@@ -391,10 +408,7 @@ class BeerController extends Controller
             return redirect('/orders')->with('error', 'Richiesta di Acquisto Fallita');
         };
 
-
     }
-
-
 
     public function getCart(){
         if (!Session::has('cart')){

@@ -27,23 +27,34 @@ class OrderEventSubscriber
             SMEvents::PRE_TRANSITION,
             'App\Listeners\OrderEventSubscriber@updateRequestedStock'
         );
+
     }
 
     /**
-     * Update requested stock field on beers.
+     * Add qty to requested stock field on beers.
      *
      * @param \SM\Event\TransitionEvent $event
      */
     public function updateRequestedStock(TransitionEvent $event)
     {
- //       dd($event->getStateMachine()->getObject()->getAttribute('id'));
-        $order = Order::find($event->getStateMachine()->getObject()->getAttribute('id'));
+//        dd($event->getStateMachine()->getObject()->getAttribute('id'))
+//        dd($event);
 
-        foreach ($order->lines as $line) {
-            $beer = Beer::find($line->beer_id);
-            $new_requested_stock = $beer->requested_stock + $line->qty;
-            $beer->update(['requested_stock' => $new_requested_stock]);
+        if ($event->getTransition() == 'sent' or $event->getTransition() == 'cancel') {
+            $order = Order::find($event->getStateMachine()->getObject()->getAttribute('id'));
+            foreach ($order->lines as $line) {
+                $beer = Beer::find($line->beer_id);
+                if ($event->getTransition() == 'sent') {
+                    $new_requested_stock = $beer->requested_stock + $line->qty;
+                } else  {
+                    $new_requested_stock = $beer->requested_stock - $line->qty;
+                }
+                $beer->update(['requested_stock' => $new_requested_stock]);
+            }
         }
 
+
     }
+
+
 }
