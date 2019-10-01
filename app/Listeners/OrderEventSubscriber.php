@@ -53,9 +53,5 @@ class OrderEventSubscriber
                 $beer->update(['requested_stock' => $new_requested_stock]);
             }
         }
-
-
     }
-
-
 }

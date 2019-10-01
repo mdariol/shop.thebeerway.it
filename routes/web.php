@@ -73,15 +73,26 @@ Route::resource('purchaseorders', 'PurchaseorderController');
 Route::get('/purchaseorders/{purchaseorder}/delete', 'PurchaseorderController@delete')
     ->name('purchaseorders.delete');
 
-Route::resource('orders', 'OrderController');
+/* ----- Order ----- */
+
+Route::resource('orders', 'OrderController', [
+    'except' => ['show', 'edit', 'update', 'destroy']
+]);
+Route::patch('/orders/{order}/transition', 'OrderController@transition')
+    ->name('orders.transition');
+
+/* ----- Line ----- */
+
 Route::resource('lines', 'LineController');
 
-/* ----- User & Authenticatable ----- */
+/* ----- Authenticatable ----- */
 
 Auth::routes(['verify' => true]);
 
 Route::get('/login/{provider}', 'Auth\LoginController@redirectToProvider');
 Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
+
+/* ----- User ----- */
 
 Route::resource('users', 'UserController');
 Route::get('/users/{user}/delete', 'UserController@delete')
@@ -125,6 +136,11 @@ Route::group([
 
     Route::get('/companies', 'CompanyController@index')
         ->name('admin.companies.index');
+
+    /* ----- Order ----- */
+
+    Route::get('/orders', 'OrderController@index')
+        ->name('admin.orders.index');
 });
 
 /* --------------------------------------------------------------------------

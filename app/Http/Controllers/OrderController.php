@@ -12,13 +12,20 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     /**
+     * OrderController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-
         $orders = Order::queryFilter()
             ->join('company_has_users', 'orders.company_id', '=', 'company_has_users.company_id' )
             ->where('company_has_users.user_id', '=', auth()->user()->id )
@@ -96,4 +103,21 @@ class OrderController extends Controller
         //
     }
 
+    /**
+     * Apply transition to specified resource.
+     *
+     * @param  \App\Order  $order
+     *
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function transition(Order $order)
+    {
+        $this->authorize('transition', $order);
+
+        $order->state_machine->apply(request()->transition);
+        $order->save();
+
+        return back();
+    }
 }
