@@ -27,14 +27,36 @@
                 </div>
 
                 <div class="form-group col-md">
-                    <label for="total_amount_from">Totale maggiore di</label>
+                    <label for="date_from">Dalla data</label>
+                    <input type="date" class="form-control" name="date_from" id="date_from" value="{{ request()->date_from }}">
+                </div>
+
+                <div class="form-group col-md">
+                    <label for="date_to">Alla data</label>
+                    <input type="date" class="form-control" name="date_to" id="date_to" value="{{ request()->date_to }}">
+                </div>
+
+                <div class="form-group col-md">
+                    <label for="brewery_id">Contengo il Birrificio</label>
+                    <select name="brewery_id" id="brewery_id" class="form-control">
+                        <option selected value> -- seleziona un valore -- </option>
+                        @foreach( $breweries as $brewery)
+                            <option value="{{ $brewery->id }}"
+                                    {{ request()->brewery_id == $brewery->id ? 'selected' : '' }}>
+                                {{ $brewery->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group col-md">
+                    <label for="total_amount_from">Totale a partire da</label>
                     <input type="text" class="form-control" name="total_amount_from" id="total_amount_from" value="{{ request()->total_amount_from }}">
                 </div>
                 <div class="form-group col-md">
-                    <label for="total_amount_to">Totale minore di</label>
+                    <label for="total_amount_to">Totale fino a</label>
                     <input type="text" class="form-control" name="total_amount_to" id="total_amount_to" value="{{ request()->total_amount_to }}">
                 </div>
-
 
                 <button class="btn btn-primary">Applica Filtri</button>
                 <a href="/orders" class="btn btn-link">Reset Filtri</a>
@@ -50,8 +72,8 @@
 
         @foreach($orders as $order)
             <div class="text-dark d-flex flex-row bg-warning" >
-                <div class="p-2 col-sm-9 text-left">{{ $order->date }} - N.{{ $order->number }} - {{ $order->user->name }} - {{ $order->company->business_name }}</div>
-                <div class="p-2 col-sm-1 text-right">{{ __($order->state)}}</div>
+                <div class="p-2 col-sm-9 text-left">{{ $order->date }} - {{ $order->number }}/{{$order->id}} - {{ $order->user->name }} - {{ $order->company->business_name }}</div>
+                <div class="p-2 col-sm-1 text-right">{{ __("states.$order->state")}}</div>
                 <div class="p-2 col-sm-2 text-right">{{ $order->total_amount }}</div>
             </div>
             <div class="text-secondary d-flex w-100 flex-column align-items-end" >

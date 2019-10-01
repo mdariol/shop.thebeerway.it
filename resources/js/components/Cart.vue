@@ -4,7 +4,8 @@
             <label for="company-id">Azienda</label>
             <multiselect @select="onCompanyChange" v-model="company" :options="filtered_options" label="business_name" track-by="business_name" :closeOnSelect="true" placeholder="Seleziona un indirizzo di fatturazione" ></multiselect>
              <select  name="company_id" id="company-id" class="d-none" >
-                <option :value="company.id" selected>{{ company.business_name }}</option>
+                <option v-if="company" :value="company.id" selected>{{ company.business_name }}</option>
+                <option v-else value selected></option>
             </select>
         </div>
 
@@ -12,7 +13,8 @@
             <label for="shipping_address-id">Indirizzo di Spedizione</label>
             <multiselect  v-model="shipping_address" :options="filtered_shipping_addresses" label="name" track-by="name" :closeOnSelect="true" placeholder="Seleziona un indirizzo di spedizione" ></multiselect>
             <select name="shipping_address_id" id="shipping_address-id" class="d-none">
-                <option :value="shipping_address.id" selected>{{ shipping_address.name }}</option>
+                <option v-if="shipping_address" :value="shipping_address.id" selected>{{ shipping_address.name }}</option>
+                <option v-else value selected></option>
             </select>
         </div>
     </div>
@@ -67,8 +69,10 @@
 
         mounted() {
             this.filtered_options = this.options;
-            this.company = this.default_company;
-            this.onCompanyChange(this.default_company);
+            if (this.default_company)  {
+                this.company = this.default_company;
+                this.onCompanyChange(this.default_company);
+            }
         }
     }
 </script>

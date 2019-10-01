@@ -42,8 +42,11 @@
             <form method="POST" action="/beers/saveorder">
                 @csrf
 
-                <cart :options='@json(auth()->user()->companies)' :default_company='@json(auth()->user()->default_company)' :shipping_addresses='@json($shipping_addresses)' ></cart>
-
+                @if (auth()->user()->hasRole('Publican'))
+                    <cart :options='@json(auth()->user()->companies)' :default_company='@json(auth()->user()->default_company)' :shipping_addresses='@json($shipping_addresses)' ></cart>
+                @else
+                    <cart :options='@json($companies)' :shipping_addresses='@json($shipping_addresses)' ></cart>
+                @endif
                 <div class="form-group">
                     <label class="pt-3" for="delivetynote">Note per la consegna</label>
                     <textarea class="form-control form-control-lg" type="text" name="deliverynote" id="deliverynote" rows="5">{{ $deliverynote}}</textarea>
