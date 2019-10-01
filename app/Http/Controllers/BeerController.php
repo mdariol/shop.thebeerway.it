@@ -191,14 +191,10 @@ class BeerController extends Controller
      */
     public function update(Beer $beer)
     {
-//        dd(request()->getRequestUri());
-
-
         request()->validate([
             'brewery_id'=>['required'],
             'packaging_id'=>['required']
             ]);
-
 
         $beer->price()->updateOrCreate(['beer_id' => $beer->id], request([
             'horeca', 'horeca_unit', 'discount',
@@ -221,13 +217,9 @@ class BeerController extends Controller
         ])+ [
             'isactive' => request()->has('isactive'),
             'image'=>$filePath
-        ]
-        );
-
+        ]);
 
         return redirect(str_replace('/'.$beer->id.'?','?',request()->getRequestUri()));
-
-
     }
 
     /**
@@ -254,7 +246,6 @@ class BeerController extends Controller
         $beer->delete();
 
         return redirect(str_replace('/'.$beer->id.'?','?',request()->getRequestUri()));
-
     }
 
     public function getAddToCart(Request $request, Beer $beer){
@@ -270,7 +261,6 @@ class BeerController extends Controller
     }
 
     public function fixupCart(Request $request, Beer $beer){
-
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
         $cart = new Cart($oldCart);
         $id = $beer->id;
@@ -287,6 +277,7 @@ class BeerController extends Controller
         $cart->totalQty++;
         $cart->totalPrice+= $storedItem['unit_price'];
         $request->session()->put('cart', $cart);
+
         return back();
     }
 
@@ -296,7 +287,6 @@ class BeerController extends Controller
 
         $id = $beer->id;
 
-
         if (array_key_exists($id, $cart->items)) {
             $storedItem = $cart->items[$id];
         }
@@ -304,12 +294,12 @@ class BeerController extends Controller
         $storedItem['qty']--;
         $storedItem['price'] = $storedItem['unit_price'] * $storedItem['qty'];
 
-
         $cart->items[$id] = $storedItem;
 
         $cart->totalQty--;
         $cart->totalPrice-= $storedItem['unit_price'];
         $request->session()->put('cart', $cart);
+
         return back();
     }
 
@@ -318,9 +308,9 @@ class BeerController extends Controller
         $cart = new Cart($oldCart);
         $cart->deliverynote = $request->deliverynote;
         $request->session()->put('cart', $cart);
+
         return back();
     }
-
 
     public function saveOrder(Request $request)
     {
@@ -380,9 +370,7 @@ class BeerController extends Controller
                         'order_id' => $order->id,
                         'beer_id' => $item['item']->getAttribute('id')
                     ]);
-
                 }
-
             }
             return $order;
         });
@@ -406,16 +394,17 @@ class BeerController extends Controller
         } else {
             auth()->user()->getDraftOrder();
             return redirect('/orders')->with('error', 'Richiesta di Acquisto Fallita');
-        };
-
+        }
     }
 
     public function getCart(){
         if (!Session::has('cart')){
             return view('beer.shoppingcart');
         }
+
         $oldCart = Session::get('cart');
         $cart = new Cart($oldCart);
+
         return view('beer.shoppingcart',[
             'products' => $cart->items,
             'totalPrice' => $cart->totalPrice,
@@ -423,13 +412,5 @@ class BeerController extends Controller
             'companies' => Company::all(),
             'shipping_addresses' => ShippingAddress::all(),
         ]);
-
     }
-
-
-
 }
-
-
-
-

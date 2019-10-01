@@ -7,7 +7,10 @@
         <p class="mb-4">Elenco delle società.</p>
 
         <div class="card bg-light mb-4">
-            <div class="card-body">
+            <div class="card-header">
+                <a href="#filters" class="d-block text-secondary" data-toggle="collapse">Filtri</a>
+            </div>
+            <div class="card-body collapse" id="filters">
                 <form class="mb-0" action="{{ route('admin.companies.index') }}">
                     <div class="form-row">
                         <div class="form-group col-md">
@@ -21,7 +24,7 @@
                                 <option selected value> -- seleziona un valore -- </option>
                                 @foreach(config('state-machine.approval.states') as $state)
                                     <option {{ request()->state == $state ? 'selected' : '' }}
-                                            value="{{ $state }}">{{ __("states.$state") }}</option>
+                                            value="{{ $state }}">{{ ucfirst(__("states.$state")) }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -60,7 +63,7 @@
                 @foreach($companies as $company)
                     <tr>
                         <td class="d-none d-md-table-cell align-middle">{{ $company->id }}</td>
-                        <td class="align-middle align-middle">
+                        <td class="align-middle">
                             <a href="{{ route('companies.show', ['company' => $company->id]) }}">{{ $company->business_name }}</a>
                         </td>
                         <td class="d-none d-md-table-cell align-middle">{{ $company->owner->name }}</td>

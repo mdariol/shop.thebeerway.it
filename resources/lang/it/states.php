@@ -23,4 +23,5 @@ return [
     'confirm' => 'conferma',
     'ship' => 'consegna',
     'cancel' => 'cancella',
+    'reset' => 'reset',
 ];
