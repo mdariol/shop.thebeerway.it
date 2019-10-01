@@ -86,7 +86,6 @@ class CompanyController extends Controller
 
         return view('company.show')->with([
             'company' => $company,
-            'state' => $this->prepareState($company),
         ]);
     }
 
@@ -104,7 +103,6 @@ class CompanyController extends Controller
 
         return view('company.edit')->with([
             'company' => $company,
-            'state' => $this->prepareState($company),
         ]);
     }
 
@@ -200,41 +198,5 @@ class CompanyController extends Controller
         $company->apply(request()->transition);
 
         return back();
-    }
-
-    /**
-     * Prepare state variable for company.show view.
-     *
-     * @param  \App\Company  $company
-     *
-     * @return object
-     */
-    protected function prepareState(Company $company)
-    {
-        $state = (object) [
-            'color' => 'info',
-            'icon' => 'fa-question-circle',
-            'title' => 'Verifica',
-            'text' => 'Questa società deve essere verificata. Cosa vuoi fare?',
-            'button' => 'btn-primary',
-        ];
-
-        if ($company->is_approved) {
-            $state->color = 'success';
-            $state->icon = 'fa-check-circle';
-            $state->title = 'Approvato';
-            $state->text = 'Questa società è stata approvata. Hai cambiato idea?';
-            $state->button = 'btn-success';
-        }
-
-        if ($company->is_rejected) {
-            $state->color = 'danger';
-            $state->icon = 'fa-times-circle';
-            $state->title = 'Rifiutato';
-            $state->text = 'Questa società è stata rifiutata. Hai cambiato idea?';
-            $state->button = 'btn-danger';
-        }
-
-        return $state;
     }
 }

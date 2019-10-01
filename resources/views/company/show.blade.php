@@ -4,14 +4,22 @@
     <div class="container">
         <h1>{{ $company->business_name }}
             @role('Admin')
-                <small class="far {{ $state->icon }} text-{{ $state->color }}" data-toggle="collapse"
-                       data-target="#company-approval" style="cursor: pointer;"></small>
+                @if($company->is_approved)
+                    <small class="far fa-check-circle text-success" data-toggle="collapse"
+                           data-target="#company-approval" style="cursor: pointer;"></small>
+                @elseif($company->is_rejected)
+                    <small class="far fa-times-circle text-danger" data-toggle="collapse"
+                           data-target="#company-approval" style="cursor: pointer;"></small>
+                @else
+                    <small class="far fa-question-circle text-primary" data-toggle="collapse"
+                           data-target="#company-approval" style="cursor: pointer;"></small>
+                @endif
             @endrole
         </h1>
 
         @role('Admin')
             <div class="collapse collapsed" id="company-approval">
-                @include('company.components.approve')
+                @include('company.components.transition')
             </div>
         @endrole
 
@@ -28,9 +36,9 @@
             <h3>Indirizzi di Spedizione</h3>
 
             @if( ! $company->shipping_addresses->count())
-                <p>Non hai alcun indirizzo di spedizione per questa azienda...</p>
+                <p>Non hai alcun indirizzo di spedizione per questa società...</p>
             @else
-                <p>Gli indirizzi di spedizione della tua azienda.</p>
+                <p>Gli indirizzi di spedizione della tua società.</p>
             @endif
 
             <div class="d-flex overflow-auto">

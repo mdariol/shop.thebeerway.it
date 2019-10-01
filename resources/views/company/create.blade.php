@@ -2,31 +2,33 @@
 
 @section('content')
     <div class="container">
-        <h1><em>Nuova</em> Società</h1>
+        <div class="alert alert-primary" role="alert">I dati della società verranno utilizzati come <strong>indirizzo di fatturazione</strong> negli ordini.</div>
 
-        <p>I dati inseriti verranno utilizzati per la fatturazione.</p>
+        <h1><em>Nuova</em> Società</h1>
 
         <form method="POST" action="{{ route('companies.store') }}">
             @csrf
 
-            <div class="form-group">
-                <label for="business-name">Ragione sociale</label>
-                <input type="text" name="business_name" id="business-name" placeholder="BrewPub S.p.A." required
-                       class="form-control {{ $errors->has('business_name') ? 'is-invalid' : '' }}">
-                @if($errors->has('business_name'))
-                    <div class="invalid-feedback">{{ $errors->first('business_name') }}</div>
-                @endif
-            </div>
-
-            <div class="form-group">
-                <label for="vat-number">Partita IVA</label>
-                <div class="input-group">
-                    <div class="input-group-prepend"><span class="input-group-text">IT</span></div>
-                    <input type="text" name="vat_number" id="vat-number" required maxlength="11" pattern="[0-9]{11}"
-                           class="form-control {{ $errors->has('vat_number') ? 'is-invalid' : '' }}">
-                    @if($errors->has('vat_number'))
-                        <div class="invalid-feedback">{{ $errors->first('vat_number') }}</div>
+            <div class="form-row">
+                <div class="form-group col-md">
+                    <label for="business-name">Ragione sociale</label>
+                    <input type="text" name="business_name" id="business-name" placeholder="BrewPub S.p.A." required
+                           class="form-control {{ $errors->has('business_name') ? 'is-invalid' : '' }}">
+                    @if($errors->has('business_name'))
+                        <div class="invalid-feedback">{{ $errors->first('business_name') }}</div>
                     @endif
+                </div>
+
+                <div class="form-group col-md">
+                    <label for="vat-number">Partita IVA</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend"><span class="input-group-text">IT</span></div>
+                        <input type="text" name="vat_number" id="vat-number" required maxlength="11" pattern="[0-9]{11}"
+                               class="form-control {{ $errors->has('vat_number') ? 'is-invalid' : '' }}">
+                        @if($errors->has('vat_number'))
+                            <div class="invalid-feedback">{{ $errors->first('vat_number') }}</div>
+                        @endif
+                    </div>
                 </div>
             </div>
 
@@ -59,7 +61,7 @@
             <div class="form-group custom-control custom-switch">
                 <input type="checkbox" name="is_default" id="is-default" class="custom-control-input">
                 <label class="custom-control-label" for="is-default">Società predefinita</label>
-                <small class="form-text text-muted">Verrà utilizzata come socità di default.</small>
+                <small class="form-text text-muted">Verrà usato come default negli ordini.</small>
             </div>
 
             <button class="btn btn-primary">Salva</button>

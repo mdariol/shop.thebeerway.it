@@ -7,7 +7,7 @@
         <div class="row">
             @role('Admin')
                 <div class="col-md-4 order-md-1">
-                    @include('company.components.approve')
+                    @include('company.components.transition')
                 </div>
             @endrole
 
