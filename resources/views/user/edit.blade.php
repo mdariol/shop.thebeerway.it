@@ -23,9 +23,9 @@
                             @enderror
                         </div>
 
-                        <image-input :name='@json('profile_image')' :label='@json('Immagine del Profilo')'
-                                     :default='@json(asset("storage/$user->profile_image"))'
-                                     @error('profile_image') :error='@json($message)' @enderror></image-input>
+                        <input-image :name='@json('profile_image')' :label='@json('Immagine del Profilo')'
+                                     @if($user->profile_image) :default='@json(asset("storage/$user->profile_image"))' @endif
+                                     @error('profile_image') :error='@json($message)' @enderror></input-image>
 
                         <button class="btn btn-primary">Salva</button>
                         <a href="{{ route('users.delete', ['user' => $user->id]) }}" class="btn btn-link">Elimina</a>
@@ -81,3 +81,9 @@
             </div>
     </div>
 @endsection
+<script>
+    import InputImage from "../../js/components/InputImage";
+    export default {
+        components: {InputImage}
+    }
+</script>
