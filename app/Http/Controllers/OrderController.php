@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Beer;
 use App\Line;
 use App\Order;
+use App\Brewery;
 use App\Packaging;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,7 @@ class OrderController extends Controller
 
         return view('order.index')->with([
             'orders' => $orders,
+            'breweries' => Brewery::all()
         ]);
     }
 

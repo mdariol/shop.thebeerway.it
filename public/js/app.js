@@ -1802,6 +1802,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 Vue.component('multiselect', vue_multiselect__WEBPACK_IMPORTED_MODULE_0___default.a);
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1845,8 +1847,11 @@ Vue.component('multiselect', vue_multiselect__WEBPACK_IMPORTED_MODULE_0___defaul
   },
   mounted: function mounted() {
     this.filtered_options = this.options;
-    this.company = this.default_company;
-    this.onCompanyChange(this.default_company);
+
+    if (this.default_company) {
+      this.company = this.default_company;
+      this.onCompanyChange(this.default_company);
+    }
   }
 });
 
@@ -38808,11 +38813,16 @@ var render = function() {
             attrs: { name: "company_id", id: "company-id" }
           },
           [
-            _c(
-              "option",
-              { attrs: { selected: "" }, domProps: { value: _vm.company.id } },
-              [_vm._v(_vm._s(_vm.company.business_name))]
-            )
+            _vm.company
+              ? _c(
+                  "option",
+                  {
+                    attrs: { selected: "" },
+                    domProps: { value: _vm.company.id }
+                  },
+                  [_vm._v(_vm._s(_vm.company.business_name))]
+                )
+              : _c("option", { attrs: { value: "", selected: "" } })
           ]
         )
       ],
@@ -38851,14 +38861,16 @@ var render = function() {
             attrs: { name: "shipping_address_id", id: "shipping_address-id" }
           },
           [
-            _c(
-              "option",
-              {
-                attrs: { selected: "" },
-                domProps: { value: _vm.shipping_address.id }
-              },
-              [_vm._v(_vm._s(_vm.shipping_address.name))]
-            )
+            _vm.shipping_address
+              ? _c(
+                  "option",
+                  {
+                    attrs: { selected: "" },
+                    domProps: { value: _vm.shipping_address.id }
+                  },
+                  [_vm._v(_vm._s(_vm.shipping_address.name))]
+                )
+              : _c("option", { attrs: { value: "", selected: "" } })
           ]
         )
       ],

@@ -37,14 +37,15 @@ class OrderEventSubscriber
      */
     public function updateRequestedStock(TransitionEvent $event)
     {
-//        dd($event->getStateMachine()->getObject()->getAttribute('id'))
+//        dd($event->getStateMachine()->getObject()->getAttribute('id'));
 //        dd($event);
 
-        if ($event->getTransition() == 'sent' or $event->getTransition() == 'cancel') {
+        if ($event->getTransition() == 'send' or $event->getTransition() == 'cancel') {
+//        dd($event);
             $order = Order::find($event->getStateMachine()->getObject()->getAttribute('id'));
             foreach ($order->lines as $line) {
                 $beer = Beer::find($line->beer_id);
-                if ($event->getTransition() == 'sent') {
+                if ($event->getTransition() == 'send') {
                     $new_requested_stock = $beer->requested_stock + $line->qty;
                 } else  {
                     $new_requested_stock = $beer->requested_stock - $line->qty;

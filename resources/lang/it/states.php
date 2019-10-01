@@ -16,12 +16,12 @@ return [
     'draft' => 'bozza',
     'sent' => 'inviato',
     'confirmed' => 'confermato',
-    'shipped' => 'consegnato',
+    'shipped' => 'spedito',
     'canceled' => 'cancellato',
 
     'send' => 'invia',
     'confirm' => 'conferma',
-    'ship' => 'consegna',
+    'ship' => 'spedisci',
     'cancel' => 'cancella',
     'reset' => 'reset',
 ];
