@@ -39220,7 +39220,7 @@ var render = function() {
         })
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "form-group col-6 col-md-2" }, [
+      _c("div", { staticClass: "form-group col-6 col-md-3" }, [
         _c("label", { attrs: { for: "country" } }, [_vm._v("Stato")]),
         _vm._v(" "),
         _c("input", {

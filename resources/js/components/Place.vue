@@ -25,7 +25,7 @@
                        required :value="district">
             </div>
 
-            <div class="form-group col-6 col-md-2">
+            <div class="form-group col-6 col-md-3">
                 <label for="country">Stato</label>
                 <input type="text" name="country" id="country" class="form-control" required
                        readonly :value="country">
@@ -87,6 +87,7 @@
              * @param {string} component
              * @param {array} place
              * @param {string} name
+             * 
              * @returns {string}
              */
             getPlaceComponent(component, place, name = 'short_name') {
