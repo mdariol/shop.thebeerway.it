@@ -59,6 +59,13 @@ Route::resource('roles', 'RoleController');
 Route::get('/roles/{role}/delete', 'RoleController@delete')
     ->name('roles.delete');
 
+Route::resource('policies', 'PolicyController');
+Route::get('/policies/{policy}/delete', 'PolicyController@delete')
+    ->name('policies.delete');
+
+
+
+
 Route::get('/stocksync', function () {
     $exitCode = Artisan::call('fatture:sync beers --field=stock');
 

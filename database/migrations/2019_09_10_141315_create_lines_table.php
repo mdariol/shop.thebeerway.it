@@ -27,6 +27,8 @@ class CreateLinesTable extends Migration
                 ->onDelete('set null');
             $table->foreign('beer_id')->references('id')->on('beers')
                 ->onDelete('set null');
+
+
         });
     }
 

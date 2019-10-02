@@ -12,6 +12,7 @@ class Cart
     public $deliverynote = null;
     public $company_id = null;
     public $shipping_address_id = null;
+    public $policy_accept = null;
 
     public function __construct($oldCart)
     {
@@ -24,6 +25,7 @@ class Cart
             $this->deliverynote = $oldCart->deliverynote;
             $this->company_id = $oldCart->company_id;
             $this->shipping_address_id = $oldCart->shipping_address_id;
+            $this->policy_accept = $oldCart->policy_accept;
         }
     }
 

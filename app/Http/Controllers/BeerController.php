@@ -12,6 +12,7 @@ use App\Packaging;
 use App\ShippingAddress;
 use App\Style;
 use App\Taste;
+use App\Policy;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
@@ -320,6 +321,7 @@ class BeerController extends Controller
         $cart->deliverynote = $request->deliverynote;
         $cart->company_id = $request->company_id;
         $cart->shipping_address_id = $request->shipping_address_id;
+        $cart->policy_accept = $request->accept;
 
         $request->session()->put('cart', $cart);
 
@@ -355,6 +357,9 @@ class BeerController extends Controller
                     'deliverynote' => $cart->deliverynote,
                     'user_id' => auth()->user()->id,
                     'company_id' => $request->company_id,
+                    'shipping_address_id' => $request->shipping_address_id,
+                    'policy_accept' => $cart->policy_accept,
+                    'policy_id' => Policy::getCurrentPolicyName('vendita')->id,
                     'shipping_address_id' => $request->shipping_address_id,
                     'total_amount' => $cart->totalPrice,
                 ]);
@@ -411,6 +416,7 @@ class BeerController extends Controller
             'deliverynote' => $cart->deliverynote,
             'companies' => Company::all(),
             'shipping_addresses' => ShippingAddress::all(),
+            'current_policy' => Policy::getCurrentPolicyName('vendita'),
         ]);
     }
 }
