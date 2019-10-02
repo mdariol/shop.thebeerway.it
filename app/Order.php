@@ -16,7 +16,7 @@ class Order extends Model
 
     protected $fillable = [
         'date', 'number', 'state', 'deliverynote', 'user_id',
-        'company_id', 'shipping_address_id', 'total_amount',
+        'company_id', 'shipping_address_id', 'policy_id', 'policy_accept', 'total_amount',
     ];
 
     protected static function boot()
@@ -45,4 +45,10 @@ class Order extends Model
     {
         return $this->belongsTo(ShippingAddress::class);
     }
+
+    public function policy()
+    {
+        return $this->belongsTo(Policy::class);
+    }
+
 }

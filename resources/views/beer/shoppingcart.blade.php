@@ -39,7 +39,7 @@
                 <div class="col-8 text-left">{{ 'Totale Carrello Iva e Spese Escluse' }}</div>
                 <div class="col-4 text-right">{{ $totalPrice }}</div>
             </div>
-            <form method="POST" action="/beers/saveorder">
+            <form method="POST" action="/beers/saveorder" >
                 @csrf
 
                 @if (auth()->user()->hasRole('Publican'))
@@ -51,20 +51,31 @@
                     <label class="pt-3" for="delivetynote">Note per la consegna</label>
                     <textarea class="form-control form-control-lg" type="text" name="deliverynote" id="deliverynote" rows="5">{{ $deliverynote}}</textarea>
 
-                    <div class="form-check form-check-inline">
-                        <input type="radio" name="transition" id="transition-send" value="send" class="form-check-input d-none" onchange="this.form.submit()">
-                        <label for="transition-send" class="form-check-label btn btn-primary mt-2">
-                            Invia richiesta
-                        </label>
-                        <input type="radio" name="save_cart" id="save-cart" value="savecart" class="form-check-input d-none" onchange="this.form.submit()">
-                        <label for="save-cart" class="form-check-label btn btn-warning mt-2 ml-2">
-                            Salva il carrello
+
+                    <label class="pt-3" for="current_policy">Condizioni di vendita</label>
+                    <textarea readonly class="form-control form-control-lg" type="text" name="current_policy" id="current_policy" rows="5">{{ $current_policy->content}}</textarea>
+
+                    <div class="form-check form-check-inline w-100">
+
+                        <input type="checkbox" name="accept" id="accept" class="form-control-sm">
+                        <label for="accept" class="form-control form-check-label border-0">
+                            Accetto le condizioni di vendita
                         </label>
 
-                        <input type="radio" name="reset_cart" id="reset-cart" value="resetcart" class="form-check-input d-none" onchange="this.form.submit()">
-                        <label for="reset-cart" class="form-check-label btn btn-danger mt-2 ml-2">
+                    </div>
+                    <div class="form-check form-check-inline">
+
+                        <button name="transition" value="send" class="btn btn-primary mt-2" onclick="checkForm(event)">
+                            Invia richiesta
+                        </button>
+
+                        <button name="save_cart" value="savecart" class="btn btn-warning mt-2 ml-2">
+                            Salva il carrello
+                        </button>
+
+                        <button name="reset_cart" value="resetcart"  class="btn btn-danger mt-2 ml-2">
                             Svuota il carrello
-                        </label>
+                        </button>
                     </div>
 
                 </div>
@@ -79,5 +90,21 @@
         </div>
     @endif
 
-
 @endsection
+
+<script>
+
+    function checkForm(event)
+    {
+        console.log(event.target);
+        console.log(event.target.form);
+
+        console.log(event);
+        if(!event.target.form.accept.checked) {
+            alert("Per continuare è necessario accettare le condizioni di vendita");
+            event.preventDefault();
+            event.target.form.accept.focus();
+        }
+    }
+
+</script>
