@@ -107,7 +107,9 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        $user->update(request()->validate(self::RULES));
+        $user->update(request()->validate(self::RULES) + [
+            'is_horeca' => request()->has('is_horeca')
+        ]);
 
         if (request()->has('profile_image')) {
             $this->upload('profile_image', $user);

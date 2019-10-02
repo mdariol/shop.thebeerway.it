@@ -27,6 +27,13 @@
                                      @if($user->profile_image) :default='@json(asset("storage/$user->profile_image"))' @endif
                                      @error('profile_image') :error='@json($message)' @enderror></input-image>
 
+                        <div class="form-group custom-control custom-switch">
+                            <input type="checkbox" name="is_horeca" id="is-horeca" class="custom-control-input"
+                                {{ $user->is_horeca ? 'checked' : '' }}>
+                            <label for="is-horeca" class="custom-control-label">Ho.Re.Ca</label>
+                            <small class="form-text text-muted">Possiedo un'attività commerciale.</small>
+                        </div>
+
                         <button class="btn btn-primary">Salva</button>
                         <a href="{{ route('users.delete', ['user' => $user->id]) }}" class="btn btn-link">Elimina</a>
                     </form>

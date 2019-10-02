@@ -65,22 +65,13 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $horeca = [];
-
-        if (request()->has('ishoreca')) {
-            $horeca = request([
-                'horecaname',
-                'vatnumber',
-            ]) + [
-                'ishoreca' => request()->has('ishoreca'),
-            ];
-        }
-
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-        ] + $horeca);
+        ] + [
+            'is_horeca' => request()->has('is_horeca')
+        ]);
     }
 
     /**

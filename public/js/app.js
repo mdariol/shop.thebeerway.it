@@ -2137,6 +2137,7 @@ __webpack_require__.r(__webpack_exports__);
      * @param {string} component
      * @param {array} place
      * @param {string} name
+     *
      * @returns {string}
      */
     getPlaceComponent: function getPlaceComponent(component, place) {

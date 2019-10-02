@@ -23,8 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'google_id', 'facebook_id', 'name', 'email',
-        'password', 'ishoreca', 'horecaname','vatnumber',
-        'profile_image',
+        'password', 'is_horeca', 'profile_image',
     ];
 
     /**
@@ -96,17 +95,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function owns(Company $company)
     {
         return $this->is($company->owner);
-    }
-
-    /**
-     * Whether user has approved companies or not.
-     *
-     * @return bool
-     */
-    public function getIsHorecaAttribute()
-    {
-        return $this->companies()->where('state', 'approved')
-            ->exists();
     }
 
     public function getDraftOrder(){
