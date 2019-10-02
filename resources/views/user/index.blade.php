@@ -7,7 +7,10 @@
         <p class="mb-4">Elenco degli utenti.</p>
 
         <div class="card bg-light mb-4">
-            <div class="card-body">
+            <div class="card-header">
+                <a href="#filters" class="d-block text-secondary" data-toggle="collapse">Filtri</a>
+            </div>
+            <div class="card-body collapse" id="filters">
                 <form class="mb-0" action="{{ route('users.index') }}">
                     <div class="form-row">
                         <div class="form-group col-md">
