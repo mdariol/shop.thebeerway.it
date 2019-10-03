@@ -68,16 +68,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Send the email verification notification.
-     *
-     * @return void
-     */
-    public function sendEmailVerificationNotification()
-    {
-        Mail::to($this)->send(new UserVerifyEmail($this));
-    }
-
-    /**
      * Get related orders.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

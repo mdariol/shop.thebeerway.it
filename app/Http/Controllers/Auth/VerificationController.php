@@ -39,76 +39,8 @@ class VerificationController extends Controller
      */
     public function __construct()
     {
-//        $this->middleware('auth');
+        $this->middleware('auth');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
-    }
-
-    /**
-     * Show the email verification notice.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request)
-    {
-        $user = User::find($request->user);
-
-        if ( ! $user) return back();
-
-        return $user->hasVerifiedEmail()
-          ? redirect($this->redirectPath())
-          : view('auth.verify');
-    }
-
-    /**
-     * Resend the email verification notification.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function resend(Request $request)
-    {
-        /** @var \App\User $user */
-        $user = User::find($request->user);
-
-        if ( ! $user) {
-            return back()->withErrors('Non riusciamo a inviarti l\'email.');
-        }
-
-        if ($user->hasVerifiedEmail()) {
-            return redirect($this->redirectPath());
-        }
-
-        $user->sendEmailVerificationNotification();
-
-        return back()->with('resent', true);
-    }
-
-    /**
-     * Mark the authenticated user's email address as verified.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function verify(Request $request)
-    {
-        $user = User::find($request->route('id'));
-
-//        if ($request->route('id') != $request->user()->getKey()) {
-//            throw new AuthorizationException;
-//        }
-
-        if ($user->hasVerifiedEmail()) {
-            return redirect($this->redirectPath());
-        }
-
-        if ($user->markEmailAsVerified()) {
-            event(new Verified($user));
-        }
-
-        Auth::login($user);
-
-        return redirect($this->redirectPath())->with('status', 'La tua email è stata verificata.');
     }
 }
