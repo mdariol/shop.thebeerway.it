@@ -8,7 +8,9 @@
 
             <div class="flex-grow-1 align-self-center text-center text-md-left">
                 <h1>{{ $user->name }}</h1>
-                <p>{{ $user->email }}</p>
+                <p>{{ $user->email }}
+                    <email-verified :verified='@json($user->hasVerifiedEmail())'
+                                    :url='@json(route('verification.resend'))'></email-verified></p>
 
                 <a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-primary">Modifica</a>
             </div>
