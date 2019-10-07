@@ -28,6 +28,10 @@ class OrderEventSubscriber
             'App\Listeners\OrderEventSubscriber@updateRequestedStock'
         );
 
+        $events->listen(
+            SMEvents::POST_TRANSITION,
+            'App\Listeners\OrderEventSubscriber@sendRequestedOrderEmail'
+        );
     }
 
     /**
@@ -37,21 +41,39 @@ class OrderEventSubscriber
      */
     public function updateRequestedStock(TransitionEvent $event)
     {
-//        dd($event->getStateMachine()->getObject()->getAttribute('id'));
-//        dd($event);
+        $transition = $event->getTransition();
 
-        if ($event->getTransition() == 'send' or $event->getTransition() == 'cancel') {
-//        dd($event);
-            $order = Order::find($event->getStateMachine()->getObject()->getAttribute('id'));
-            foreach ($order->lines as $line) {
-                $beer = Beer::find($line->beer_id);
-                if ($event->getTransition() == 'send') {
-                    $new_requested_stock = $beer->requested_stock + $line->qty;
-                } else  {
-                    $new_requested_stock = $beer->requested_stock - $line->qty;
-                }
-                $beer->update(['requested_stock' => $new_requested_stock]);
+        if ($transition !== 'send' and $transition !== 'cancel') return;
+
+        $order = $event->getStateMachine()->getObject();
+
+        foreach ($order->lines as $line) {
+            if ($transition == 'send') {
+                $line->beer->update([
+                    'requested_stock' => $line->beer->requested_stock + $line->qty
+                ]);
+                continue;
             }
+            $line->beer->update([
+                'requested_stock' => $line->beer->requested_stock - $line->qty
+            ]);
         }
     }
+
+
+    /**
+     * Send requested order.
+     *
+     * @param  \SM\Event\TransitionEvent $event
+     */
+    public function sendRequestedOrderEmail(TransitionEvent $event)
+    {
+        if ($event->getTransition() !== 'send') return;
+
+        $order = $event->getStateMachine()->getObject();
+
+        Mail::to($order->company->users)->send(new \App\Mail\OrderSent($order));
+    }
+
+
 }

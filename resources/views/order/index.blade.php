@@ -71,8 +71,12 @@
         </div>
 
         @foreach($orders as $order)
-            <div class="text-dark d-flex flex-row bg-warning" >
-                <div class="p-2 col-sm-9 text-left">{{ $order->date }} - {{ $order->number }}/{{$order->id}} - {{ $order->user->name }} - {{ $order->company->business_name }}</div>
+            <div class="text-dark d-flex flex-row bg-warning" data-toggle="collapse" href={{ "#order".$order->id }} aria-expanded="false" aria-controls={{ "order".$order->id }} >
+
+                <div class="p-2 col-sm-9 text-left">
+                    <img src="/Espandi-TheBeerWay.png" alt="Espandi" height="20px" >
+                    {{ $order->date }} - {{ $order->number }}/{{$order->id}} - {{ $order->user->name }} - {{ $order->company->business_name }}
+                </div>
                 <div class="p-2 col-sm-1 text-right">{{ __("states.$order->state")}}</div>
                 <div class="p-2 col-sm-2 text-right">{{ $order->total_amount }}</div>
             </div>
@@ -95,6 +99,26 @@
                     </div>
                 @endforeach
             </div>
+
+            <div class="card collapse w-100 pl-3 pr-3 pt-1 pb-1 border-0" id={{ "order".$order->id }}>
+                <div class="card card-body  m-3 p-3 border-1 bg-info">
+                    <h4>Spedire a:</h4>
+                    <p>
+                        {{$order->shipping_address->name}} - {{ $order->shipping_address->postal_code }} - {{ $order->shipping_address->route  }}
+                    </p>
+                    @if ($order->deliverynote)
+                        <h4>Note</h4>
+                        <p>
+                            {{ $order->deliverynote }}
+                        </p>
+                    @endif
+                    <h4>Fatturare a:</h4>
+                    <p>
+                        {{$order->company->business_name}} - {{ $order->company->postal_code }} - {{ $order->company->route  }}
+                    </p>
+                </div>
+            </div>
+
 
         @endforeach
     </div>

@@ -15,7 +15,8 @@ class Packaging extends Model
     protected $fillable = ['type','quantity','capacity'];
 
     public function getNameAttribute(){
-        return $this->quantity . ' ' . $this->type . ' x ' . $this->capacity . ' l';
+        $qty = $this->quantity == 1 ? '' : $this->quantity. ' ';
+        return $qty. $this->type . ' da ' . $this->capacity . ' l';
     }
 
     public function beers()
