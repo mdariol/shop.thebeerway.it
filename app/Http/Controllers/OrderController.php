@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Beer;
-use App\Line;
 use App\Order;
 use App\Brewery;
-use App\Packaging;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -17,7 +14,6 @@ class OrderController extends Controller
     public function __construct()
     {
         $this->middleware('verified');
-        $this->middleware('auth');
     }
 
     /**
