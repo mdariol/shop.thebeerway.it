@@ -58,7 +58,6 @@
                     <th>Società</th>
                     <th>Totale</th>
                     <th>Stato</th>
-                    <th>Operazioni</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -68,19 +67,11 @@
                         <td class="d-none d-md-table-cell align-middle">{{ $order->user->name }}</td>
                         <td class="align-middle">{{ $order->company->business_name }}</td>
                         <td class="align-middle">€ {{ $order->total_amount }}</td>
-                        <td class="align-middle">{{ ucfirst(__("states.$order->state")) }}</td>
-                        <td>
-                            <form method="POST" action="{{ route('orders.transition', ['order' => $order->id]) }}">
-                                @csrf
-                                @method('PATCH')
-
-                                @foreach($order->state_machine->getPossibleTransitions() as $transition)
-                                    <button class="btn {{ $loop->first ? 'btn-primary' : 'btn-link' }}" name="transition"
-                                            value="{{ $transition }}">{{ ucfirst(__("states.$transition")) }}</button>
-                                @endforeach
-                            </form>
-
-                            @if ( ! count($order->state_machine->getPossibleTransitions())) // @endif
+                        <td class="align-middle">
+                            <state-machine :action='@json(route('orders.transition', ['order' => $order->id]))'
+                                           :transitions='@json(array_values($order->state_machine->getPossibleTransitions()))'
+                                           :message='@json('Sei pronto a portare avanti questo ordine?')'
+                                           :state='@json($order->state)'></state-machine>
                         </td>
                     </tr>
                 @endforeach

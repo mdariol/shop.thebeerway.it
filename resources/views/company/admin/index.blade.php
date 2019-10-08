@@ -68,13 +68,18 @@
                         </td>
                         <td class="d-none d-md-table-cell align-middle">{{ $company->owner->name }}</td>
                         <td class="d-none d-md-table-cell align-middle">{{ $company->address }}</td>
-                        @if($company->is_pending)
-                            <td class="align-middle"><span class="far fa-question-circle text-info" style="font-size: 1.5rem;"></span></td>
-                        @elseif($company->is_approved)
-                            <td class="align-middle"><span class="far fa-check-circle text-success" style="font-size: 1.5rem;"></span></td>
-                        @else
-                            <td class="align-middle"><span class="far fa-times-circle text-danger" style="font-size: 1.5rem;"></span></td>
-                        @endif
+                        <td class="aign-middle">
+                            <state-machine :action='@json(route('companies.approve', ['company' => $company->id]))'
+                                           @if($company->is_pending)
+                                           :message='@json("Questa società deve essere verificata. Cosa vuoi fare?")'
+                                           @elseif($company->is_approved)
+                                           :message='@json("Questa società è stata approvata. Hai cambiato idea?")'
+                                           @else
+                                           :message='@json('Questa società è stata rifiutata. Hai cambiato idea?')'
+                                           @endif
+                                           :transitions='@json(array_values($company->state_machine->getPossibleTransitions()))'
+                                           :state='@json($company->state)'></state-machine>
+                        </td>
                         <td class="align-middle">
                             <a href="{{ route('companies.edit', ['id' => $company->id]) }}"
                                class="btn btn-primary">Modifica</a>
@@ -87,8 +92,8 @@
             </table>
         </div>
 
-        @if( ! $companies->count())
+        @empty($companies)
             <p style="padding-left: .75rem;">Non c'è alcuna società...</p>
-        @endif
+        @endempty
     </div>
 @endsection
