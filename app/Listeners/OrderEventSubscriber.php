@@ -32,6 +32,17 @@ class OrderEventSubscriber
             SMEvents::POST_TRANSITION,
             'App\Listeners\OrderEventSubscriber@sendRequestedOrderEmail'
         );
+
+        $events->listen(
+            SMEvents::POST_TRANSITION,
+            'App\Listeners\OrderEventSubscriber@sendCanceledOrderEmail'
+        );
+
+        $events->listen(
+            SMEvents::POST_TRANSITION,
+            'App\Listeners\OrderEventSubscriber@sendResetOrderEmail'
+        );
+
     }
 
     /**
@@ -72,8 +83,37 @@ class OrderEventSubscriber
 
         $order = $event->getStateMachine()->getObject();
 
-        Mail::to($order->company->users)->send(new \App\Mail\OrderSent($order));
+        Mail::to($order->company->users)->send(new \App\Mail\RequestedOrderSent($order));
     }
+
+    /**
+     * Send canceled order.
+     *
+     * @param  \SM\Event\TransitionEvent $event
+     */
+    public function sendCanceledOrderEmail(TransitionEvent $event)
+    {
+        if ($event->getTransition() !== 'cancel') return;
+
+        $order = $event->getStateMachine()->getObject();
+
+        Mail::to($order->company->users)->send(new \App\Mail\CanceledOrderSent($order));
+    }
+
+    /**
+     * Send reset order.
+     *
+     * @param  \SM\Event\TransitionEvent $event
+     */
+    public function sendResetOrderEmail(TransitionEvent $event)
+    {
+        if ($event->getTransition() !== 'reset') return;
+
+        $order = $event->getStateMachine()->getObject();
+
+        Mail::to($order->company->users)->send(new \App\Mail\ResetOrderSent($order));
+    }
+
 
 
 }

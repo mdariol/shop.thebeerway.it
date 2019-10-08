@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Order;
 
 
-class OrderSent extends Mailable
+class RequestedOrderSent extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -37,6 +37,6 @@ class OrderSent extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.orders.sent');
+        return $this->subject('The BeerWay: Richiesta d\'ordine inviata')->markdown('emails.orders.sent-request');
     }
 }
