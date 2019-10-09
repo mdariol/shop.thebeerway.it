@@ -68,7 +68,7 @@
                         </td>
                         <td class="d-none d-md-table-cell align-middle">{{ $company->owner->name }}</td>
                         <td class="d-none d-md-table-cell align-middle">{{ $company->address }}</td>
-                        <td class="aign-middle">
+                        <td class="align-middle">
                             <state-machine :action='@json(route('companies.approve', ['company' => $company->id]))'
                                            @if($company->is_pending)
                                            :message='@json("Questa società deve essere verificata. Cosa vuoi fare?")'

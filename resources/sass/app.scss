@@ -1,6 +1,12 @@
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
+// Font Awesome
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+
 // Variables
 @import 'variables';
 
@@ -18,7 +24,6 @@
         height: 50%;
     }
 }
-
 
 .btn-warning, .btn-warning:hover, .btn-warning:active, .btn-warning:visited, .bg-warning {
     background-color: #ffcc00 !important;

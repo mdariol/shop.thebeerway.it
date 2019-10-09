@@ -12,7 +12,8 @@ Log of unreleased changes.
 - Adds `Company` model.
 - Use [winzou/state-machine](https://github.com/winzou/state-machine) library to manage states.
 - Use [intervention/image](https://github.com/Intervention/image) library to resize images.
-- Adds 'profile_image' to users.
+- Adds `profile_image` to users.
+- Use [vue-i18n](https://github.com/kazupon/vue-i18n) library to translate Vue components.
 
 ### Changed
 

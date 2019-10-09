@@ -1,10 +1,10 @@
 <template>
     <div>
-        <button class="btn btn-outline-primary" :disabled=" ! transitions.length" @click="toggle">{{ state }}</button>
+        <button class="btn btn-outline-primary" :disabled=" ! transitions.length" @click="toggle">{{ $t(`states.${state}`) }}</button>
 
         <div class="card m-2 shadow" style="z-index: 1;" tabindex="-1" @focusout="close" :hidden="hidden">
             <div class="card-body">
-                <h4 class="card-title">{{ state }}</h4>
+                <h4 class="card-title">{{ $t(`states.${state}`) }}</h4>
                 <p>{{ message }}</p>
 
                 <form method="POST" :action="action">
@@ -12,7 +12,7 @@
                     <input type="hidden" name="_method" value="PATCH">
 
                     <button v-for="(transition, index) in transitions" :value="transition" name="transition"
-                            :class="['btn', index ? 'btn-link' : 'btn-primary']">{{ transition }}</button>
+                            :class="['btn', index ? 'btn-link' : 'btn-primary']">{{ $t(`states.${transition}`) }}</button>
                 </form>
             </div>
         </div>
@@ -79,9 +79,9 @@
 
 <style scoped>
     .card {
-        max-width: 17rem;
+        max-width: 19rem;
     }
-    button[name="transition"],
+    button,
     .card-title {
         text-transform: capitalize;
     }
