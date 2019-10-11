@@ -14,16 +14,8 @@ class Company extends Model
     const WORKFLOW = 'approval';
 
     protected $fillable = [
-        'business_name',
-        'vat_number',
-        'route',
-        'postal_code',
-        'city',
-        'district',
-        'country',
-        'pec',
-        'sdi',
-        'owner_id',
+        'business_name', 'vat_number', 'route', 'postal_code',
+        'city', 'district', 'country', 'pec', 'sdi', 'owner_id',
     ];
 
     /**
@@ -148,24 +140,6 @@ class Company extends Model
     public function owner()
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Apply the specified transition.
-     *
-     * @param string $transition
-     *
-     * @return $this
-     */
-    public function apply($transition)
-    {
-        $this->state_machine->apply($transition);
-        $this->save();
-
-        if ($this->is_approved) event(new Events\CompanyApproved($this));
-        if ($this->is_rejected) event(new Events\CompanyRejected($this));
-
-        return $this;
     }
 
     /**

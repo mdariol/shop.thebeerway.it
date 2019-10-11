@@ -195,7 +195,8 @@ class CompanyController extends Controller
     {
         $this->authorize('approve', $company);
 
-        $company->apply(request()->transition);
+        $company->state_machine->apply(request()->transition);
+        $company->save();
 
         return back();
     }
