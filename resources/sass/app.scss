@@ -30,3 +30,9 @@
 .btn-warning, .btn-warning:hover, .btn-warning:active, .btn-warning:visited, .bg-warning {
     background-color: #ffcc00 !important;
 }
+
+.btn-none {
+    padding: 0;
+    border: 0;
+    background-color: initial;
+}

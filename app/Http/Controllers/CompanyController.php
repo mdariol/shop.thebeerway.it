@@ -176,9 +176,7 @@ class CompanyController extends Controller
     {
         $this->authorize('default', $company);
 
-        if (request()->has('is_default')) {
-            $company->default();
-        }
+        $company->default();
 
         return back();
     }

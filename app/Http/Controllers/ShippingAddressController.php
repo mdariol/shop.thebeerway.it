@@ -148,9 +148,7 @@ class ShippingAddressController extends Controller
     {
         $this->authorize('default', $shippingAddress);
 
-        if (request()->has('is_default')) {
-            $shippingAddress->default();
-        }
+        $shippingAddress->default();
 
         return redirect()->route('companies.show', [$company->id]);
     }

@@ -50,10 +50,7 @@
                                 @csrf
                                 @method('PATCH')
 
-                                <label class="{{ $shippingAddress->is_default ? 'fas' : 'far' }} fa-star" style="cursor: pointer;"
-                                       for="is-default-{{ $shippingAddress->id }}"></label>
-                                <input type="checkbox" name="is_default" id="is-default-{{ $shippingAddress->id }}"
-                                       class="d-none" onchange="this.form.submit()">
+                                <button class="{{ $shippingAddress->is_default ? 'fas' : 'far' }} fa-star btn-none"></button>
                             </form>
                             <h4 class="card-title text-truncate mr-4">{{ $shippingAddress->name }}</h4>
                             <hr>

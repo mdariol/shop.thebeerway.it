@@ -16585,3 +16585,9 @@ a.text-dark:focus {
   background-color: #ffcc00 !important;
 }
 
+.btn-none {
+  padding: 0;
+  border: 0;
+  background-color: initial;
+}
+
