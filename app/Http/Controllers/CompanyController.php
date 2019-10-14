@@ -184,16 +184,16 @@ class CompanyController extends Controller
     }
 
     /**
-     * Approve or reject the specified resource.
+     * Apply transition to specified resource.
      *
      * @param  \App\Company  $company
      *
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function approve(Company $company)
+    public function transition(Company $company)
     {
-        $this->authorize('approve', $company);
+        $this->authorize('transition', $company);
 
         $company->state_machine->apply(request()->transition);
         $company->save();

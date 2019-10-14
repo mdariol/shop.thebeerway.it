@@ -25,7 +25,7 @@ if ($company->is_rejected) {
             <p>Questa società deve essere verificata. Cosa vuoi fare?</p>
         @endif
 
-        <form method="POST" action="{{ route('companies.approve', ['company' => $company->id]) }}">
+        <form method="POST" action="{{ route('companies.transition', ['company' => $company->id]) }}">
             @csrf
             @method('PATCH')
 
