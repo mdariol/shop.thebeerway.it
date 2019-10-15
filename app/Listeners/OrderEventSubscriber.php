@@ -54,7 +54,7 @@ class OrderEventSubscriber
     {
         $transition = $event->getTransition();
 
-        if ($transition !== 'send' and $transition !== 'cancel') return;
+        if ($transition !== 'send' and $transition !== 'cancel' and $transition !== 'ship') return;
 
         $order = $event->getStateMachine()->getObject();
 

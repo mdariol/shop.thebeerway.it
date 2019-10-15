@@ -150,6 +150,14 @@ Route::group([
         ->name('admin.orders.index');
 });
 
+
+/* -----  image download----- */
+
+Route::get('/download', 'DownloadController@download')
+    ->name('download');
+
+
+
 /* --------------------------------------------------------------------------
     API
    -------------------------------------------------------------------------- */

@@ -115,6 +115,14 @@
                     </div>
                 </div>
             @endif
+            @if ($message = Session::get('error'))
+                <div class="container mb-4">
+                    <div class="alert alert-danger alert-block">
+                        {{ $message }}
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                    </div>
+                </div>
+            @endif
 
             @yield('content')
         </main>

@@ -2,7 +2,24 @@
     <div>
         <div class="form-group">
             <label for="company-id">Azienda</label>
-            <multiselect @select="onCompanyChange" v-model="company" :options="filtered_options" label="business_name" track-by="business_name" :closeOnSelect="true" placeholder="Seleziona un indirizzo di fatturazione" ></multiselect>
+            <multiselect @select="onCompanyChange" v-model="company" :options="filtered_options" label="business_name" :show-labels="false" :closeOnSelect="true" placeholder="Seleziona un indirizzo di fatturazione" >
+
+                <template slot="singleLabel" slot-scope="props">
+                    <div>
+                        <span>{{ props.option.business_name }}</span> <br>
+                        <span>{{ props.option.postal_code }}</span> -
+                        <span>{{ props.option.route }}</span>
+                    </div>
+                </template>
+                <template slot="option" slot-scope="props">
+                    <div>
+                        <span>{{ props.option.business_name }}</span> <br>
+                        <span>{{ props.option.postal_code }}</span> -
+                        <span>{{ props.option.route }}</span>
+                    </div>
+                </template>
+
+            </multiselect>
              <select  name="company_id" id="company-id" class="d-none" >
                 <option v-if="company" :value="company.id" selected>{{ company.business_name }}</option>
                 <option v-else value selected></option>
@@ -11,7 +28,25 @@
 
         <div class="form-group">
             <label for="shipping_address-id">Indirizzo di Spedizione</label>
-            <multiselect  v-model="shipping_address" :options="filtered_shipping_addresses" label="name" track-by="name" :closeOnSelect="true" placeholder="Seleziona un indirizzo di spedizione" ></multiselect>
+            <multiselect  v-model="shipping_address" :options="filtered_shipping_addresses" label="name" :show-labels="false" track-by="name" :closeOnSelect="true" placeholder="Seleziona un indirizzo di spedizione" >
+
+                <template slot="singleLabel" slot-scope="props">
+                    <div>
+                        <span>{{ props.option.name }}</span> <br>
+                        <span>{{ props.option.postal_code }}</span> -
+                        <span>{{ props.option.route }}</span>
+                    </div>
+                </template>
+                <template slot="option" slot-scope="props">
+                    <div>
+                        <span>{{ props.option.name }}</span> <br>
+                        <span>{{ props.option.postal_code }}</span> -
+                        <span>{{ props.option.route }}</span>
+                    </div>
+                </template>
+
+
+            </multiselect>
             <select name="shipping_address_id" id="shipping_address-id" class="d-none">
                 <option v-if="shipping_address" :value="shipping_address.id" selected>{{ shipping_address.name }}</option>
                 <option v-else value selected></option>
@@ -65,6 +100,7 @@
                     });
                 }
             }
+
         },
 
         mounted() {
