@@ -40992,11 +40992,45 @@ var render = function() {
           attrs: {
             options: _vm.filtered_options,
             label: "business_name",
-            "track-by": "business_name",
+            "show-labels": false,
             closeOnSelect: true,
             placeholder: "Seleziona un indirizzo di fatturazione"
           },
           on: { select: _vm.onCompanyChange },
+          scopedSlots: _vm._u([
+            {
+              key: "singleLabel",
+              fn: function(props) {
+                return [
+                  _c("div", [
+                    _c("span", [_vm._v(_vm._s(props.option.business_name))]),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("span", [_vm._v(_vm._s(props.option.postal_code))]),
+                    _vm._v(" -\n                    "),
+                    _c("span", [_vm._v(_vm._s(props.option.route))])
+                  ])
+                ]
+              }
+            },
+            {
+              key: "option",
+              fn: function(props) {
+                return [
+                  _c("div", [
+                    _c("span", [_vm._v(_vm._s(props.option.business_name))]),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("span", [_vm._v(_vm._s(props.option.postal_code))]),
+                    _vm._v(" -\n                    "),
+                    _c("span", [_vm._v(_vm._s(props.option.route))])
+                  ])
+                ]
+              }
+            }
+          ]),
           model: {
             value: _vm.company,
             callback: function($$v) {
@@ -41041,10 +41075,45 @@ var render = function() {
           attrs: {
             options: _vm.filtered_shipping_addresses,
             label: "name",
+            "show-labels": false,
             "track-by": "name",
             closeOnSelect: true,
             placeholder: "Seleziona un indirizzo di spedizione"
           },
+          scopedSlots: _vm._u([
+            {
+              key: "singleLabel",
+              fn: function(props) {
+                return [
+                  _c("div", [
+                    _c("span", [_vm._v(_vm._s(props.option.name))]),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("span", [_vm._v(_vm._s(props.option.postal_code))]),
+                    _vm._v(" -\n                    "),
+                    _c("span", [_vm._v(_vm._s(props.option.route))])
+                  ])
+                ]
+              }
+            },
+            {
+              key: "option",
+              fn: function(props) {
+                return [
+                  _c("div", [
+                    _c("span", [_vm._v(_vm._s(props.option.name))]),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("span", [_vm._v(_vm._s(props.option.postal_code))]),
+                    _vm._v(" -\n                    "),
+                    _c("span", [_vm._v(_vm._s(props.option.route))])
+                  ])
+                ]
+              }
+            }
+          ]),
           model: {
             value: _vm.shipping_address,
             callback: function($$v) {
