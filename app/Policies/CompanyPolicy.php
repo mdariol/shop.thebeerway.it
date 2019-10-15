@@ -63,14 +63,14 @@ class CompanyPolicy
     }
 
     /**
-     * Determine whether the user can approve or reject the company.
+     * Determine whether the user can apply transition.
      *
      * @param  \App\User  $user
      * @param  \App\Company  $company
      *
-     * @return mixed
+     * @return bool
      */
-    public function approve(User $user, Company $company)
+    public function transition(User $user, Company $company)
     {
         return $user->hasRole('Admin');
     }

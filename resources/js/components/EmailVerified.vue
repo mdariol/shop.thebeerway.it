@@ -3,7 +3,8 @@
         <span v-if="verified" class="far fa-check-circle text-success mx-1"></span>
         <span v-else class="far fa-times-circle text-danger mx-1" @click="toggle" style="cursor: pointer;"></span>
 
-        <div class="card border-danger mt-2" style="width: 17rem; z-index: 1;" :hidden="hidden">
+        <div class="card border-danger m-2 shadow" style="width: 17rem; z-index: 1;"
+             :hidden="hidden" tabindex="-1" @focusout="close">
             <div class="card-body text-danger">
                 <h4>E-mail non verificata</h4>
                 <p class="mb-0">Per favore, utilizza il link di verifica che ti abbiamo mandato via e-mail. Se non lo hai ricevuto,
@@ -26,8 +27,6 @@
             return {
                 hidden: true,
                 popper: null,
-                reference: null,
-                popover: null,
             }
         },
 
@@ -37,8 +36,21 @@
 
                 if ( ! this.hidden) {
                     this.popper.update();
+
+                    Vue.nextTick(() => {
+                        this.popper.popper.focus();
+                    });
                 }
             },
+
+            close() {
+                if (this.popper.popper.contains(event.relatedTarget)
+                    || this.popper.reference === event.relatedTarget) {
+                    return;
+                }
+
+                this.hidden = true;
+            }
         },
 
         mounted() {
@@ -46,10 +58,10 @@
                 return;
             }
 
-            this.reference = this.$el.querySelector('.fa-times-circle');
-            this.popover = this.$el.querySelector('.card');
+            let reference = this.$el.querySelector('.fa-times-circle');
+            let popover = this.$el.querySelector('.card');
 
-            this.popper = new Popper(this.reference, this.popover);
+            this.popper = new Popper(reference, popover);
         }
     }
 </script>

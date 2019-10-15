@@ -2,10 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Events\CompanyApproved;
 use App\Events\CompanyCreated;
 use App\User;
 use Illuminate\Support\Facades\Mail;
+use SM\Event\SMEvents;
+use SM\Event\TransitionEvent;
 
 class CompanyEventSubscriber
 {
@@ -17,30 +18,41 @@ class CompanyEventSubscriber
     public function subscribe($events)
     {
 //        $events->listen(
-//            CompanyApproved::class,
+//            SMEvents::POST_TRANSITION,
 //            'App\Listeners\CompanyEventSubscriber@assignPublicanRole'
 //        );
 
-        $events->listen(
-            CompanyApproved::class,
-            'App\Listeners\CompanyEventSubscriber@sendCompanyApprovedEmail'
-        );
+//        $events->listen(
+//            SMEvents::POST_TRANSITION,
+//            'App\Listeners\CompanyEventSubscriber@removePubicanRole'
+//        );
 
         $events->listen(
             CompanyCreated::class,
             'App\Listeners\CompanyEventSubscriber@sendCompanyApprovalEmail'
+        );
+
+        $events->listen(
+            SMEvents::POST_TRANSITION,
+            'App\Listeners\CompanyEventSubscriber@sendCompanyApprovedEmail'
         );
     }
 
     /**
      * Send approved email to company's users.
      *
-     * @param  \App\Events\CompanyApproved  $event
+     * @param  \SM\Event\TransitionEvent  $event
      */
-    public function sendCompanyApprovedEmail(CompanyApproved $event)
+    public function sendCompanyApprovedEmail(TransitionEvent $event)
     {
-        Mail::to($event->company->users)
-            ->send(new \App\Mail\CompanyApproved($event->company));
+        if ($event->getStateMachine()->getGraph() !== 'approval'
+            || $event->getTransition() !== 'approve') return;
+
+        /** @var \App\Company $company */
+        $company = $event->getStateMachine()->getObject();
+
+        Mail::to($company->users)
+            ->send(new \App\Mail\CompanyApproved($company));
     }
 
     /**
@@ -58,11 +70,14 @@ class CompanyEventSubscriber
     /**
      * Assign Publican role to company's users.
      *
-     * @param \App\Events\CompanyApproved $event
+     * @param \SM\Event\TransitionEvent $event
      */
-    public function assignPublicanRole(CompanyApproved $event)
+    public function assignPublicanRole(TransitionEvent $event)
     {
-        $users = $event->company->users;
+        if ($event->getStateMachine()->getGraph() !== 'approval'
+            || $event->getTransition() !== 'approve') return;
+
+        $users = $event->getStateMachine()->getObject()->users;
 
         /** @var \App\User $user */
         foreach ($users as $user) {
@@ -73,11 +88,14 @@ class CompanyEventSubscriber
     /**
      * Remove Publican role to company's users.
      *
-     * @param $event
+     * @param \SM\Event\TransitionEvent $event
      */
-    public function removePublicanRole($event)
+    public function removePublicanRole(TransitionEvent $event)
     {
-        $users = $event->company->users;
+        if ($event->getStateMachine()->getGraph() !== 'approval'
+            || $event->getTransition() !== 'reject') return;
+
+        $users = $event->getStateMachine()->getObject()->users;
 
         /** @var \App\User $user */
         foreach ($users as $user) {

@@ -8,6 +8,11 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import VueI18n from 'vue-i18n';
+import Locale from './vue-i18n-locales.generated'
+
+Vue.use(VueI18n);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -25,6 +30,14 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+const lang = document.documentElement.lang;
+
+const i18n = new VueI18n({
+    locale: lang,
+    messages: Locale,
+});
+
 const app = new Vue({
     el: '#app',
+    i18n,
 });

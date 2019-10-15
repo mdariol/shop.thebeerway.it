@@ -1,11 +1,19 @@
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
+// Font Awesome
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+
 // Variables
 @import 'variables';
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+@import 'pages';
 
 .navbar-laravel {
     background-color: #fff;
@@ -19,7 +27,12 @@
     }
 }
 
-
 .btn-warning, .btn-warning:hover, .btn-warning:active, .btn-warning:visited, .bg-warning {
     background-color: #ffcc00 !important;
+}
+
+.btn-none {
+    padding: 0;
+    border: 0;
+    background-color: initial;
 }

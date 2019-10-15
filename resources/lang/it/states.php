@@ -4,7 +4,7 @@ return [
 
     /* ----- Approval ----- */
 
-    'approval' => 'approvazione',
+    'approval' => 'verifica',
     'approved' => 'approvato',
     'rejected' => 'rifiutato',
 

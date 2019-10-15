@@ -176,26 +176,25 @@ class CompanyController extends Controller
     {
         $this->authorize('default', $company);
 
-        if (request()->has('is_default')) {
-            $company->default();
-        }
+        $company->default();
 
         return back();
     }
 
     /**
-     * Approve or reject the specified resource.
+     * Apply transition to specified resource.
      *
      * @param  \App\Company  $company
      *
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function approve(Company $company)
+    public function transition(Company $company)
     {
-        $this->authorize('approve', $company);
+        $this->authorize('transition', $company);
 
-        $company->apply(request()->transition);
+        $company->state_machine->apply(request()->transition);
+        $company->save();
 
         return back();
     }
