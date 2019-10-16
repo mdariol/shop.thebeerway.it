@@ -10,6 +10,8 @@
             <input type="file" :class="['form-control-file', 'pr-4', {'is-invalid': error}]"
                    :name="name" :id="name" @change="preview">
             <span v-if="error" class="invalid-feedback"><strong>{{ error }}</strong></span>
+
+            <input type="checkbox" :name="`delete_${name}`" :id="`delete-${name}`" :checked="remove" class="d-none">
         </div>
     </div>
 </template>
@@ -28,6 +30,7 @@
         data() {
             return {
                 src: this.default,
+                remove: false,
             }
         },
 
@@ -40,18 +43,15 @@
                 };
 
                 reader.readAsDataURL(event.target.files[0]);
+                this.remove = false;
             },
 
             clear(event) {
                 let input = event.target.nextElementSibling;
 
-                if ( ! input.value) {
-                    return;
-                }
-
-                input.value = '';
-                this.src = this.default;
-            }
+                this.src = input.value = '';
+                this.remove = Boolean(this.default);
+            },
         }
     }
 </script>

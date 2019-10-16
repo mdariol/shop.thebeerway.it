@@ -2071,6 +2071,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "InputImage",
   props: {
@@ -2087,7 +2089,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      src: this["default"]
+      src: this["default"],
+      remove: false
     };
   },
   methods: {
@@ -2101,16 +2104,12 @@ __webpack_require__.r(__webpack_exports__);
       };
 
       reader.readAsDataURL(event.target.files[0]);
+      this.remove = false;
     },
     clear: function clear(event) {
       var input = event.target.nextElementSibling;
-
-      if (!input.value) {
-        return;
-      }
-
-      input.value = '';
-      this.src = this["default"];
+      this.src = input.value = '';
+      this.remove = Boolean(this["default"]);
     }
   }
 });
@@ -41365,7 +41364,17 @@ var render = function() {
         ? _c("span", { staticClass: "invalid-feedback" }, [
             _c("strong", [_vm._v(_vm._s(_vm.error))])
           ])
-        : _vm._e()
+        : _vm._e(),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "d-none",
+        attrs: {
+          type: "checkbox",
+          name: "delete_" + _vm.name,
+          id: "delete-" + _vm.name
+        },
+        domProps: { checked: _vm.remove }
+      })
     ])
   ])
 }

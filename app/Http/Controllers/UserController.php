@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Rules\Password;
 use App\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use Spatie\Permission\Models\Role;
 
@@ -111,9 +113,7 @@ class UserController extends Controller
             'is_horeca' => request()->has('is_horeca')
         ]);
 
-        if (request()->has('profile_image')) {
-            $this->upload('profile_image', $user);
-        }
+        $this->upload('profile_image', $user);
 
         return redirect()->route('users.show', ['user' => $user->id]);
     }
@@ -176,22 +176,26 @@ class UserController extends Controller
         Helper
        ---------------------------------------------------------------------- */
 
-    protected function upload(string $file, User $user)
+//    protected function upload(string $file, User $user)
+//    {
+//        request()->validate([$file => ['image', 'max:1024']]);
+//
+//        if ($user->profile_image) {
+//            Storage::disk('public')->delete($user->profile_image);
+//        }
+//
+//        $name = request()->file($file)->hashName();
+//        $name = str_replace(pathinfo($name, 4), 'jpg', $name);
+//
+//        $file = Image::make(request()->file($file))->fit(500)
+//            ->encode('jpg', 75);
+//
+//        Storage::disk('public')->put("profile_images/$name", $file);
+//
+//        $user->update(['profile_image' => "profile_images/$name"]);
+//    }
+
+    protected function upload(string $file, Model $model, $callback = null)
     {
-        request()->validate([$file => ['image', 'max:1024']]);
-
-        if ($user->profile_image) {
-            Storage::disk('public')->delete($user->profile_image);
-        }
-
-        $name = request()->file($file)->hashName();
-        $name = str_replace(pathinfo($name, 4), 'jpg', $name);
-
-        $file = Image::make(request()->file($file))->fit(500)
-            ->encode('jpg', 75);
-
-        Storage::disk('public')->put("profile_images/$name", $file);
-
-        $user->update(['profile_image' => "profile_images/$name"]);
     }
 }
