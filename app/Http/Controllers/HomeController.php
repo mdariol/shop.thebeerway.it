@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Brewery;
+
 class HomeController extends Controller
 {
     /**
@@ -11,6 +13,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return view('home')->with('breweries', Brewery::all());
     }
 }

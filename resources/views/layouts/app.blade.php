@@ -30,7 +30,7 @@
                 <a class="navbar-brand" href="{{ url(request()->exists('packaging') ? str_replace('bottiglie','fusti',request()->getRequestUri()) : '/beers?packaging=fusti&stock=on')}}">
                     <img src="/Fusto.png" alt="Fusti" height="40px" >
                 </a>
-                <a class="navbar-brand" href="{{ url(request()->exists('packaging') ? str_replace('fusti','bottiglie',request()->getRequestUri()) : '/beers?packaging=fusti&stock=on')}}">
+                <a class="navbar-brand" href="{{ url(request()->exists('packaging') ? str_replace('fusti','bottiglie',request()->getRequestUri()) : '/beers?packaging=bottiglie&stock=on')}}">
                     <img src="/Bottiglia512.png" alt="Bottiglie" height="40px" >
                 </a>
 

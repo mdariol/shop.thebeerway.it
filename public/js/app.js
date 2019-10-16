@@ -1710,6 +1710,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 Vue.component('multiselect', vue_multiselect__WEBPACK_IMPORTED_MODULE_0___default.a);
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -40931,6 +40946,45 @@ var render = function() {
           placeholder: "Seleziona un'opzione",
           multiple: true
         },
+        scopedSlots: _vm._u(
+          [
+            {
+              key: "singleLabel",
+              fn: function(props) {
+                return _vm.name === "brewery"
+                  ? [
+                      _c("div", [
+                        _c("span", [_vm._v(_vm._s(props.option.name))])
+                      ])
+                    ]
+                  : undefined
+              }
+            },
+            {
+              key: "option",
+              fn: function(props) {
+                return _vm.name === "brewery"
+                  ? [
+                      _c("div", [
+                        _c("img", {
+                          staticClass: "option__image",
+                          attrs: {
+                            src: "/storage/" + props.option.logo,
+                            width: "40px",
+                            alt: "Immagine Birrificio"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("span", [_vm._v("   " + _vm._s(props.option.name))])
+                      ])
+                    ]
+                  : undefined
+              }
+            }
+          ],
+          null,
+          true
+        ),
         model: {
           value: _vm.values,
           callback: function($$v) {

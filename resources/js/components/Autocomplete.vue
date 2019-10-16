@@ -1,7 +1,22 @@
 <template>
     <div class="form-group">
         <label :for="name">{{ label }}</label>
-        <multiselect v-model="values" :options="options" label="name" track-by="name" :closeOnSelect="false" placeholder="Seleziona un'opzione" :multiple="true"></multiselect>
+        <multiselect v-model="values" :options="options" label="name" track-by="name" :closeOnSelect="false" placeholder="Seleziona un'opzione" :multiple="true">
+
+
+                <template slot="singleLabel" slot-scope="props" v-if="name === 'brewery'">
+                    <div>
+                        <span>{{ props.option.name }}</span>
+                    </div>
+                </template>
+                <template slot="option" slot-scope="props" v-if="name === 'brewery'">
+                    <div>
+                        <img class="option__image" :src="'/storage/' + props.option.logo" width="40px" alt="Immagine Birrificio">
+                        <span>   {{ props.option.name }}</span>
+                    </div>
+                </template>
+
+        </multiselect>
         <select :name="name+'[]'" multiple class="d-none">
             <option v-for="value in values" :value="value.name" selected>{{ value.name }}</option>
         </select>
