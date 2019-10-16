@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Brewery extends Model
 {
-    protected $fillable = ['name','isactive'];
+    protected $fillable = ['name','isactive','logo'];
 
     /**
      * The "booting" method of the model.

@@ -16,15 +16,26 @@
             </div>
             @foreach($products as $product)
                 <div class="row">
-                    <div class="col-7 text-left">{{ $product['packaging'] }} - {{ $product['beer'] }} - {{ $product['brewery'] }} </div>
+                    <div class="col-7 text-left">
+                        {{ $product['packaging'] }} -
+                        {{ $product['beer'] }} -
+                        {{ $product['brewery'] }} [
+                        {{ $beers->find($product['item']->getAttribute('id'))->stock - $beers->find($product['item']->getAttribute('id'))->requested_stock}}]
+                    </div>
                     <div class="col-1 border-0 p-0">
                         <a  href="{{'/beers/'.$product['item']->getAttribute('id').'/fixdowncart'}}" >
                             <img src="/Decrementa-TheBeerWay.png" alt="Diminuisci" height="20px" class="p-0">
                         </a>
                     </div>
-                    <div class="col-1 text-center border-0 p-0 ">
-                        {{$product['qty']}}
-                    </div>
+                    @if ($product['qty'] > $beers->find($product['item']->getAttribute('id'))->stock - $beers->find($product['item']->getAttribute('id'))->requested_stock)
+                        <div class="col-1 text-center border-0 p-0 bg-danger ">
+                            {{$product['qty']}}
+                        </div>
+                    @else
+                        <div class="col-1 text-center border-0 p-0 ">
+                            {{$product['qty']}}
+                        </div>
+                    @endif
                     <div class="col-1 border-0 p-0">
                         <a  href="{{'/beers/'.$product['item']->getAttribute('id').'/fixupcart'}}" >
                             <img src="/Incrementa-TheBeerWay.png" alt="Aumenta" height="20px" class="p-0">

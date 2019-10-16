@@ -30,7 +30,7 @@
                 <a class="navbar-brand" href="{{ url(request()->exists('packaging') ? str_replace('bottiglie','fusti',request()->getRequestUri()) : '/beers?packaging=fusti&stock=on')}}">
                     <img src="/Fusto.png" alt="Fusti" height="40px" >
                 </a>
-                <a class="navbar-brand" href="{{ url(request()->exists('packaging') ? str_replace('fusti','bottiglie',request()->getRequestUri()) : '/beers?packaging=fusti&stock=on')}}">
+                <a class="navbar-brand" href="{{ url(request()->exists('packaging') ? str_replace('fusti','bottiglie',request()->getRequestUri()) : '/beers?packaging=bottiglie&stock=on')}}">
                     <img src="/Bottiglia512.png" alt="Bottiglie" height="40px" >
                 </a>
 
@@ -109,6 +109,14 @@
             @if ($message = Session::get('success'))
                 <div class="container mb-4">
                     <div class="alert alert-success alert-block">
+                        {{ $message }}
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                    </div>
+                </div>
+            @endif
+            @if ($message = Session::get('error'))
+                <div class="container mb-4">
+                    <div class="alert alert-danger alert-block">
                         {{ $message }}
                         <button type="button" class="close" data-dismiss="alert">×</button>
                     </div>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Brewery;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class BreweryController extends Controller
 {
@@ -47,7 +49,11 @@ class BreweryController extends Controller
      */
     public function store(Request $request)
     {
-        Brewery::create(['name' => $request->name]);
+        $brewery = Brewery::create(['name' => $request->name]);
+
+        if (request()->has('logo')) {
+            $this->upload('logo', $brewery);
+        }
 
         return redirect('/breweries');
     }
@@ -86,6 +92,9 @@ class BreweryController extends Controller
         $brewery->update(request(['name']) + [
                 'isactive' => $request->has('isactive')
             ]);
+        if (request()->has('logo')) {
+            $this->upload('logo', $brewery);
+        }
 
         return redirect('/breweries');
     }
@@ -116,4 +125,25 @@ class BreweryController extends Controller
         return redirect('/breweries');
 
     }
+
+
+    protected function upload(string $file, Brewery $brewery)
+    {
+        request()->validate([$file => ['image', 'max:1024']]);
+
+        if ($brewery->logo) {
+            Storage::disk('public')->delete($brewery->logo);
+        }
+
+        $name = $brewery->name.'.jpg';
+
+        $file = Image::make(request()->file($file))
+            ->encode('jpg', 75);
+
+        Storage::disk('public')->put("brewery_logos/$name", $file);
+
+        $brewery->update(['logo' => "brewery_logos/$name"]);
+    }
+
+
 }

@@ -31,6 +31,45 @@
         <h3 class="mb-4">Disponibilità</h3>
         <a class="btn btn-dark mb-2 btn-lg" href="/beers?packaging=fusti&stock=on">Fusti</a>
         <a class="btn btn-warning mb-2 btn-lg" href="/beers?packaging=bottiglie&stock=on">Bottiglie</a>
+
+
+        <div id="carousel" class="carousel slide d-flex flex-column justify-content-center align-items-center" data-ride="carousel" >
+            <div class="carousel-inner">
+
+                @foreach($breweries as $brewery)
+                    @if ($loop->first)
+                        <div class="carousel-item active ">
+                    @else
+                        <div class="carousel-item">
+                    @endif
+                    <h2 class="text-center text-black-50 mt-3 mb-3">
+                        Birrificio {{$brewery->name}}
+                    </h2>
+                    @if ($brewery->logo)
+                        <img class="d-block" src="{{ asset('storage/'.$brewery->logo) }}"  style="height: 200px; ">
+                    @endif
+                    </div>
+                @endforeach
+
+            </div>
+            <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Precedente</span>
+            </a>
+            <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Successivo</span>
+            </a>
+        </div>
+
+
+
+
+
+
+
     </div>
+
+
 </div>
 @endsection

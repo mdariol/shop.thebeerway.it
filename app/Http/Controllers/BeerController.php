@@ -325,6 +325,12 @@ class BeerController extends Controller
 
         $request->session()->put('cart', $cart);
 
+
+        if (!$this->checkCart() and $cart->policy_accept){
+            return back()->with('error', 'Le disponibilità, nel frattempo, sono cambiate. Ricontrolla il carrello e modifica le quantità evidenziate in rosso prima di reinviare l\'ordine');
+        }
+
+
         $order = DB::transaction(function () use ($request, $cart) {
 
             if ($cart->order_id) {
@@ -398,7 +404,7 @@ class BeerController extends Controller
             return redirect('/orders')->with('success', 'Richiesta di Acquisto completata con successo');
         } else {
             auth()->user()->getDraftOrder();
-            return redirect('/orders')->with('error', 'Richiesta di Acquisto Fallita');
+            return redirect('/orders')->with('success', 'Carrello salvato in modalità bozza');
         }
     }
 
@@ -414,9 +420,33 @@ class BeerController extends Controller
             'products' => $cart->items,
             'totalPrice' => $cart->totalPrice,
             'deliverynote' => $cart->deliverynote,
-            'companies' => Company::all(),
+            'companies' => auth()->user()->companies,
             'shipping_addresses' => ShippingAddress::all(),
             'current_policy' => Policy::getCurrentPolicyName('vendita'),
+            'beers' => Beer::all(),
         ]);
     }
+
+    public function checkCart(){
+
+        $cart = Session::get('cart');
+
+        foreach ($cart->items as $item) {
+            if (!$item['qty']) {
+                continue;
+            }
+            $beer = Beer::find($item['item']->getAttribute('id'));
+            $stock = $beer->stock;
+            $requested_stock = $beer->requested_stock;
+            if ($beer->stock - $beer->requested_stock < $item['qty'] ) {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+
+
 }
