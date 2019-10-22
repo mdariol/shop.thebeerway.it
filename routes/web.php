@@ -108,25 +108,25 @@ Route::patch('/users/{user}/role', 'UserController@role')
 Route::patch('/users/{user}/password', 'UserController@password')
     ->name('users.password');
 
-/* ----- Company ----- */
+/* ----- Billing Profile ----- */
 
-Route::resource('companies', 'CompanyController');
-Route::get('/companies/{company}/delete', 'CompanyController@delete')
-    ->name('companies.delete');
-Route::patch('/companies/{company}/default', 'CompanyController@default')
-    ->name('companies.default');
-Route::patch('/companies/{company}/transition', 'CompanyController@transition')
-    ->name('companies.transition');
+Route::resource('billing-profiles', 'BillingProfileController');
+Route::get('/billing-profiles/{billing_profile}/delete', 'BillingProfileController@delete')
+    ->name('billing-profiles.delete');
+Route::patch('/billing-profiles/{billing_profile}/default', 'BillingProfileController@default')
+    ->name('billing-profiles.default');
+Route::patch('/billing-profiles/{billing_profile}/transition', 'BillingProfileController@transition')
+    ->name('billing-profiles.transition');
 
 /* ----- Shipping Address ----- */
 
-Route::resource('companies.shipping-addresses', 'ShippingAddressController', [
+Route::resource('billing-profiles.shipping-addresses', 'ShippingAddressController', [
     'except' => ['show', 'index']
 ]);
-Route::get('/companies/{company}/shipping-addresses/{shipping_address}/delete', 'ShippingAddressController@delete')
-    ->name('companies.shipping-addresses.delete');
-Route::patch('/companies/{company}/shipping-addresses/{shipping_address}/default', 'ShippingAddressController@default')
-    ->name('companies.shipping-addresses.default');
+Route::get('/billing-profiles/{billing_profile}/shipping-addresses/{shipping_address}/delete', 'ShippingAddressController@delete')
+    ->name('billing-profiles.shipping_addresses.delete');
+Route::patch('/billing-profiles/{billing_profile}/shipping-addresses/{shipping_address}/default', 'ShippingAddressController@default')
+    ->name('billing-profiles.shipping-addresses.default');
 
 /* --------------------------------------------------------------------------
     Admin
@@ -138,10 +138,10 @@ Route::group([
     'namespace' => 'Admin',
 ], function () {
 
-    /* ----- Company ----- */
+    /* ----- BillingProfile ----- */
 
-    Route::get('/companies', 'CompanyController@index')
-        ->name('admin.companies.index');
+    Route::get('/billing-profiles', 'BillingProfileController@index')
+        ->name('admin.billing-profiles.index');
 
     /* ----- Order ----- */
 
@@ -166,8 +166,8 @@ Route::group([
     'namespace' => 'Api'
 ], function () {
 
-    /* ----- Company ----- */
+    /* ----- BillingProfile ----- */
 
-    Route::get('/companies/{company}/shipping-address', 'CompanyController@shippingAddress')
-        ->name('api.companies.shipping-address');
+    Route::get('/billing-profiles/{billing_profile}/shipping-address', 'BillingProfileController@shippingAddress')
+        ->name('api.billing-profiles.shipping-address');
 });

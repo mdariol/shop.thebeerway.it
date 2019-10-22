@@ -2,20 +2,18 @@
 
 @section('content')
     <div class="container">
-        <div class="alert alert-primary" role="alert">I dati della società verranno utilizzati come <strong>indirizzo di fatturazione</strong> negli ordini.</div>
+        <h1><em>Nuovo</em> Profilo di Fatturazione</h1>
 
-        <h1><em>Nuova</em> Società</h1>
-
-        <form method="POST" action="{{ route('companies.store') }}">
+        <form method="POST" action="{{ route('billing-profiles.store') }}">
             @csrf
 
             <div class="form-row">
                 <div class="form-group col-md">
                     <label for="business-name">Ragione sociale</label>
-                    <input type="text" name="business_name" id="business-name" placeholder="BrewPub S.p.A." required
-                           class="form-control {{ $errors->has('business_name') ? 'is-invalid' : '' }}">
-                    @if($errors->has('business_name'))
-                        <div class="invalid-feedback">{{ $errors->first('business_name') }}</div>
+                    <input type="text" name="name" id="business-name" placeholder="BrewPub S.p.A." required
+                           class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}">
+                    @if($errors->has('name'))
+                        <div class="invalid-feedback">{{ $errors->first('name') }}</div>
                     @endif
                 </div>
 

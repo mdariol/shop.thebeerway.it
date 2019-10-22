@@ -75,7 +75,7 @@
 
                 <div class="p-2 col-sm-9 text-left">
                     <img src="/Espandi-TheBeerWay.png" alt="Espandi" height="20px" >
-                    {{ $order->date }} - {{ $order->number }}/{{$order->id}} - {{ $order->user->name }} - {{ $order->company->business_name }}
+                    {{ $order->date }} - {{ $order->number }}/{{$order->id}} - {{ $order->user->name }} - {{ $order->billing_profile->name }}
                 </div>
                 <div class="p-2 col-sm-1 text-right">{{ __("states.$order->state")}}</div>
                 <div class="p-2 col-sm-2 text-right">{{ $order->total_amount }}</div>
@@ -114,7 +114,7 @@
                     @endif
                     <h4>Fatturare a:</h4>
                     <p>
-                        {{$order->company->business_name}} - {{ $order->company->postal_code }} - {{ $order->company->route  }}
+                        {{$order->billing_profile->name}} - {{ $order->billing_profile->postal_code }} - {{ $order->billing_profile->route  }}
                     </p>
                 </div>
             </div>

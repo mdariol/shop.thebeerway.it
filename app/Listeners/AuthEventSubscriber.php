@@ -4,11 +4,9 @@ namespace App\Listeners;
 
 use App\Mail\AuthRegistered;
 use App\User;
-use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Http\Request;
 
 class AuthEventSubscriber
 {
@@ -45,12 +43,11 @@ class AuthEventSubscriber
     /**
      * Load Cart from Draft Order if exist.
      *
-     * @param \Illuminate\Auth\Events\Authenticated $event
+     * @param \Illuminate\Auth\Events\Login $event
      */
     public function loadCartFromDraftOrder(Login $event)
     {
        $event->user->getDraftOrder();
-
     }
 
 

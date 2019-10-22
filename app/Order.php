@@ -16,7 +16,8 @@ class Order extends Model
 
     protected $fillable = [
         'date', 'number', 'state', 'deliverynote', 'user_id',
-        'company_id', 'shipping_address_id', 'policy_id', 'policy_accept', 'total_amount',
+        'billing_profile_id', 'shipping_address_id', 'policy_id',
+        'policy_accept', 'total_amount',
     ];
 
     protected static function boot()
@@ -36,9 +37,9 @@ class Order extends Model
         return $this->hasMany(Line::class);
     }
 
-    public function company()
+    public function billing_profile()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(BillingProfile::class);
     }
 
     public function shipping_address()
@@ -50,5 +51,4 @@ class Order extends Model
     {
         return $this->belongsTo(Policy::class);
     }
-
 }

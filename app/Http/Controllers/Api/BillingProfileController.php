@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Company;
+use App\BillingProfile;
 use App\Http\Controllers\Controller;
 
-class CompanyController extends Controller
+class BillingProfileController extends Controller
 {
     public function __construct()
     {
@@ -15,15 +15,15 @@ class CompanyController extends Controller
     /**
      * Get default shipping address.
      *
-     * @param  \App\Company  $company
+     * @param  \App\BillingProfile  $billing_profile
      *
      * @return mixed
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function shippingAddress(Company $company)
+    public function shippingAddress(BillingProfile $billing_profile)
     {
-        $this->authorize('view', $company);
+        $this->authorize('view', $billing_profile);
 
-        return $company->default_shipping_address;
+        return $billing_profile->default_shipping_address;
     }
 }

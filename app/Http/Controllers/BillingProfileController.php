@@ -2,27 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
+use App\BillingProfile;
 
-class CompanyController extends Controller
+class BillingProfileController extends Controller
 {
     /**
      * Validation rules.
      */
     const RULES = [
-        'business_name' => 'required',
+        'name' => 'required',
         'route' => 'required',
         'postal_code' => 'required',
         'city' => 'required',
         'district' => 'required',
         'country' => 'required',
-        'vat_number' => 'required|alpha_num|size:11',
+        'vat_number' => 'required',
         'pec' => 'nullable|email',
         'sdi' => 'nullable|alpha_num|min:6|max:7',
     ];
 
     /**
-     * CompanyController constructor.
+     * BillingProfileController constructor.
      */
     public function __construct()
     {
@@ -36,8 +36,8 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        return view('company.index')->with([
-            'companies' => auth()->user()->companies,
+        return view('billing-profile.index')->with([
+            'billingProfiles' => auth()->user()->billing_profiles,
         ]);
     }
 
@@ -48,7 +48,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        return view('company.create');
+        return view('billing-profile.create');
     }
 
     /**
@@ -58,125 +58,125 @@ class CompanyController extends Controller
      */
     public function store()
     {
-        /** @var \App\Company $company */
-        $company = Company::create(request()->validate(self::RULES) + [
+        /** @var \App\BillingProfile $billing_profile */
+        $billing_profile = BillingProfile::create(request()->validate(self::RULES) + [
             'owner_id' => auth()->id(),
         ]);
 
-        $company->users()->attach(auth()->user());
+        $billing_profile->users()->attach(auth()->user());
 
         if (request()->has('is_default')) {
-            $company->default();
+            $billing_profile->default();
         }
 
-        return redirect()->route('companies.show', ['company' => $company->id]);
+        return redirect()->route('billing-profiles.show', ['billing_profile' => $billing_profile->id]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\BillingProfile  $billing_profile
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function show(Company $company)
+    public function show(BillingProfile $billing_profile)
     {
-        $this->authorize('view', $company);
+        $this->authorize('view', $billing_profile);
 
-        return view('company.show')->with([
-            'company' => $company,
+        return view('billing-profile.show')->with([
+            'billingProfile' => $billing_profile,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\BillingProfile  $billing_profile
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function edit(Company $company)
+    public function edit(BillingProfile $billing_profile)
     {
-        $this->authorize('update', $company);
+        $this->authorize('update', $billing_profile);
 
-        return view('company.edit')->with([
-            'company' => $company,
+        return view('billing-profile.edit')->with([
+            'billingProfile' => $billing_profile,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Company  $company
+     * @param  \App\BillingProfile  $billingProfile
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Company $company)
+    public function update(BillingProfile $billingProfile)
     {
-        $this->authorize('update', $company);
+        $this->authorize('update', $billingProfile);
 
-        $company->update(request()->validate(self::RULES));
+        $billingProfile->update(request()->validate(self::RULES));
 
         if (request()->has('is_default')) {
-            $company->default();
+            $billingProfile->default();
         }
 
-        return redirect()->route('companies.show', ['company' => $company->id]);
+        return redirect()->route('billing-profiles.show', ['billingProfile' => $billingProfile->id]);
     }
 
     /**
      * Show the form for deleting the specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\BillingProfile  $billingProfile
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function delete(Company $company)
+    public function delete(BillingProfile $billingProfile)
     {
-        $this->authorize('delete', $company);
+        $this->authorize('delete', $billingProfile);
 
-        return view('company.delete')->with(['company' => $company]);
+        return view('billing-profile.delete')->with(['billingProfile' => $billingProfile]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Company  $company
+     * @param  \App\BillingProfile  $billingProfile
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Exception
      */
-    public function destroy(Company $company)
+    public function destroy(BillingProfile $billingProfile)
     {
         // TODO: Implement soft delete.
-        $this->authorize('delete', $company);
+        $this->authorize('delete', $billingProfile);
 
         // TODO: Use model event to detach the relationship.
-        $company->users()->detach();
+        $billingProfile->users()->detach();
 
-        $company->delete();
+        $billingProfile->delete();
 
-        return redirect()->route('companies.index');
+        return redirect()->route('billing-profiles.index');
     }
 
     /**
      * Set the specified resource as default.
      *
-     * @param  \App\Company  $company
+     * @param  \App\BillingProfile  $billingProfile
      *
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function default(Company $company)
+    public function default(BillingProfile $billingProfile)
     {
-        $this->authorize('default', $company);
+        $this->authorize('default', $billingProfile);
 
-        $company->default();
+        $billingProfile->default();
 
         return back();
     }
@@ -184,17 +184,17 @@ class CompanyController extends Controller
     /**
      * Apply transition to specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\BillingProfile  $billingProfile
      *
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function transition(Company $company)
+    public function transition(BillingProfile $billingProfile)
     {
-        $this->authorize('transition', $company);
+        $this->authorize('transition', $billingProfile);
 
-        $company->state_machine->apply(request()->transition);
-        $company->save();
+        $billingProfile->state_machine->apply(request()->transition);
+        $billingProfile->save();
 
         return back();
     }

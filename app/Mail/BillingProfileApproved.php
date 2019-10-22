@@ -2,30 +2,30 @@
 
 namespace App\Mail;
 
-use App\Company;
+use App\BillingProfile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class CompanyApproved extends Mailable
+class BillingProfileApproved extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
-     * @var \App\Company
+     * @var \App\BillingProfile
      */
-    public $company;
+    public $billingProfile;
 
     /**
      * Create a new message instance.
      *
-     * @param \App\Company $company
+     * @param \App\BillingProfile $billingProfile
      *
      * @return void
      */
-    public function __construct(Company $company)
+    public function __construct(BillingProfile $billingProfile)
     {
-        $this->company = $company;
+        $this->billingProfile = $billingProfile;
     }
 
     /**
@@ -36,6 +36,6 @@ class CompanyApproved extends Mailable
     public function build()
     {
         return $this->subject('Società riconosciuta!')
-            ->markdown('emails.company.approved');
+            ->markdown('emails.billing-profile.approved');
     }
 }

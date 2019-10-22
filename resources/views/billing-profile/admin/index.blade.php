@@ -11,7 +11,7 @@
                 <a href="#filters" class="d-block text-secondary" data-toggle="collapse">Filtri</a>
             </div>
             <div class="card-body collapse" id="filters">
-                <form class="mb-0" action="{{ route('admin.companies.index') }}">
+                <form class="mb-0" action="{{ route('admin.billing-profiles.index') }}">
                     <div class="form-row">
                         <div class="form-group col-md">
                             <label for="name">Nome</label>
@@ -42,7 +42,7 @@
                     </div>
 
                     <button class="btn btn-primary">Filtra</button>
-                    <a href="{{ route('admin.companies.index') }}" class="btn btn-link">Reset</a>
+                    <a href="{{ route('admin.billing-profiles.index') }}" class="btn btn-link">Reset</a>
                 </form>
             </div>
         </div>
@@ -60,30 +60,30 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($companies as $company)
+                @foreach($billingProfiles as $billingProfile)
                     <tr>
-                        <td class="d-none d-md-table-cell align-middle">{{ $company->id }}</td>
+                        <td class="d-none d-md-table-cell align-middle">{{ $billingProfile->id }}</td>
                         <td class="align-middle">
-                            <a href="{{ route('companies.show', ['company' => $company->id]) }}">{{ $company->business_name }}</a>
+                            <a href="{{ route('billing-profiles.show', ['billing-profile' => $billingProfile->id]) }}">{{ $billingProfile->name }}</a>
                         </td>
-                        <td class="d-none d-md-table-cell align-middle">{{ $company->owner->name }}</td>
-                        <td class="d-none d-md-table-cell align-middle">{{ $company->address }}</td>
+                        <td class="d-none d-md-table-cell align-middle">{{ $billingProfile->owner->name }}</td>
+                        <td class="d-none d-md-table-cell align-middle">{{ $billingProfile->address }}</td>
                         <td class="align-middle">
-                            <state-machine :action='@json(route('companies.transition', ['company' => $company->id]))'
-                                           @if($company->is_pending)
+                            <state-machine :action='@json(route('billing-profiles.transition', ['billing-profile' => $billingProfile->id]))'
+                                           @if($billingProfile->is_pending)
                                            :message='@json("Questa società deve essere verificata. Cosa vuoi fare?")'
-                                           @elseif($company->is_approved)
+                                           @elseif($billingProfile->is_approved)
                                            :message='@json("Questa società è stata approvata. Hai cambiato idea?")'
                                            @else
                                            :message='@json('Questa società è stata rifiutata. Hai cambiato idea?')'
                                            @endif
-                                           :transitions='@json(array_values($company->state_machine->getPossibleTransitions()))'
-                                           :state='@json($company->state)'></state-machine>
+                                           :transitions='@json(array_values($billingProfile->state_machine->getPossibleTransitions()))'
+                                           :state='@json($billingProfile->state)'></state-machine>
                         </td>
                         <td class="align-middle">
-                            <a href="{{ route('companies.edit', ['id' => $company->id]) }}"
+                            <a href="{{ route('billing-profiles.edit', ['id' => $billingProfile->id]) }}"
                                class="btn btn-primary">Modifica</a>
-                            <a href="{{ route('companies.delete', ['company' => $company->id]) }}"
+                            <a href="{{ route('billing-profiles.delete', ['billing-profile' => $billingProfile->id]) }}"
                                class="btn btn-link">Elimina</a>
                         </td>
                     </tr>
@@ -92,7 +92,7 @@
             </table>
         </div>
 
-        @empty($companies)
+        @empty($billingProfiles)
             <p style="padding-left: .75rem;">Non c'è alcuna società...</p>
         @endempty
     </div>

@@ -4,7 +4,7 @@ return [
     'approval' => [
         'graph' => 'approval',
         'property_path' => 'state',
-        'class' => \App\Company::class,
+        'class' => \App\BillingProfile::class,
         'states' => [
             'approval',
             'approved',

@@ -20,8 +20,8 @@
                 </template>
 
             </multiselect>
-             <select  name="company_id" id="company-id" class="d-none" >
-                <option v-if="company" :value="company.id" selected>{{ company.business_name }}</option>
+             <select  name="billing_profile_id" id="company-id" class="d-none" >
+                <option v-if="company" :value="company.id" selected>{{ company.name }}</option>
                 <option v-else value selected></option>
             </select>
         </div>
@@ -85,7 +85,7 @@
             onCompanyChange: function (event) {
                 this.shipping_address = {};
                 this.filtered_shipping_addresses = this.shipping_addresses.filter((address) => {
-                    return address.company_id  === event.id;
+                    return address.billing_profile_id  === event.id;
                 });
 
                 // assegna l'unico indirizzo di spedizione presente
@@ -95,7 +95,7 @@
                 } else {
                     // assegna indirizzo di spedizione di default
                     //
-                    axios.get('/api/companies/' + event.id + '/shipping-address').then(response => {
+                    axios.get('/api/billing-profiles/' + event.id + '/shipping-address').then(response => {
                         this.shipping_address = response.data;
                     });
                 }

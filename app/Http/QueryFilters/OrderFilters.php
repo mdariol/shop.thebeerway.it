@@ -23,10 +23,10 @@ class OrderFilters extends QueryFilter
         });
     }
 
-    public function company(string $search): Builder
+    public function billing(string $search): Builder
     {
-        return $this->builder->whereHas('company', function ($query) use ($search) {
-            $query->where('business_name', 'ILIKE', "%$search%");
+        return $this->builder->whereHas('billing_profile', function ($query) use ($search) {
+            $query->where('name', 'ILIKE', "%$search%");
         });
     }
 

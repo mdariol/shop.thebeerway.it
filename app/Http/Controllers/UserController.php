@@ -21,7 +21,7 @@ class UserController extends Controller
     ];
 
     /**
-     * CompanyController constructor.
+     * UserController constructor.
      */
     public function __construct()
     {
@@ -113,7 +113,9 @@ class UserController extends Controller
             'is_horeca' => request()->has('is_horeca')
         ]);
 
-        $this->upload('profile_image', $user);
+        if (request()->has('profile_image')) {
+            $this->upload('profile_image', $user);
+        }
 
         return redirect()->route('users.show', ['user' => $user->id]);
     }
@@ -176,26 +178,22 @@ class UserController extends Controller
         Helper
        ---------------------------------------------------------------------- */
 
-//    protected function upload(string $file, User $user)
-//    {
-//        request()->validate([$file => ['image', 'max:1024']]);
-//
-//        if ($user->profile_image) {
-//            Storage::disk('public')->delete($user->profile_image);
-//        }
-//
-//        $name = request()->file($file)->hashName();
-//        $name = str_replace(pathinfo($name, 4), 'jpg', $name);
-//
-//        $file = Image::make(request()->file($file))->fit(500)
-//            ->encode('jpg', 75);
-//
-//        Storage::disk('public')->put("profile_images/$name", $file);
-//
-//        $user->update(['profile_image' => "profile_images/$name"]);
-//    }
-
-    protected function upload(string $file, Model $model, $callback = null)
+    protected function upload(string $file, User $user)
     {
+        request()->validate([$file => ['image', 'max:1024']]);
+
+        if ($user->profile_image) {
+            Storage::disk('public')->delete($user->profile_image);
+        }
+
+        $name = request()->file($file)->hashName();
+        $name = str_replace(pathinfo($name, 4), 'jpg', $name);
+
+        $file = Image::make(request()->file($file))->fit(500)
+            ->encode('jpg', 75);
+
+        Storage::disk('public')->put("profile_images/$name", $file);
+
+        $user->update(['profile_image' => "profile_images/$name"]);
     }
 }

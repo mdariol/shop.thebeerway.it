@@ -10,20 +10,19 @@ class Cart
     public $totalQty = 0;
     public $totalPrice = 0;
     public $deliverynote = null;
-    public $company_id = null;
+    public $billing_profile_id = null;
     public $shipping_address_id = null;
     public $policy_accept = null;
 
     public function __construct($oldCart)
     {
         if ($oldCart){
-
             $this->order_id = $oldCart->order_id;
             $this->items = $oldCart->items;
             $this->totalQty = $oldCart->totalQty;
             $this->totalPrice = $oldCart->totalPrice;
             $this->deliverynote = $oldCart->deliverynote;
-            $this->company_id = $oldCart->company_id;
+            $this->billing_profile_id = $oldCart->billing_profile_id;
             $this->shipping_address_id = $oldCart->shipping_address_id;
             $this->policy_accept = $oldCart->policy_accept;
         }
@@ -49,6 +48,4 @@ class Cart
         $this->totalQty++;
         $this->totalPrice+= $item->price->distribution;
     }
-
-
 }

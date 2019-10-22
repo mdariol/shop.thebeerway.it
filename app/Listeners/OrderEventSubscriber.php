@@ -2,15 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Mail\AuthRegistered;
-use App\User;
-use App\Order;
-use App\Beer;
-use Illuminate\Auth\Events\Authenticated;
-use Illuminate\Auth\Events\Login;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Http\Request;
 use SM\Event\SMEvents;
 use SM\Event\TransitionEvent;
 
@@ -54,7 +46,9 @@ class OrderEventSubscriber
     {
         $transition = $event->getTransition();
 
-        if ($transition !== 'send' and $transition !== 'cancel' and $transition !== 'ship') return;
+        if ($transition !== 'send'
+            && $transition !== 'cancel'
+            && $transition !== 'ship') return;
 
         $order = $event->getStateMachine()->getObject();
 
@@ -63,14 +57,15 @@ class OrderEventSubscriber
                 $line->beer->update([
                     'requested_stock' => $line->beer->requested_stock + $line->qty
                 ]);
+
                 continue;
             }
+
             $line->beer->update([
                 'requested_stock' => $line->beer->requested_stock - $line->qty
             ]);
         }
     }
-
 
     /**
      * Send requested order.
@@ -81,9 +76,10 @@ class OrderEventSubscriber
     {
         if ($event->getTransition() !== 'send') return;
 
+        /** @var \App\Order $order */
         $order = $event->getStateMachine()->getObject();
 
-        Mail::to($order->company->users)->send(new \App\Mail\RequestedOrderSent($order));
+        Mail::to($order->billing_profile->users)->send(new \App\Mail\RequestedOrderSent($order));
     }
 
     /**
@@ -95,9 +91,10 @@ class OrderEventSubscriber
     {
         if ($event->getTransition() !== 'cancel') return;
 
+        /** @var \App\Order $order */
         $order = $event->getStateMachine()->getObject();
 
-        Mail::to($order->company->users)->send(new \App\Mail\CanceledOrderSent($order));
+        Mail::to($order->billing_profile->users)->send(new \App\Mail\CanceledOrderSent($order));
     }
 
     /**
@@ -109,11 +106,9 @@ class OrderEventSubscriber
     {
         if ($event->getTransition() !== 'reset') return;
 
+        /** @var \App\Order $order */
         $order = $event->getStateMachine()->getObject();
 
-        Mail::to($order->company->users)->send(new \App\Mail\ResetOrderSent($order));
+        Mail::to($order->billing_profile->users)->send(new \App\Mail\ResetOrderSent($order));
     }
-
-
-
 }

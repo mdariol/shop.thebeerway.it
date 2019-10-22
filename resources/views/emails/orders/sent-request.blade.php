@@ -23,8 +23,8 @@ La tua richiesta d'ordine **{{ $order->number }}/{{ $order->id }}** del **{{ $or
 > {{ $order->shipping_address->postal_code }} - {{ $order->shipping_address->route  }}
 
 ## Fatturare a:
-> {{ $order->company->business_name }}
-> {{ $order->company->postal_code }} - {{ $order->company->route  }}
+> {{ $order->billing_profile->name }}
+> {{ $order->billing_profile->postal_code }} - {{ $order->billing_profile->route  }}
 
 @if ($order->deliverynote)
 ## Note di spedizione:

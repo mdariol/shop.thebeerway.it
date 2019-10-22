@@ -9,17 +9,17 @@ class ShippingAddress extends Model
 {
     protected $fillable = [
         'name', 'route', 'postal_code', 'city',
-        'district', 'country', 'phone', 'company_id',
+        'district', 'country', 'phone', 'billing_profile_id',
     ];
 
     /**
-     * Get related company.
+     * Get related billing profile.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function company()
+    public function billing_profile()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(BillingProfile::class);
     }
 
     /**
@@ -42,8 +42,8 @@ class ShippingAddress extends Model
      */
     public function default()
     {
-        DB::table('company_default_shipping_address')->updateOrInsert(
-            ['company_id' => $this->company->id],
+        DB::table('billing_profile_default_shipping_address')->updateOrInsert(
+            ['billing_profile_id' => $this->billing_profile->id],
             ['shipping_address_id' => $this->id]
         );
 
@@ -51,14 +51,14 @@ class ShippingAddress extends Model
     }
 
     /**
-     * Whether is default shipping address for related company or not.
+     * Whether is default shipping address for related billing-profile or not.
      *
      * @return bool
      */
     public function getIsDefaultAttribute()
     {
-        return DB::table('company_default_shipping_address')->where([
-            ['company_id', '=', $this->company->id],
+        return DB::table('billing_profile_default_shipping_address')->where([
+            ['billing_profile_id', '=', $this->billing_profile->id],
             ['shipping_address_id', '=', $this->id],
         ])->exists();
     }

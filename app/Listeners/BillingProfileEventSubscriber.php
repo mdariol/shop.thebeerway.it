@@ -2,13 +2,13 @@
 
 namespace App\Listeners;
 
-use App\Events\CompanyCreated;
+use App\Events\BillingProfileCreated;
 use App\User;
 use Illuminate\Support\Facades\Mail;
 use SM\Event\SMEvents;
 use SM\Event\TransitionEvent;
 
-class CompanyEventSubscriber
+class BillingProfileEventSubscriber
 {
     /**
      * Register the listeners for the subscriber.
@@ -19,27 +19,27 @@ class CompanyEventSubscriber
     {
 //        $events->listen(
 //            SMEvents::POST_TRANSITION,
-//            'App\Listeners\CompanyEventSubscriber@assignPublicanRole'
+//            'App\Listeners\BillingProfileEventSubscriber@assignPublicanRole'
 //        );
 
 //        $events->listen(
 //            SMEvents::POST_TRANSITION,
-//            'App\Listeners\CompanyEventSubscriber@removePubicanRole'
+//            'App\Listeners\BillingProfileEventSubscriber@removePubicanRole'
 //        );
 
         $events->listen(
-            CompanyCreated::class,
-            'App\Listeners\CompanyEventSubscriber@sendCompanyApprovalEmail'
+            BillingProfileCreated::class,
+            'App\Listeners\BillingProfileEventSubscriber@sendCompanyApprovalEmail'
         );
 
         $events->listen(
             SMEvents::POST_TRANSITION,
-            'App\Listeners\CompanyEventSubscriber@sendCompanyApprovedEmail'
+            'App\Listeners\BillingProfileEventSubscriber@sendCompanyApprovedEmail'
         );
     }
 
     /**
-     * Send approved email to company's users.
+     * Send approved email to billing-profile's users.
      *
      * @param  \SM\Event\TransitionEvent  $event
      */
@@ -48,27 +48,27 @@ class CompanyEventSubscriber
         if ($event->getStateMachine()->getGraph() !== 'approval'
             || $event->getTransition() !== 'approve') return;
 
-        /** @var \App\Company $company */
-        $company = $event->getStateMachine()->getObject();
+        /** @var \App\BillingProfile $billingProfile */
+        $billingProfile = $event->getStateMachine()->getObject();
 
-        Mail::to($company->users)
-            ->send(new \App\Mail\CompanyApproved($company));
+        Mail::to($billingProfile->users)
+            ->send(new \App\Mail\BillingProfileApproved($billingProfile));
     }
 
     /**
      * Send approval email to admins.
      *
-     * @param  \App\Events\CompanyCreated  $event
+     * @param  \App\Events\BillingProfileCreated  $event
      */
-    public function sendCompanyApprovalEmail(CompanyCreated $event)
+    public function sendCompanyApprovalEmail(BillingProfileCreated $event)
     {
         $admins = User::role('Admin')->get();
 
-        Mail::to($admins)->send(new \App\Mail\CompanyCreated($event->company));
+        Mail::to($admins)->send(new \App\Mail\BillingProfileCreated($event->billingProfile));
     }
 
     /**
-     * Assign Publican role to company's users.
+     * Assign Publican role to billing-profile's users.
      *
      * @param \SM\Event\TransitionEvent $event
      */
@@ -86,7 +86,7 @@ class CompanyEventSubscriber
     }
 
     /**
-     * Remove Publican role to company's users.
+     * Remove Publican role to billing-profile's users.
      *
      * @param \SM\Event\TransitionEvent $event
      */

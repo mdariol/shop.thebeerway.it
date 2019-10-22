@@ -2,10 +2,10 @@
 
 /* @var $factory \Illuminate\Database\Eloquent\Factory */
 
-use App\Company;
+use App\BillingProfile;
 use Faker\Generator as Faker;
 
-$factory->define(Company::class, function (Faker $faker) {
+$factory->define(BillingProfile::class, function (Faker $faker) {
     return [
         'business_name' => $faker->company,
         'route' => $faker->streetName . ', ' . $faker->buildingNumber,

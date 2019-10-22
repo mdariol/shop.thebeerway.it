@@ -15,15 +15,18 @@ class CreateCompaniesTable extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->bigIncrements('id');
+
             $table->string('business_name');
+            $table->string('vat_number');
+            $table->string('sdi')->nullable();
+            $table->string('pec')->nullable();
+
             $table->string('route');
             $table->string('postal_code');
             $table->string('city');
             $table->string('district');
             $table->string('country');
-            $table->string('vat_number');
-            $table->string('sdi')->nullable();
-            $table->string('pec')->nullable();
+
             $table->timestamps();
         });
     }

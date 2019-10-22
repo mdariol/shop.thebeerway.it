@@ -4,7 +4,7 @@
     <div class="container">
         <h1><em>Nuovo</em> Indirizzo di Spedizione</h1>
 
-        <form method="POST" action="{{ route('companies.shipping-addresses.store', ['company' => $company->id]) }}">
+        <form method="POST" action="{{ route('billing-profiles.shipping-addresses.store', ['billing-profile' => $billingProfile->id]) }}">
             @csrf
 
             <div class="form-group">
@@ -36,7 +36,7 @@
             </div>
 
             <button class="btn btn-primary">Salva</button>
-            <a href="{{ route('companies.show', ['company' => $company->id]) }}" class="btn btn-link">Annulla</a>
+            <a href="{{ route('billing-profiles.show', ['billing-profile' => $billingProfile->id]) }}" class="btn btn-link">Annulla</a>
         </form>
     </div>
 @endsection

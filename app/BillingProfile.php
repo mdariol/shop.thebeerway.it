@@ -7,14 +7,14 @@ use App\Traits\HasState;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Company extends Model
+class BillingProfile extends Model
 {
     use HasState, HasFilters;
 
     const WORKFLOW = 'approval';
 
     protected $fillable = [
-        'business_name', 'vat_number', 'route', 'postal_code',
+        'name', 'vat_number', 'route', 'postal_code',
         'city', 'district', 'country', 'pec', 'sdi', 'owner_id',
     ];
 
@@ -24,7 +24,7 @@ class Company extends Model
      * @var array
      */
     protected $dispatchesEvents = [
-        'created' => \App\Events\CompanyCreated::class,
+        'created' => \App\Events\BillingProfileCreated::class,
     ];
 
     /**
@@ -33,7 +33,7 @@ class Company extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function users() {
-        return $this->belongsToMany(User::class, 'company_has_users');
+        return $this->belongsToMany(User::class, 'billing_profile_has_users');
     }
 
     /**
@@ -54,38 +54,38 @@ class Company extends Model
      */
     public function getDefaultShippingAddressAttribute()
     {
-        $id = DB::table('company_default_shipping_address')
-            ->where('company_id', $this->id)
+        $id = DB::table('billing_profile_default_shipping_address')
+            ->where('billing_profile_id', $this->id)
             ->value('shipping_address_id');
 
         return ShippingAddress::find($id);
     }
 
     /**
-     * Set this company as default for logged-in user.
+     * Set this billing-profile as default for logged-in user.
      *
      * @return $this
      */
     public function default()
     {
-        DB::table('user_default_company')->updateOrInsert(
+        DB::table('user_default_billing_profile')->updateOrInsert(
             ['user_id' => auth()->id()],
-            ['company_id' => $this->id]
+            ['billing_profile_id' => $this->id]
         );
 
         return $this;
     }
 
     /**
-     * Whether is default company or not for logged-in user.
+     * Whether is default billing-profile or not for logged-in user.
      *
      * @return bool
      */
     public function getIsDefaultAttribute()
     {
-        return DB::table('user_default_company')->where([
+        return DB::table('user_default_billing_profile')->where([
             ['user_id', '=', auth()->id()],
-            ['company_id', '=', $this->id]
+            ['billing_profile_id', '=', $this->id]
         ])->exists();
     }
 

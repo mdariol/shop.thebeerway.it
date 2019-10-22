@@ -2,13 +2,11 @@
 
 namespace App;
 
-use App\Mail\UserVerifyEmail;
 use App\Traits\HasFilters;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Session;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -45,26 +43,26 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * Get related companies.
+     * Get related billing profiles.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function companies()
+    public function billing_profiles()
     {
-        return $this->belongsToMany(Company::class, 'company_has_users');
+        return $this->belongsToMany(BillingProfile::class, 'billing_profile_has_users');
     }
 
     /**
-     * Get related default company.
+     * Get related default billing-profile.
      *
-     * @return \App\Company|null
+     * @return \App\BillingProfile|null
      */
-    public function getDefaultCompanyAttribute()
+    public function getDefaultBillingProfileAttribute()
     {
-        $id = DB::table('user_default_company')
-            ->where('user_id', $this->id)->value('company_id');
+        $id = DB::table('user_default_billing_profile')
+            ->where('user_id', $this->id)->value('billing_profile_id');
 
-        return Company::find($id);
+        return BillingProfile::find($id);
     }
 
     /**
@@ -78,18 +76,18 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Whether user owns specified company or not.
+     * Whether user owns specified billing-profile or not.
+     *
+     * @param \App\BillingProfile $billingProfile
      *
      * @return bool
      */
-    public function owns(Company $company)
+    public function owns(BillingProfile $billingProfile)
     {
-        return $this->is($company->owner);
+        return $this->is($billingProfile->owner);
     }
 
     public function getDraftOrder(){
-
-
         $order = $this->orders()->where('state','draft')->first();
 
         if ($order) {
@@ -97,7 +95,7 @@ class User extends Authenticatable implements MustVerifyEmail
             $oldCart->order_id = $order->id;
             $oldCart->totalPrice = $order->total_amount;
             $oldCart->deliverynote = $order->deliverynote;
-            $oldCart->company_id = $order->company_id;
+            $oldCart->billing_profile_id = $order->billing_profile_id;
             $oldCart->shipping_address_id = $order->shipping_address_id;
 
             $storedItem = null;
@@ -120,9 +118,5 @@ class User extends Authenticatable implements MustVerifyEmail
 
             request()->session()->put('cart', $cart);
         }
-
     }
-
-
-
 }

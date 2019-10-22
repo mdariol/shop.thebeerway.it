@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Beer;
 use App\Brewery;
 use App\Color;
-use App\Company;
+use App\BillingProfile;
 use App\Line;
 use App\Order;
 use App\Packaging;
@@ -319,7 +319,7 @@ class BeerController extends Controller
 
         $cart = new Cart($oldCart);
         $cart->deliverynote = $request->deliverynote;
-        $cart->company_id = $request->company_id;
+        $cart->billing_profile_id = $request->billing_profile_id;
         $cart->shipping_address_id = $request->shipping_address_id;
         $cart->policy_accept = $request->accept;
 
@@ -362,7 +362,7 @@ class BeerController extends Controller
                     'state' => 'draft',
                     'deliverynote' => $cart->deliverynote,
                     'user_id' => auth()->user()->id,
-                    'company_id' => $request->company_id,
+                    'billing_profile_id' => $request->billing_profile_id,
                     'shipping_address_id' => $request->shipping_address_id,
                     'policy_accept' => $cart->policy_accept,
                     'policy_id' => Policy::getCurrentPolicyName('vendita')->id,
@@ -420,7 +420,7 @@ class BeerController extends Controller
             'products' => $cart->items,
             'totalPrice' => $cart->totalPrice,
             'deliverynote' => $cart->deliverynote,
-            'companies' => auth()->user()->companies,
+            'billing_profiles' => auth()->user()->billing_profiles,
             'shipping_addresses' => ShippingAddress::all(),
             'current_policy' => Policy::getCurrentPolicyName('vendita'),
             'beers' => Beer::all(),
