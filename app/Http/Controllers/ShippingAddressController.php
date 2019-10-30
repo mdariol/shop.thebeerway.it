@@ -55,24 +55,24 @@ class ShippingAddressController extends Controller
             $shippingAddress->default();
         }
 
-        return redirect()->route('billing-profiles.show', ['billing-profile' => $billingProfile->id]);
+        return redirect()->route('billing-profiles.show', ['billing_profile' => $billingProfile->id]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\BillingProfile  $company
+     * @param  \App\BillingProfile  $billingProfile
      * @param  \App\ShippingAddress  $shippingAddress
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function edit(BillingProfile $company, ShippingAddress $shippingAddress)
+    public function edit(BillingProfile $billingProfile, ShippingAddress $shippingAddress)
     {
         $this->authorize('update', $shippingAddress);
 
         return view('shipping-address.edit')->with([
-            'billing-profile' => $company,
+            'billingProfile' => $billingProfile,
             'shippingAddress' => $shippingAddress,
         ]);
     }
@@ -80,13 +80,13 @@ class ShippingAddressController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\BillingProfile  $company
+     * @param  \App\BillingProfile  $billingProfile
      * @param  \App\ShippingAddress  $shippingAddress
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(BillingProfile $company, ShippingAddress $shippingAddress)
+    public function update(BillingProfile $billingProfile, ShippingAddress $shippingAddress)
     {
         $this->authorize('update', $shippingAddress);
 
@@ -96,24 +96,24 @@ class ShippingAddressController extends Controller
             $shippingAddress->default();
         }
 
-        return redirect()->route('companies.show', ['billing-profile' => $company->id]);
+        return redirect()->route('billing-profiles.show', ['billing_profile' => $billingProfile->id]);
     }
 
     /**
      * Show the form for deleting the specified resource.
      *
-     * @param  \App\BillingProfile  $company
+     * @param  \App\BillingProfile  $billingProfile
      * @param  \App\ShippingAddress  $shippingAddress
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function delete(BillingProfile $company, ShippingAddress $shippingAddress)
+    public function delete(BillingProfile $billingProfile, ShippingAddress $shippingAddress)
     {
         $this->authorize('delete', $shippingAddress);
 
         return view('shipping-address.delete')->with([
-            'billing-profile' => $company,
+            'billingProfile' => $billingProfile,
             'shippingAddress' => $shippingAddress,
         ]);
     }
@@ -121,37 +121,37 @@ class ShippingAddressController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\BillingProfile  $company
+     * @param  \App\BillingProfile  $billingProfile
      * @param  \App\ShippingAddress  $shippingAddress
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Exception
      */
-    public function destroy(BillingProfile $company, ShippingAddress $shippingAddress)
+    public function destroy(BillingProfile $billingProfile, ShippingAddress $shippingAddress)
     {
         $this->authorize('delete', $shippingAddress);
 
         $shippingAddress->delete();
 
-        return redirect()->route('companies.show', ['billing-profile' => $company->id]);
+        return redirect()->route('billing-profiles.show', ['billing_profile' => $billingProfile->id]);
     }
 
     /**
      * Set the specified resource as default.
      *
-     * @param  \App\BillingProfile  $company
+     * @param  \App\BillingProfile  $billingProfile
      * @param  \App\ShippingAddress  $shippingAddress
      *
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function default(BillingProfile $company, ShippingAddress $shippingAddress)
+    public function default(BillingProfile $billingProfile, ShippingAddress $shippingAddress)
     {
         $this->authorize('default', $shippingAddress);
 
         $shippingAddress->default();
 
-        return redirect()->route('companies.show', [$company->id]);
+        return redirect()->route('billing-profiles.show', [$billingProfile->id]);
     }
 }

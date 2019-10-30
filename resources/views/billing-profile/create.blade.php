@@ -7,6 +7,8 @@
         <form method="POST" action="{{ route('billing-profiles.store') }}">
             @csrf
 
+            <input type="radio" name="legal_person" class="d-none" checked>
+
             <div class="form-row">
                 <div class="form-group col-md">
                     <label for="business-name">Ragione sociale</label>

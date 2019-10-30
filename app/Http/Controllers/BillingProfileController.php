@@ -10,14 +10,10 @@ class BillingProfileController extends Controller
      * Validation rules.
      */
     const RULES = [
-        'name' => 'required',
-        'route' => 'required',
-        'postal_code' => 'required',
-        'city' => 'required',
-        'district' => 'required',
-        'country' => 'required',
-        'vat_number' => 'required',
-        'pec' => 'nullable|email',
+        'name' => 'required', 'route' => 'required',
+        'postal_code' => 'required', 'city' => 'required',
+        'district' => 'required', 'country' => 'required',
+        'vat_number' => 'required', 'pec' => 'nullable|email',
         'sdi' => 'nullable|alpha_num|min:6|max:7',
     ];
 
@@ -48,6 +44,10 @@ class BillingProfileController extends Controller
      */
     public function create()
     {
+        if ( ! request()->has('legal_person')) {
+            return view('billing-profile.choice');
+        }
+
         return view('billing-profile.create');
     }
 
@@ -61,6 +61,7 @@ class BillingProfileController extends Controller
         /** @var \App\BillingProfile $billing_profile */
         $billing_profile = BillingProfile::create(request()->validate(self::RULES) + [
             'owner_id' => auth()->id(),
+            'legal_person' => request()->has('legal_person'),
         ]);
 
         $billing_profile->users()->attach(auth()->user());

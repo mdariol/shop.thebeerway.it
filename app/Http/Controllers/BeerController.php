@@ -128,7 +128,6 @@ class BeerController extends Controller
      */
     public function store()
     {
-
         request()->validate([
             'brewery_id'=>['required'],
             'packaging_id'=>['required']
@@ -446,7 +445,4 @@ class BeerController extends Controller
         return true;
 
     }
-
-
-
 }
