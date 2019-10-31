@@ -10,6 +10,7 @@ Log of unreleased changes.
 
 - Adds `isHoreca()` method on `User` model.
 - Removes `is_horeca` field on `User` model.
+- Adds `legal_person` filter on `BillingProfile` model. 
 
 ### Fixed
 

@@ -32,11 +32,11 @@ abstract class QueryFilter
             $reflection = new \ReflectionMethod($this, $filter);
             $requiresParam = (boolean) $reflection->getNumberOfRequiredParameters();
 
-            if (empty($parameter) && $requiresParam) {
+            if (is_null($parameter) && $requiresParam) {
                 continue;
             }
 
-            empty($parameter) ? $this->$filter() : $this->$filter($parameter);
+            is_null($parameter) ? $this->$filter() : $this->$filter($parameter);
         }
 
         return $this->builder;
