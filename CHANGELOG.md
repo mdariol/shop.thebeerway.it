@@ -6,9 +6,14 @@ All notable changes to this project will be documented in this file.
 
 Log of unreleased changes.
 
+### Changed
+
+- Adds `isHoreca()` method on `User` model.
+
 ### Fixed
 
 - Fixes Maps API key retrieving.
+- Unlocks `assignPublicanRole()` and `removePublicanRole()` methods.
 
 ## v1.0.0
 

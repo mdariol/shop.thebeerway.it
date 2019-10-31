@@ -17,15 +17,15 @@ class BillingProfileEventSubscriber
      */
     public function subscribe($events)
     {
-//        $events->listen(
-//            SMEvents::POST_TRANSITION,
-//            'App\Listeners\BillingProfileEventSubscriber@assignPublicanRole'
-//        );
+        $events->listen(
+            SMEvents::POST_TRANSITION,
+            'App\Listeners\BillingProfileEventSubscriber@assignPublicanRole'
+        );
 
-//        $events->listen(
-//            SMEvents::POST_TRANSITION,
-//            'App\Listeners\BillingProfileEventSubscriber@removePubicanRole'
-//        );
+        $events->listen(
+            SMEvents::POST_TRANSITION,
+            'App\Listeners\BillingProfileEventSubscriber@removePubicanRole'
+        );
 
         $events->listen(
             BillingProfileCreated::class,
@@ -99,7 +99,7 @@ class BillingProfileEventSubscriber
 
         /** @var \App\User $user */
         foreach ($users as $user) {
-            if ($user->is_horeca) continue;
+            if ($user->isHoreca()) continue;
 
             $user->removeRole('Publican');
         }

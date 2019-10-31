@@ -7,7 +7,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
-use Session;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -85,6 +84,19 @@ class User extends Authenticatable implements MustVerifyEmail
     public function owns(BillingProfile $billingProfile)
     {
         return $this->is($billingProfile->owner);
+    }
+
+    /**
+     * Whether user is horeca or not.
+     *
+     * @return bool
+     */
+    public function isHoreca()
+    {
+        return $this->billing_profiles()
+            ->where('state', 'approved')
+            ->where('legal_person', true)
+            ->exists();
     }
 
     public function getDraftOrder(){
