@@ -24,7 +24,7 @@ class BillingProfileEventSubscriber
 
         $events->listen(
             SMEvents::POST_TRANSITION,
-            'App\Listeners\BillingProfileEventSubscriber@removePubicanRole'
+            'App\Listeners\BillingProfileEventSubscriber@removePublicanRole'
         );
 
         $events->listen(
@@ -94,6 +94,10 @@ class BillingProfileEventSubscriber
     {
         if ($event->getStateMachine()->getGraph() !== 'approval'
             || $event->getTransition() !== 'reject') return;
+
+        // We're saving BillingProfile to DB so that isHoreca()
+        // method works properly.
+        $event->getStateMachine()->getObject()->save();
 
         $users = $event->getStateMachine()->getObject()->users;
 
