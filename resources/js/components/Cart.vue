@@ -6,14 +6,14 @@
 
                 <template slot="singleLabel" slot-scope="props">
                     <div>
-                        <span>{{ props.option.business_name }}</span> <br>
+                        <span>{{ props.option.name }}</span> <br>
                         <span>{{ props.option.postal_code }}</span> -
                         <span>{{ props.option.route }}</span>
                     </div>
                 </template>
                 <template slot="option" slot-scope="props">
                     <div>
-                        <span>{{ props.option.business_name }}</span> <br>
+                        <span>{{ props.option.name }}</span> <br>
                         <span>{{ props.option.postal_code }}</span> -
                         <span>{{ props.option.route }}</span>
                     </div>

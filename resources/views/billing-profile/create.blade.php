@@ -63,7 +63,7 @@
             </div>
 
             <button class="btn btn-primary">Salva</button>
-            <a href="{{ back() }}" class="btn btn-link">Annulla</a>
+            <a href="{{ URL::previous() }}" class="btn btn-link">Annulla</a>
         </form>
     </div>
 @endsection
