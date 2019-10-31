@@ -44,9 +44,9 @@ class BillingProfileController extends Controller
      */
     public function create()
     {
-        if ( ! request()->has('legal_person')) {
-            return view('billing-profile.choice');
-        }
+//        if ( ! request()->has('legal_person')) {
+//            return view('billing-profile.choice');
+//        }
 
         return view('billing-profile.create');
     }
@@ -61,7 +61,8 @@ class BillingProfileController extends Controller
         /** @var \App\BillingProfile $billing_profile */
         $billing_profile = BillingProfile::create(request()->validate(self::RULES) + [
             'owner_id' => auth()->id(),
-            'legal_person' => request()->has('legal_person'),
+            'legal_person' => true,
+            // 'legal_person' => request()->has('legal_person'),
         ]);
 
         $billing_profile->users()->attach(auth()->user());
