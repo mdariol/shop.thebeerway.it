@@ -61,15 +61,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <span class="col-md-4 text-md-right">Attività commerciale</span>
-
-                            <div class="custom-control custom-switch col-md-6" style="padding-left: 3.25rem;">
-                                <input type="checkbox" name="is_horeca" id="is-horeca" class="custom-control-input">
-                                <label for="is-horeca" class="custom-control-label">Ho.Re.Ca.</label>
-                            </div>
-                        </div>
-
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">Registra</button>

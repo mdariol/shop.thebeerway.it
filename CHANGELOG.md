@@ -9,6 +9,7 @@ Log of unreleased changes.
 ### Changed
 
 - Adds `isHoreca()` method on `User` model.
+- Removes `is_horeca` field on `User` model.
 
 ### Fixed
 
