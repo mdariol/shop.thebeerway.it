@@ -41044,7 +41044,7 @@ var render = function() {
         _c("multiselect", {
           attrs: {
             options: _vm.filtered_options,
-            label: "business_name",
+            label: "name",
             "show-labels": false,
             closeOnSelect: true,
             placeholder: "Seleziona un indirizzo di fatturazione"

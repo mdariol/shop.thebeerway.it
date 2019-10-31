@@ -124,7 +124,7 @@ Route::resource('billing-profiles.shipping-addresses', 'ShippingAddressControlle
     'except' => ['show', 'index']
 ]);
 Route::get('/billing-profiles/{billing_profile}/shipping-addresses/{shipping_address}/delete', 'ShippingAddressController@delete')
-    ->name('billing-profiles.shipping_addresses.delete');
+    ->name('billing-profiles.shipping-addresses.delete');
 Route::patch('/billing-profiles/{billing_profile}/shipping-addresses/{shipping_address}/default', 'ShippingAddressController@default')
     ->name('billing-profiles.shipping-addresses.default');
 

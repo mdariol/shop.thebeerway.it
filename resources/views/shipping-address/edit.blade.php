@@ -4,7 +4,7 @@
     <div class="container">
         <h1><em>Nuovo</em> Indirizzo di Spedizione</h1>
 
-        <form method="POST" action="{{ route('companies.shipping-addresses.update', ['billing-profile' => $company->id, 'shipping_address' => $shippingAddress->id]) }}">
+        <form method="POST" action="{{ route('billing-profiles.shipping-addresses.update', ['billing_profile' => $billingProfile->id, 'shipping_address' => $shippingAddress->id]) }}">
             @csrf
             @method('PATCH')
 
@@ -38,7 +38,7 @@
             </div>
 
             <button class="btn btn-primary">Salva</button>
-            <a href="{{ route('companies.shipping-addresses.delete', ['billing-profile' => $company->id, 'shipping_address' => $shippingAddress->id]) }}" class="btn btn-link">Elimina</a>
+            <a href="{{ route('billing-profiles.shipping-addresses.delete', ['billing_profile' => $billingProfile->id, 'shipping_address' => $shippingAddress->id]) }}" class="btn btn-link">Elimina</a>
         </form>
     </div>
 @endsection

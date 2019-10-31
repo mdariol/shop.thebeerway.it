@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="form-group">
-            <label for="company-id">Azienda</label>
-            <multiselect @select="onCompanyChange" v-model="company" :options="filtered_options" label="business_name" :show-labels="false" :closeOnSelect="true" placeholder="Seleziona un indirizzo di fatturazione" >
+            <label for="company-id">Indirizzo di Fatturazione</label>
+            <multiselect @select="onCompanyChange" v-model="company" :options="filtered_options" label="name" :show-labels="false" :closeOnSelect="true" placeholder="Seleziona un indirizzo di fatturazione" >
 
                 <template slot="singleLabel" slot-scope="props">
                     <div>

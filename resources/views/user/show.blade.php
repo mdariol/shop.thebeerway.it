@@ -45,6 +45,7 @@
                         </div>
                         <div class="card-footer">
                             <a href="{{ route('billing-profiles.edit', ['billing-profile' => $billingProfile->id]) }}" class="card-link">Modifica</a>
+                            <a href="{{ route('billing-profiles.show', ['billing-profile' => $billingProfile->id]) }}" class="card-link">Indirizzi di Spedizione</a>
                         </div>
                     </div>
                 @endforeach
