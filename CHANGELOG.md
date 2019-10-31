@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+Log of unreleased changes.
+
+### Fixed
+
+- Fixes Maps API key retrieving.
+
 ## v1.0.0
 
 Released on **2019/10/31**.
@@ -21,7 +29,7 @@ Released on **2019/10/31**.
 
 ### Fixed
 
-- Fixes backup strategy. 
+- Fixes backup strategy.
 
 ## v0.3.0
 
