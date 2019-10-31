@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v1.0.0
 
-Log of unreleased changes.
+Released on **2019/10/31**.
 
 ### Added
 
