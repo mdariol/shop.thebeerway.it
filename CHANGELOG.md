@@ -16,6 +16,7 @@ Log of unreleased changes.
 
 - Fixes Maps API key retrieving.
 - Unlocks `assignPublicanRole()` and `removePublicanRole()` methods.
+- Fixes `BillingProfile` views issues.
 
 ## v1.0.0
 

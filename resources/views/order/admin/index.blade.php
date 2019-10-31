@@ -26,9 +26,9 @@
                         </div>
 
                         <div class="form-group col-md">
-                            <label for="company">Società</label>
-                            <input type="text" name="company" id="company" class="form-control"
-                                   value="{{ request()->company }}">
+                            <label for="billing-profile">Profilo di Fatturazione</label>
+                            <input type="text" name="billing" id="billing-profile" class="form-control"
+                                   value="{{ request()->billing_profile }}">
                         </div>
 
                         <div class="form-group col-md">
@@ -55,7 +55,7 @@
                 <tr>
                     <th class="d-none d-md-table-cell">#</th>
                     <th class="d-none d-md-table-cell">Utente</th>
-                    <th>Società</th>
+                    <th>Profilo di Fatturazione</th>
                     <th>Totale</th>
                     <th>Stato</th>
                 </tr>
@@ -65,7 +65,7 @@
                     <tr>
                         <td class="d-none d-md-table-cell align-middle">{{ $order->number }}</td>
                         <td class="d-none d-md-table-cell align-middle">{{ $order->user->name }}</td>
-                        <td class="align-middle">{{ $order->company->business_name }}</td>
+                        <td class="align-middle">{{ $order->billing_profile->name }}</td>
                         <td class="align-middle">€ {{ $order->total_amount }}</td>
                         <td class="align-middle">
                             <state-machine :action='@json(route('orders.transition', ['order' => $order->id]))'
