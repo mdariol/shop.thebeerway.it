@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 Log of unreleased changes.
 
+### Added
+
+- Adds honeypot functionality via `spatie/laravel-honeypot` library.
+
 ### Changed
 
 - Adds `isHoreca()` method on `User` model.

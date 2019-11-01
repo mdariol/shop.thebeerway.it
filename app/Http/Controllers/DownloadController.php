@@ -2,11 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Beer;
-use App\Brewery;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-
 class DownloadController extends Controller
 {
     /**

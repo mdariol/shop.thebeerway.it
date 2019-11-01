@@ -91,7 +91,9 @@ Route::resource('lines', 'LineController');
 
 /* ----- Auth ----- */
 
-Auth::routes(['verify' => true]);
+Route::middleware(\Spatie\Honeypot\ProtectAgainstSpam::class)->group(function () {
+    Auth::routes(['verify' => true]);
+});
 
 Route::get('/login/{provider}', 'Auth\LoginController@redirectToProvider');
 Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
@@ -128,6 +130,11 @@ Route::get('/billing-profiles/{billing_profile}/shipping-addresses/{shipping_add
 Route::patch('/billing-profiles/{billing_profile}/shipping-addresses/{shipping_address}/default', 'ShippingAddressController@default')
     ->name('billing-profiles.shipping-addresses.default');
 
+/* -----  Resource download----- */
+
+Route::get('/download', 'DownloadController@download')
+    ->name('download');
+
 /* --------------------------------------------------------------------------
     Admin
    -------------------------------------------------------------------------- */
@@ -148,14 +155,6 @@ Route::group([
     Route::get('/orders', 'OrderController@index')
         ->name('admin.orders.index');
 });
-
-
-/* -----  image download----- */
-
-Route::get('/download', 'DownloadController@download')
-    ->name('download');
-
-
 
 /* --------------------------------------------------------------------------
     API
