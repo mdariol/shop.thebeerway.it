@@ -8,6 +8,8 @@
             {{ 'Birra' }};
             {{ 'Birrificio' }};
             {{ 'Formato' }};
+            {{ 'Stile' }};
+            {{ 'Descrizione' }};
             {{ 'Stock' }};
             {{ 'Horeca' }};
             {{ 'Acquisto' }};
@@ -22,6 +24,8 @@
                     {{ $beer->name }};
                     {{ $beer->brewery->name }};
                     {{ $beer->packaging ? $beer->packaging->name : '' }};
+                    {{ $beer->style ? $beer->style->name : '' }};
+                    {{ htmlentities(str_replace(';', '--', $beer->description), ENT_NOQUOTES, 'UTF-8') }};
                     {{ $beer->stock }};
                     @if ($beer->price)
                         {{$beer->price->horeca ? number_format($beer->price->horeca,2,',','.') : 0}};
