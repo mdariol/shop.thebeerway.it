@@ -22,6 +22,7 @@
         "sebdesign/laravel-state-machine": "^2.0",
         "spatie/laravel-activitylog": "^3.7",
         "spatie/laravel-backup": "^6.2",
+        "spatie/laravel-honeypot": "^1.4",
         "spatie/laravel-permission": "^2.37"
     },
     "require-dev": {

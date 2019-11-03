@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="container">
-        <h1>Società</h1>
+        <h1>Profili di Fatturazione</h1>
 
-        <p class="mb-4">Elenco delle società.</p>
+        <p class="mb-4">Elenco dei profili di fatturazione.</p>
 
         <div class="card bg-light mb-4">
             <div class="card-header">
@@ -19,6 +19,11 @@
                         </div>
 
                         <div class="form-group col-md">
+                            <label for="owner">Proprietario</label>
+                            <input type="text" name="owner" id="owner" class="form-control" value="{{ request()->owner }}">
+                        </div>
+
+                        <div class="form-group col-md">
                             <label for="state">Stato</label>
                             <select name="state" id="state" class="form-control">
                                 <option selected value> -- seleziona un valore -- </option>
@@ -30,13 +35,11 @@
                         </div>
 
                         <div class="form-group col-md">
-                            <label for="owner">Proprietario</label>
-                            <select name="owner" id="owner" class="form-control">
-                                <option value selected> -- seleziona un valore -- </option>
-                                @foreach(\App\User::all() as $user)
-                                    <option {{ request()->owner == $user->id ? 'selected' : ''}}
-                                            value="{{ $user->id }}">{{ $user->name }}</option>
-                                @endforeach
+                            <label for="legal_person">Tipologia</label>
+                            <select name="legal_person" id="legal-person" class="form-control">
+                                <option selected value> -- seleziona un valore -- </option>
+                                <option value="1" {{ request()->legal_person === '1' ? 'selected' : ''  }}>Azienda</option>
+                                <option value="0" {{ request()->legal_person === '0' ? 'selected' : ''  }}>Privato</option>
                             </select>
                         </div>
                     </div>
@@ -55,6 +58,7 @@
                     <th>Nome</th>
                     <th class="d-none d-md-table-cell">Proprietario</th>
                     <th class="d-none d-md-table-cell">Indirizzo</th>
+                    <th class="d-none d-md-table-cell">Tipologia</th>
                     <th>Stato</th>
                     <th>Operazioni</th>
                 </tr>
@@ -68,6 +72,7 @@
                         </td>
                         <td class="d-none d-md-table-cell align-middle">{{ $billingProfile->owner->name }}</td>
                         <td class="d-none d-md-table-cell align-middle">{{ $billingProfile->address }}</td>
+                        <td class="d-none d-md-table-cell align-middle">{{ $billingProfile->legal_person ? 'Azienda' : 'Privato' }}</td>
                         <td class="align-middle">
                             <state-machine :action='@json(route('billing-profiles.transition', ['billing-profile' => $billingProfile->id]))'
                                            @if($billingProfile->is_pending)
@@ -92,8 +97,8 @@
             </table>
         </div>
 
-        @empty($billingProfiles)
+        @if( ! $billingProfiles->count())
             <p style="padding-left: .75rem;">Non c'è alcuna società...</p>
-        @endempty
+        @endif
     </div>
 @endsection

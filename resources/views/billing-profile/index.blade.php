@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="container">
-        <h1>Società</h1>
+        <h1>Profili di Fatturazione</h1>
 
-        <p>L'elenco delle tue società.</p>
+        <p>L'elenco dei tuoi profili di fatturazione.</p>
 
         <a href="{{ route('billing-profiles.create') }}" class="btn btn-primary mb-5">Aggiungi</a>
 

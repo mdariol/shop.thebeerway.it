@@ -8,6 +8,27 @@ Log of unreleased changes.
 
 ### Added
 
+- Adds honeypot functionality via `spatie/laravel-honeypot` library.
+
+### Changed
+
+- Adds `isHoreca()` method on `User` model.
+- Removes `is_horeca` field on `User` model.
+- Adds `legal_person` filter on `BillingProfile` model.
+- Removes `choice.blade.php` view. 
+
+### Fixed
+
+- Fixes Maps API key retrieving.
+- Unlocks `assignPublicanRole()` and `removePublicanRole()` methods.
+- Fixes `BillingProfile` views issues.
+
+## v1.0.0
+
+Released on **2019/10/31**.
+
+### Added
+
 - Adds `ShippingAddress` model.
 - Adds `BillingProfile` model.
 - Use [winzou/state-machine](https://github.com/winzou/state-machine) library to manage states.
@@ -21,7 +42,7 @@ Log of unreleased changes.
 
 ### Fixed
 
-- Fixes backup strategy. 
+- Fixes backup strategy.
 
 ## v0.3.0
 

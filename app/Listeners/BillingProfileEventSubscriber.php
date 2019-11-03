@@ -17,15 +17,15 @@ class BillingProfileEventSubscriber
      */
     public function subscribe($events)
     {
-//        $events->listen(
-//            SMEvents::POST_TRANSITION,
-//            'App\Listeners\BillingProfileEventSubscriber@assignPublicanRole'
-//        );
+        $events->listen(
+            SMEvents::POST_TRANSITION,
+            'App\Listeners\BillingProfileEventSubscriber@assignPublicanRole'
+        );
 
-//        $events->listen(
-//            SMEvents::POST_TRANSITION,
-//            'App\Listeners\BillingProfileEventSubscriber@removePubicanRole'
-//        );
+        $events->listen(
+            SMEvents::POST_TRANSITION,
+            'App\Listeners\BillingProfileEventSubscriber@removePublicanRole'
+        );
 
         $events->listen(
             BillingProfileCreated::class,
@@ -95,11 +95,15 @@ class BillingProfileEventSubscriber
         if ($event->getStateMachine()->getGraph() !== 'approval'
             || $event->getTransition() !== 'reject') return;
 
+        // We're saving BillingProfile to DB so that isHoreca()
+        // method works properly.
+        $event->getStateMachine()->getObject()->save();
+
         $users = $event->getStateMachine()->getObject()->users;
 
         /** @var \App\User $user */
         foreach ($users as $user) {
-            if ($user->is_horeca) continue;
+            if ($user->isHoreca()) continue;
 
             $user->removeRole('Publican');
         }

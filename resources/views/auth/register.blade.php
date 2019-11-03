@@ -10,6 +10,7 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
+                        @honeypot
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nome') }}</label>
@@ -58,15 +59,6 @@
 
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <span class="col-md-4 text-md-right">Attività commerciale</span>
-
-                            <div class="custom-control custom-switch col-md-6" style="padding-left: 3.25rem;">
-                                <input type="checkbox" name="is_horeca" id="is-horeca" class="custom-control-input">
-                                <label for="is-horeca" class="custom-control-label">Ho.Re.Ca.</label>
                             </div>
                         </div>
 
