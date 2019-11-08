@@ -14,7 +14,7 @@ class BillingProfile extends Model
     const WORKFLOW = 'approval';
 
     protected $fillable = [
-        'name', 'vat_number', 'route', 'postal_code',
+        'name', 'vat_number', 'route', 'postal_code', 'legal_person',
         'city', 'district', 'country', 'pec', 'sdi', 'owner_id',
     ];
 
