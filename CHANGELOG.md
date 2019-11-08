@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+Log of unreleased changes.
+
+### Changed
+
+- Adds `InputAutocomplete.vue` component.
+
 ## 1.0.1
 
 Released on **2019/11/5**.
