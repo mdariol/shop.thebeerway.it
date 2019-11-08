@@ -9,6 +9,7 @@ Log of unreleased changes.
 ### Changed
 
 - Adds `InputAutocomplete.vue` component.
+- Admin can select `owner` on `BillingProfile` creation.
 
 ## 1.0.1
 

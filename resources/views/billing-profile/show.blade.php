@@ -26,8 +26,8 @@
         <dl class="row">
             <dt class="col-md-2">Partita IVA</dt><dd class="col-md-10">IT-{{ $billingProfile->vat_number }}</dd>
             <dt class="col-md-2">Indirizzo</dt><dd class="col-md-10">{{ $billingProfile->address }}</dd>
-            <dt class="col-md-2">Codice SDI</dt><dd class="col-md-10">{{ $billingProfile->sdi }}</dd>
-            <dt class="col-md-2">E-mail certificata</dt><dd class="col-md-10">{{ $billingProfile->pec }}</dd>
+            @if($billingProfile->sdi) <dt class="col-md-2">Codice SDI</dt><dd class="col-md-10">{{ $billingProfile->sdi }}</dd> @endif
+            @if($billingProfile->pec) <dt class="col-md-2">E-mail certificata</dt><dd class="col-md-10">{{ $billingProfile->pec }}</dd> @endif
         </dl>
 
         <a href="{{ route('billing-profiles.edit', ['id' => $billingProfile->id]) }}" class="btn btn-primary mb-5">Modifica</a>

@@ -7,6 +7,13 @@
         <form method="POST" action="{{ route('billing-profiles.store') }}">
             @csrf
 
+            @role('Admin')
+                <input-autocomplete :route='@json(route('users.index'))' :search-by='@json('email')'
+                                    :label='@json('Utente')' :option-label='@json('email')' :name='@json('user')'
+                                    @error('user') :error='@json($message)' @enderror
+                                    :description='@json('Seleziona il proprietario di questo profilo.')'></input-autocomplete>
+            @endrole
+
             <input type="radio" name="legal_person" class="d-none" checked>
 
             <div class="form-row">
@@ -60,7 +67,7 @@
 
             <div class="form-group custom-control custom-switch">
                 <input type="checkbox" name="is_default" id="is-default" class="custom-control-input">
-                <label class="custom-control-label" for="is-default">Società predefinita</label>
+                <label class="custom-control-label" for="is-default">Profilo predefinito</label>
                 <small class="form-text text-muted">Verrà usato come default negli ordini.</small>
             </div>
 

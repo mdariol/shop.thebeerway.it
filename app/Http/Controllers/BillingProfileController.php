@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\BillingProfile;
+use App\User;
 
 class BillingProfileController extends Controller
 {
@@ -58,14 +59,21 @@ class BillingProfileController extends Controller
      */
     public function store()
     {
+        $user = auth()->user();
+
+        if ($user->hasRole('Admin') && request()->has('user')) {
+            request()->validate(['user' => 'exists:users,id']);
+
+            $user = User::find(request()->user);
+        }
+
         /** @var \App\BillingProfile $billing_profile */
         $billing_profile = BillingProfile::create(request()->validate(self::RULES) + [
-            'owner_id' => auth()->id(),
+            'owner_id' => $user->id,
             'legal_person' => true,
-            // 'legal_person' => request()->has('legal_person'),
         ]);
 
-        $billing_profile->users()->attach(auth()->user());
+        $billing_profile->users()->attach($user);
 
         if (request()->has('is_default')) {
             $billing_profile->default();
