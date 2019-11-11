@@ -15,6 +15,10 @@ Log of unreleased changes.
 - `App\BillingProfile::getDefaultShippingAddressAttribute()` will be removed in v2.0.0, use 
 `App\BillingProfile::shippingAddress()` instead.
 
+### Removed
+
+- Removes `...\Api\BillingProfileController` class.
+
 ## 1.0.2
 
 Released on **2019/11/11**.

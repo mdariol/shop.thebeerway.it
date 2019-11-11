@@ -1889,7 +1889,7 @@ Vue.component('multiselect', vue_multiselect__WEBPACK_IMPORTED_MODULE_0___defaul
       } else {
         // assegna indirizzo di spedizione di default
         //
-        axios.get('/api/billing-profiles/' + event.id + '/shipping-address').then(function (response) {
+        axios.get('/billing-profiles/' + event.id + '/shipping-address').then(function (response) {
           _this.shipping_address = response.data;
         });
       }

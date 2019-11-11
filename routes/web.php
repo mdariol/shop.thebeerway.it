@@ -157,18 +157,3 @@ Route::group([
     Route::get('/orders', 'OrderController@index')
         ->name('admin.orders.index');
 });
-
-/* --------------------------------------------------------------------------
-    API
-   -------------------------------------------------------------------------- */
-
-Route::group([
-    'prefix' => 'api',
-    'namespace' => 'Api'
-], function () {
-
-    /* ----- BillingProfile ----- */
-
-    Route::get('/billing-profiles/{billing_profile}/shipping-address', 'BillingProfileController@shippingAddress')
-        ->name('api.billing-profiles.shipping-address');
-});
