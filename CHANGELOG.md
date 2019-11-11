@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+Log of unreleased changes.
+
+### Changed
+
+- Moves `shippingAddress()` method from `...\Api\BillingProfileController` to `...\BillingProfileController`.
+
+### Deprecated
+
+- `App\BillingProfile::getDefaultShippingAddressAttribute()` will be removed in v2.0.0, use 
+`App\BillingProfile::shippingAddress()` instead.
+
 ## 1.0.2
 
 Released on **2019/11/11**.

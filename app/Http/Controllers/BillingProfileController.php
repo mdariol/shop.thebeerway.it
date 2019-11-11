@@ -208,4 +208,23 @@ class BillingProfileController extends Controller
 
         return back();
     }
+
+    /**
+     * Get default or fisrt shipping-address of the specified resource.
+     *
+     * @param  BillingProfile  $billingProfile
+     *
+     * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function shippingAddress(BillingProfile $billingProfile)
+    {
+        $this->authorize('view', $billingProfile);
+
+        if (request()->wantsJson()) {
+            return $billingProfile->shippingAddress();
+        }
+
+        abort(404);
+    }
 }
