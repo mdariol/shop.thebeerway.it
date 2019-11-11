@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 1.0.2
 
-Log of unreleased changes.
+Released on **2019/11/11**.
 
 ### Changed
 
@@ -21,7 +21,7 @@ Released on **2019/11/5**.
 
 ### Added
 
-- Adds honeypot functionality via `spatie/laravel-honeypot` library.
+- Use [spatie/laravel-honeypot](https://github.com/spatie/laravel-honeypot) to prevent spam.
 
 ### Changed
 
