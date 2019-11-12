@@ -9,6 +9,7 @@ Log of unreleased changes.
 ### Changed
 
 - Moves `shippingAddress()` method from `...\Api\BillingProfileController` to `...\BillingProfileController`.
+- Adds `slot` functionality to `InputAutocomplete.vue` component.
 
 ### Deprecated
 

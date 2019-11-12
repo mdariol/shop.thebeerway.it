@@ -11,7 +11,9 @@
             <ul class="list-unstyled mb-0">
                 <li v-if=" ! options.length" class="text-muted bg-light">Nessun elemento trovato...</li>
                 <li :class="[values[option[optionId]] ? 'bg-primary text-white' : '']" tabindex="0"
-                    v-for="option in options" @click="toggle(option)">{{ option[optionLabel] }}</li>
+                    v-for="option in options" @click="toggle(option)">
+                    <slot v-bind:option="option">{{ option[optionLabel] }}</slot>
+                </li>
             </ul>
         </div>
 
