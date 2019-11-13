@@ -115,6 +115,8 @@ Route::patch('/users/{user}/password', 'UserController@password')
 Route::resource('billing-profiles', 'BillingProfileController');
 Route::get('/billing-profiles/{billing_profile}/delete', 'BillingProfileController@delete')
     ->name('billing-profiles.delete');
+Route::get('billing-profiles/{billing_profile}/shipping-address', 'BillingProfileController@shippingAddress')
+    ->name('billing-profiles.shipping-address');
 Route::patch('/billing-profiles/{billing_profile}/default', 'BillingProfileController@default')
     ->name('billing-profiles.default');
 Route::patch('/billing-profiles/{billing_profile}/transition', 'BillingProfileController@transition')
@@ -154,19 +156,4 @@ Route::group([
 
     Route::get('/orders', 'OrderController@index')
         ->name('admin.orders.index');
-});
-
-/* --------------------------------------------------------------------------
-    API
-   -------------------------------------------------------------------------- */
-
-Route::group([
-    'prefix' => 'api',
-    'namespace' => 'Api'
-], function () {
-
-    /* ----- BillingProfile ----- */
-
-    Route::get('/billing-profiles/{billing_profile}/shipping-address', 'BillingProfileController@shippingAddress')
-        ->name('api.billing-profiles.shipping-address');
 });

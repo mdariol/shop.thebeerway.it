@@ -38,6 +38,10 @@ class UserController extends Controller
     {
         $this->authorize('index');
 
+        if (request()->wantsJson()) {
+            return User::queryFilter()->orderBy('name')->get();
+        }
+
         return view('user.index')->with([
             'users' => User::queryFilter()->orderBy('name')->get(),
             'roles' => Role::all(),

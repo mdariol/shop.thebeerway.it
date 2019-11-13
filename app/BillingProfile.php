@@ -14,7 +14,7 @@ class BillingProfile extends Model
     const WORKFLOW = 'approval';
 
     protected $fillable = [
-        'name', 'vat_number', 'route', 'postal_code',
+        'name', 'vat_number', 'route', 'postal_code', 'legal_person',
         'city', 'district', 'country', 'pec', 'sdi', 'owner_id',
     ];
 
@@ -51,8 +51,40 @@ class BillingProfile extends Model
      * Get related default shipping address.
      *
      * @return \App\ShippingAddress|null
+     *
+     * @deprecated Use defaultShippingAddress() or shippingAddress().
+     * @see BillingProfile::defaultShippingAddress()
+     * @see BillingProfile::shippingAddress()
      */
     public function getDefaultShippingAddressAttribute()
+    {
+        $id = DB::table('billing_profile_default_shipping_address')
+            ->where('billing_profile_id', $this->id)
+            ->value('shipping_address_id');
+
+        return ShippingAddress::find($id);
+    }
+
+    /**
+     * Get default shipping-address or the first one.
+     *
+     * @return ShippingAddress|null
+     */
+    public function shippingAddress()
+    {
+        $default = $this->defaultShippingAddress();
+
+        if ($default) return $default;
+
+        return $this->shipping_addresses->first();
+    }
+
+    /**
+     * Get the default shipping-address.
+     *
+     * @return ShippingAddress|null
+     */
+    public function defaultShippingAddress()
     {
         $id = DB::table('billing_profile_default_shipping_address')
             ->where('billing_profile_id', $this->id)

@@ -6,9 +6,40 @@ All notable changes to this project will be documented in this file.
 
 Log of unreleased changes.
 
+### Changed
+
+- Moves `shippingAddress()` method from `...\Api\BillingProfileController` to `...\BillingProfileController`.
+- Adds `slot` functionality to `InputAutocomplete.vue` component.
+
+### Deprecated
+
+- `App\BillingProfile::getDefaultShippingAddressAttribute()` will be removed in v2.0.0, use 
+`App\BillingProfile::shippingAddress()` instead.
+
+### Removed
+
+- Removes `...\Api\BillingProfileController` class.
+
+## 1.0.2
+
+Released on **2019/11/11**.
+
+### Changed
+
+- Adds `InputAutocomplete.vue` component.
+- Admin can select `owner` on `BillingProfile` creation.
+
+### Fixed
+
+- `legal_person` attribute of `BillingProfile` is `true` by default.
+
+## 1.0.1
+
+Released on **2019/11/5**.
+
 ### Added
 
-- Adds honeypot functionality via `spatie/laravel-honeypot` library.
+- Use [spatie/laravel-honeypot](https://github.com/spatie/laravel-honeypot) to prevent spam.
 
 ### Changed
 

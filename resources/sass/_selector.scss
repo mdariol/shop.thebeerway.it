@@ -1,0 +1,53 @@
+.selector {
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    padding: .375rem .75rem 0;
+    min-height: calc(1.6em + 0.75rem + 2px);
+
+    input:focus {
+        box-shadow: unset;
+    }
+
+    input,
+    ul {
+        display: none;
+    }
+
+    input {
+        height: 1.6em;
+        padding: 0 0 .375rem;
+    }
+
+    li {
+        margin: 0 -.75rem;
+        padding: .375rem .75rem;
+
+        &:first-of-type {
+            border-top: 1px solid #ced4da;
+            margin-top: .375rem;
+        }
+
+        &:hover {
+            background-color: #f8f9fa;
+        }
+    }
+
+    .badge {
+        font-size: .9rem;
+        font-weight: 400;
+        margin-right: .375rem;
+        margin-bottom: .375rem;
+    }
+}
+
+.selector--active {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
+
+    input,
+    ul {
+        display: block;
+    }
+}
