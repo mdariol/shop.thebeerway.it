@@ -419,7 +419,7 @@ class BeerController extends Controller
             'products' => $cart->items,
             'totalPrice' => $cart->totalPrice,
             'deliverynote' => $cart->deliverynote,
-            'billing_profiles' => auth()->user()->billing_profiles,
+            'billing_profiles' => BillingProfile::all(),
             'shipping_addresses' => ShippingAddress::all(),
             'current_policy' => Policy::getCurrentPolicyName('vendita'),
             'beers' => Beer::all(),
