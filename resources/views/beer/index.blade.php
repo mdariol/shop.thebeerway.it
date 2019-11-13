@@ -2,6 +2,19 @@
 
 @section('content')
     <div class="container">
+
+        @auth
+            @if( ! Auth::user()->billing_profiles()->exists())
+                <div class="alert alert-primary">
+                    <h4>Hey {{ Auth::user()->name }}, non vedi i prezzi?</h4>
+                    <p>Probabilmente non hai inserito il profilo di fatturazione. Aggiungine subito uno, sarai in grado
+                        di vedere i <strong>prezzi Ho.Re.Ca e le disponibilità</strong>. Cosa stai aspettando?!</p>
+
+                    <a href="{{ route('billing-profiles.create') }}" class="btn btn-primary">Aggiungi Profilo</a>
+                </div>
+            @endif
+        @endauth
+
         <h3 class="text-capitalize">{{ request()->packaging }}  {{ request()->has('stock') ? ' (Disponibili)' : '(Catalogo)' }}</h3>
 
         @hasrole('Admin')

@@ -26,6 +26,11 @@ class AuthEventSubscriber
             Login::class,
             'App\Listeners\AuthEventSubscriber@loadCartFromDraftOrder'
         );
+
+        $events->listen(
+            Login::class,
+            'App\Listeners\AuthEventSubscriber@notifyMissingBillingProfile'
+        );
     }
 
     /**
@@ -50,6 +55,13 @@ class AuthEventSubscriber
        $event->user->getDraftOrder();
     }
 
-
-
+    /**
+     * Notify user is missing a billing profile.
+     */
+    public function notifyMissingBillingProfile(Login $event)
+    {
+        if ( ! $event->user->billing_profiles()->exists()) {
+            session()->flash('missing_billingProfile', true);
+        }
+    }
 }
