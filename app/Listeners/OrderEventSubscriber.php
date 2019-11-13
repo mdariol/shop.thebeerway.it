@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\User;
 use Illuminate\Support\Facades\Mail;
 use SM\Event\SMEvents;
 use SM\Event\TransitionEvent;
@@ -79,6 +80,8 @@ class OrderEventSubscriber
         /** @var \App\Order $order */
         $order = $event->getStateMachine()->getObject();
 
+        $admins = User::role('Admin')->get();
+        Mail::to($admins)->send(new \App\Mail\RequestedOrderSent($order));
         Mail::to($order->billing_profile->users)->send(new \App\Mail\RequestedOrderSent($order));
     }
 
@@ -94,6 +97,8 @@ class OrderEventSubscriber
         /** @var \App\Order $order */
         $order = $event->getStateMachine()->getObject();
 
+        $admins = User::role('Admin')->get();
+        Mail::to($admins)->send(new \App\Mail\CanceledOrderSent($order));
         Mail::to($order->billing_profile->users)->send(new \App\Mail\CanceledOrderSent($order));
     }
 
@@ -109,6 +114,8 @@ class OrderEventSubscriber
         /** @var \App\Order $order */
         $order = $event->getStateMachine()->getObject();
 
+        $admins = User::role('Admin')->get();
+        Mail::to($admins)->send(new \App\Mail\ResetOrderSent($order));
         Mail::to($order->billing_profile->users)->send(new \App\Mail\ResetOrderSent($order));
     }
 }
