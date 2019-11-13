@@ -1,6 +1,6 @@
 <template>
     <div class="form-group">
-        <label for="search">{{ label }}</label>
+        <label v-if="label" for="search">{{ label }}</label>
 
         <div class="selector" tabindex="0" @focusout="disable" @focusin="enable">
             <span class="badge badge-primary" tabindex="0" v-for="value in values">{{ value[optionLabel] }}</span>

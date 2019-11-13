@@ -32,6 +32,10 @@
         &:hover {
             background-color: #f8f9fa;
         }
+
+        &.bg-primary .text-muted {
+            color: #f8f9fa !important;
+        }
     }
 
     .badge {

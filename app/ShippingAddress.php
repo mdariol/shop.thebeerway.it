@@ -12,6 +12,8 @@ class ShippingAddress extends Model
         'district', 'country', 'phone', 'billing_profile_id',
     ];
 
+    protected $appends = ['is_default', 'address'];
+
     /**
      * Get related billing profile.
      *

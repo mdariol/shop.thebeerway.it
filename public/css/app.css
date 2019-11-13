@@ -16593,6 +16593,10 @@ a.text-dark:focus {
   background-color: #f8f9fa;
 }
 
+.selector li.bg-primary .text-muted {
+  color: #f8f9fa !important;
+}
+
 .selector .badge {
   font-size: 0.9rem;
   font-weight: 400;
