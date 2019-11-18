@@ -3,8 +3,8 @@
 @section('content')
     <div class="container">
         <h1>Profili di Fatturazione</h1>
-
-        <p class="mb-4">Elenco dei profili di fatturazione.</p>
+        <p>Elenco dei profili di fatturazione.</p>
+        <a href="{{ route('billing-profiles.create') }}" class="btn btn-primary mb-4">Aggiungi</a>
 
         <div class="card bg-light mb-4">
             <div class="card-header">

@@ -3,8 +3,8 @@
 @section('content')
     <div class="container">
         <h1>Ordini</h1>
-
-        <p class="mb-4">Elenco degli ordini.</p>
+        <p>Elenco degli ordini.</p>
+        <a href="{{ route('admin.orders.create') }}" class="btn btn-primary mb-5">Aggiungi</a>
 
         <div class="card bg-light mb-4">
             <div class="card-header">

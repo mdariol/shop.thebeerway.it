@@ -21,6 +21,7 @@ class Beer extends Model
         'packaging', 'style', 'brewery', 'price', 'color','taste',
     ];
 
+    protected $appends = ['in_stock'];
 
     /**
      * The "booting" method of the model.
@@ -65,7 +66,23 @@ class Beer extends Model
         return $this->belongsTo(Taste::class);
     }
 
+    /**
+     * @return bool
+     *
+     * @deprecated Use getInStockAttribute() instead.
+     * @see Beer::getInStockAttribute()
+     */
     public function inStock(): bool
+    {
+        return $this->stock > 0;
+    }
+
+    /**
+     * Whether the beer is in stock or not.
+     *
+     * @return bool
+     */
+    public function getInStockAttribute()
     {
         return $this->stock > 0;
     }
