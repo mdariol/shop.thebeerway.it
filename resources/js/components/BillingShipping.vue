@@ -8,13 +8,15 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="billing-profile" class="d-none">Profilo di Fatturazione</label>
-                        <select class="form-control" id="billing-profile" v-model="billingProfile" @change="update">
+                        <select :class="['form-control', errors.billing_profile_id ? 'is-invalid' : '']"
+                                id="billing-profile" v-model="billingProfile" @change="update">
                             <option value selected> -- seleziona un valore -- </option>
                             <option v-for="billingProfile in billingProfiles" :value="billingProfile">{{ billingProfile.name }}</option>
                         </select>
-                        <small class="form-text text-muted">Seleziona un profilo di fatturazione.</small>
+                        <small v-if="errors.billing_profile_id" class="invalid-feedback">{{ errors.billing_profile_id[0] }}</small>
+                        <small v-else class="form-text text-muted">Seleziona un profilo di fatturazione.</small>
 
-                        <input class="d-none" type="number" name="billing_profile" :value="billingProfile.id">
+                        <input class="d-none" type="number" name="billing_profile_id" :value="billingProfile.id">
                     </div>
 
                     <hr>
@@ -40,13 +42,15 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="shipping-address" class="d-none">Indirizzo di Spedizione</label>
-                        <select class="form-control" id="shipping-address" v-model="shippingAddress">
+                        <select :class="['form-control', errors.shipping_address_id ? 'is-invalid' : '']"
+                                id="shipping-address" v-model="shippingAddress">
                             <option value selected> -- seleziona un valore -- </option>
                             <option v-for="shippingAddress in shippingAddresses" :value="shippingAddress">{{ shippingAddress.name }}</option>
                         </select>
-                        <small class="form-text text-muted">Seleziona un indirizzo di spedizione.</small>
+                        <small v-if="errors.shipping_address_id" class="invalid-feedback">{{ errors.shipping_address_id[0] }}</small>
+                        <small v-else class="form-text text-muted">Seleziona un indirizzo di spedizione.</small>
 
-                        <input class="d-none" type="number" name="shipping_address" :value="shippingAddress.id">
+                        <input class="d-none" type="number" name="shipping_address_id" :value="shippingAddress.id">
                     </div>
 
                     <hr>

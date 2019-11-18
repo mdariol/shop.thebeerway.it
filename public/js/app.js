@@ -1863,6 +1863,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "BillingShipping",
   props: {
@@ -2466,11 +2470,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "LineCreate",
   components: {
     InputAutocomplete: _InputAutocomplete__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  props: {
+    errors: Object
   },
   data: function data() {
     return {
@@ -2517,6 +2537,9 @@ __webpack_require__.r(__webpack_exports__);
         this.remove(line);
       }
     }
+  },
+  mounted: function mounted() {
+    console.log(this.errors);
   }
 });
 
@@ -41465,7 +41488,10 @@ var render = function() {
                     expression: "billingProfile"
                   }
                 ],
-                staticClass: "form-control",
+                class: [
+                  "form-control",
+                  _vm.errors.billing_profile_id ? "is-invalid" : ""
+                ],
                 attrs: { id: "billing-profile" },
                 on: {
                   change: [
@@ -41500,13 +41526,17 @@ var render = function() {
               2
             ),
             _vm._v(" "),
-            _c("small", { staticClass: "form-text text-muted" }, [
-              _vm._v("Seleziona un profilo di fatturazione.")
-            ]),
+            _vm.errors.billing_profile_id
+              ? _c("small", { staticClass: "invalid-feedback" }, [
+                  _vm._v(_vm._s(_vm.errors.billing_profile_id[0]))
+                ])
+              : _c("small", { staticClass: "form-text text-muted" }, [
+                  _vm._v("Seleziona un profilo di fatturazione.")
+                ]),
             _vm._v(" "),
             _c("input", {
               staticClass: "d-none",
-              attrs: { type: "number", name: "billing_profile" },
+              attrs: { type: "number", name: "billing_profile_id" },
               domProps: { value: _vm.billingProfile.id }
             })
           ]),
@@ -41558,7 +41588,10 @@ var render = function() {
                     expression: "shippingAddress"
                   }
                 ],
-                staticClass: "form-control",
+                class: [
+                  "form-control",
+                  _vm.errors.shipping_address_id ? "is-invalid" : ""
+                ],
                 attrs: { id: "shipping-address" },
                 on: {
                   change: function($event) {
@@ -41592,13 +41625,17 @@ var render = function() {
               2
             ),
             _vm._v(" "),
-            _c("small", { staticClass: "form-text text-muted" }, [
-              _vm._v("Seleziona un indirizzo di spedizione.")
-            ]),
+            _vm.errors.shipping_address_id
+              ? _c("small", { staticClass: "invalid-feedback" }, [
+                  _vm._v(_vm._s(_vm.errors.shipping_address_id[0]))
+                ])
+              : _c("small", { staticClass: "form-text text-muted" }, [
+                  _vm._v("Seleziona un indirizzo di spedizione.")
+                ]),
             _vm._v(" "),
             _c("input", {
               staticClass: "d-none",
-              attrs: { type: "number", name: "shipping_address" },
+              attrs: { type: "number", name: "shipping_address_id" },
               domProps: { value: _vm.shippingAddress.id }
             })
           ]),
@@ -42391,7 +42428,7 @@ var render = function() {
                   staticClass: "d-none",
                   attrs: {
                     type: "number",
-                    name: "lines[" + line.beer.id + "][beer]",
+                    name: "lines[" + line.beer.id + "][beer_id]",
                     id: "beer-id"
                   },
                   domProps: { value: line.beer.id }
@@ -42420,7 +42457,7 @@ var render = function() {
                   staticStyle: { "max-width": "5rem" },
                   attrs: {
                     type: "number",
-                    name: "lines[" + line.beer.id + "][quantity]",
+                    name: "lines[" + line.beer.id + "][qty]",
                     id: "beer-quantity"
                   },
                   domProps: { value: line.quantity },
@@ -42438,8 +42475,41 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
-              _c("td", { staticClass: "text-right align-middle" }, [
-                _vm._v("€ " + _vm._s(line.price))
+              _c("td", { staticClass: "align-middle" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "input-group text-nowrap",
+                    staticStyle: { "flex-wrap": "nowrap" }
+                  },
+                  [
+                    _vm._m(2, true),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "form-control",
+                      staticStyle: { "max-width": "6rem", width: "6rem" },
+                      attrs: {
+                        type: "number",
+                        name: "lines[" + line.beer.id + "][unit_price]",
+                        step: ".01",
+                        required: "",
+                        readonly: ""
+                      },
+                      domProps: { value: line.price }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control d-none",
+                  attrs: {
+                    type: "number",
+                    name: "lines[" + line.beer.id + "][price]",
+                    required: "",
+                    readonly: ""
+                  },
+                  domProps: { value: line.price * line.quantity }
+                })
               ])
             ])
           }),
@@ -42460,7 +42530,7 @@ var render = function() {
             ])
           ]
         )
-      : _c("p", { staticClass: "ml-1" }, [
+      : _c("p", { class: ["ml-2", _vm.errors.lines ? "text-danger" : ""] }, [
           _vm._v("Nessuna birra nel carrello...")
         ])
   ])
@@ -42497,8 +42567,16 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Quantità")]),
         _vm._v(" "),
-        _c("th", { staticClass: "text-right" }, [_vm._v("Prezzo")])
+        _c("th", [_vm._v("Prezzo")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("div", { staticClass: "input-group-text" }, [_vm._v("€")])
     ])
   }
 ]

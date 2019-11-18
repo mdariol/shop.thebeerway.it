@@ -4,14 +4,22 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Order;
+use App\Policy;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
     const RULES = [
         'billing_profile_id' => ['required', 'exists:billing_profiles,id'],
         'shipping_address_id' => ['required', 'exists:shipping_addresses,id'],
-        'delivery_note' => 'nullable',
+        'deliverynote' => 'nullable',
+        'state' => 'required',
+        'lines' => 'required',
+        'lines.*.qty' => ['required', 'min:1'],
+        'lines.*.beer_id' => ['required', 'exists:beers,id'],
+        'lines.*.unit_price' => ['required'],
+        'lines.*.price' => ['required'],
     ];
 
     /**
@@ -50,9 +58,23 @@ class OrderController extends Controller
      * Store a newly created resource in storage.
      *
      * @return \Illuminate\Http\Response
+     * @throws \Exception|\Throwable
      */
     public function store()
     {
-        //
+        DB::transaction(function () {
+            /** @var Order $order */
+            $order = Order::create(request()->validate(self::RULES) + [
+                    'user_id' => auth()->id(),
+                    'date' => \Carbon\Carbon::now('Europe/Rome')->format('Y-m-d'),
+                    'policy_id' => Policy::getCurrentPolicyName('vendita')->id,
+                ]);
+
+            $order->lines()->createMany(request()->lines);
+
+            $order->calcNumber()->calcTotalAmount()->save();
+        });
+
+        return redirect()->route('admin.orders.index');
     }
 }

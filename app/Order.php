@@ -6,6 +6,7 @@ use App\Traits\HasFilters;
 use App\Traits\HasState;
 use Illuminate\Database\Eloquent\Model;
 use App\Scopes\OrdersScope;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -50,5 +51,35 @@ class Order extends Model
     public function policy()
     {
         return $this->belongsTo(Policy::class);
+    }
+
+    /**
+     * Calculate order's total amount.
+     *
+     * @return $this
+     */
+    public function calcTotalAmount()
+    {
+        $lines = $this->lines()->select(['unit_price', 'qty'])->get();
+
+        $this->total_amount = array_reduce($lines->toArray(), function ($carry, $line) {
+            return $carry + ($line['unit_price'] * $line['qty']);
+        }, 0);
+
+        return $this;
+    }
+
+    /**
+     * Calculate order's number.
+     *
+     * @return $this
+     */
+    public function calcNumber()
+    {
+        if ( ! $this->number) {
+            $this->number = DB::table('orders')->max('number') + 1;
+        }
+
+        return $this;
     }
 }
