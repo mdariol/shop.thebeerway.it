@@ -60,6 +60,9 @@ Route::resource('policies', 'PolicyController');
 Route::get('/policies/{policy}/delete', 'PolicyController@delete')
     ->name('policies.delete');
 
+Route::resource('promotions', 'PromotionController');
+Route::get('/promotions/{promotion}/delete', 'PromotionController@delete')
+    ->name('promotions.delete');
 
 
 
