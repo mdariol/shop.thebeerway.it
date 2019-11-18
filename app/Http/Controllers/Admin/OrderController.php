@@ -4,9 +4,24 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Order;
+use App\Policy;
+use App\User;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+    const RULES = [
+        'billing_profile_id' => ['required', 'exists:billing_profiles,id'],
+        'shipping_address_id' => ['required', 'exists:shipping_addresses,id'],
+        'deliverynote' => 'nullable',
+        'state' => 'required',
+        'lines' => 'required',
+        'lines.*.qty' => ['required', 'min:1'],
+        'lines.*.beer_id' => ['required', 'exists:beers,id'],
+        'lines.*.unit_price' => ['required'],
+        'lines.*.price' => ['required'],
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -17,5 +32,49 @@ class OrderController extends Controller
         return view('order.admin.index')->with([
             'orders' => Order::queryFilter()->get()
         ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        if ( ! request()->filled('user')) {
+            return view('order.admin.choice');
+        }
+
+        $user = User::findOrFail(request()->user);
+
+        return view('order.admin.create')->with([
+            'user' => $user,
+            'billingProfiles' => $user->billing_profiles()
+                ->where('state', 'approved')->get(),
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     * @throws \Exception|\Throwable
+     */
+    public function store()
+    {
+        DB::transaction(function () {
+            /** @var Order $order */
+            $order = Order::create(request()->validate(self::RULES) + [
+                    'user_id' => auth()->id(),
+                    'date' => \Carbon\Carbon::now('Europe/Rome')->format('Y-m-d'),
+                    'policy_id' => Policy::getCurrentPolicyName('vendita')->id,
+                ]);
+
+            $order->lines()->createMany(request()->lines);
+
+            $order->calcNumber()->calcTotalAmount()->save();
+        });
+
+        return redirect()->route('admin.orders.index');
     }
 }

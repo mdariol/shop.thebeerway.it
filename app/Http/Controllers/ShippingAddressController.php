@@ -26,6 +26,19 @@ class ShippingAddressController extends Controller
     }
 
     /**
+     * @param  BillingProfile  $billingProfile
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(BillingProfile $billingProfile) {
+        if (request()->wantsJson()) {
+            return $billingProfile->shipping_addresses;
+        }
+
+        abort(404);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @param \App\BillingProfile  $billingProfile

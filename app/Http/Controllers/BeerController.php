@@ -44,6 +44,10 @@ class BeerController extends Controller
             ->orderBy('style_name', 'ASC')
             ->get();
 
+        if (request()->wantsJson()) {
+            return $beers;
+        }
+
         activity()
           ->causedBy(request()->user())
           ->withProperties(request()->all())
@@ -57,7 +61,6 @@ class BeerController extends Controller
             'tastes' => Taste::all(),
         ]);
     }
-
 
     /**
      * Display a listing of the resource.
@@ -83,9 +86,6 @@ class BeerController extends Controller
             'tastes' => Taste::all(),
         ]);
     }
-
-
-
 
     /**
      * Show the form for creating a new resource.

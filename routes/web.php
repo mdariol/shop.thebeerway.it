@@ -128,7 +128,7 @@ Route::patch('/billing-profiles/{billing_profile}/transition', 'BillingProfileCo
 /* ----- Shipping Address ----- */
 
 Route::resource('billing-profiles.shipping-addresses', 'ShippingAddressController', [
-    'except' => ['show', 'index']
+    'except' => ['show']
 ]);
 Route::get('/billing-profiles/{billing_profile}/shipping-addresses/{shipping_address}/delete', 'ShippingAddressController@delete')
     ->name('billing-profiles.shipping-addresses.delete');
@@ -159,4 +159,8 @@ Route::group([
 
     Route::get('/orders', 'OrderController@index')
         ->name('admin.orders.index');
+    Route::get('/orders/create', 'OrderController@create')
+        ->name('admin.orders.create');
+    Route::post('/orders', 'OrderController@store')
+        ->name('admin.orders.store');
 });

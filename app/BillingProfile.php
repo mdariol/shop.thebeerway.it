@@ -18,6 +18,8 @@ class BillingProfile extends Model
         'city', 'district', 'country', 'pec', 'sdi', 'owner_id',
     ];
 
+    protected $appends = ['is_default', 'address'];
+
     /**
      * The event map for the model.
      *

@@ -114,11 +114,25 @@
                     </div>
                 </div>
             @endif
+
             @if ($message = Session::get('error'))
                 <div class="container mb-4">
                     <div class="alert alert-danger alert-block">
                         {{ $message }}
                         <button type="button" class="close" data-dismiss="alert">×</button>
+                    </div>
+                </div>
+            @endif
+
+            @if(Session::get('missing_billingProfile'))
+                <div class="container mb-4">
+                    <div class="alert alert-primary w-75 mx-auto">
+                        <h4>Hey, {{ Auth::user()->name }}</h4>
+                        <p>Abbiamo notato che non hai un profilo di fatturazione. Ti manca così poco! Aggiungi un
+                            profilo di fatturazione e sarai in grado di visualizzare i
+                            <strong>prezzi Ho.Re.Ca e le disponibilità</strong>. Cosa aspetti?!</p>
+
+                        <a href="{{ route('billing-profiles.create') }}" class="btn btn-primary">Aggiungi Profilo</a>
                     </div>
                 </div>
             @endif
