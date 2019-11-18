@@ -22,7 +22,6 @@ class Brewery extends Model
     }
 
 
-
     public function beers()
     {
         return $this->hasMany(Beer::class);
@@ -31,6 +30,11 @@ class Brewery extends Model
     public function purchaseorders()
     {
         return $this->hasMany(Purchaseorder::class);
+    }
+
+    public function promotion_breweries()
+    {
+        return $this->hasMany(PromotionBrewery::class);
     }
 
 

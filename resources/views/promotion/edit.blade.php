@@ -38,7 +38,6 @@
                 <input type="number" name="priority" id="priority" value="{{ $promotion->priority }}">
             </div>
 
-
             <button class="btn btn-primary">Aggiorna</button>
         </form>
     </div>

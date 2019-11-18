@@ -29,7 +29,18 @@
                 <input type="number" name="priority" id="priority" value="0">
             </div>
 
+
+            
+
+
+
+
+
             <button class="btn btn-primary">Memorizza</button>
         </form>
+
+
+
+
     </div>
 @endsection
