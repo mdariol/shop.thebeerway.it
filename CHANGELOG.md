@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v1.0.3
 
-Log of unreleased changes.
+Released on **2019/11/18**.
 
 ### Changed
 
@@ -20,7 +20,7 @@ Log of unreleased changes.
 
 - Removes `...\Api\BillingProfileController` class.
 
-## 1.0.2
+## v1.0.2
 
 Released on **2019/11/11**.
 
@@ -33,7 +33,7 @@ Released on **2019/11/11**.
 
 - `legal_person` attribute of `BillingProfile` is `true` by default.
 
-## 1.0.1
+## v1.0.1
 
 Released on **2019/11/5**.
 
