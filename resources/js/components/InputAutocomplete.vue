@@ -3,7 +3,9 @@
         <label v-if="label" for="search">{{ label }}</label>
 
         <div class="selector" tabindex="0" @focusout="disable" @focusin="enable">
-            <span class="badge badge-primary" tabindex="0" v-for="value in values">{{ value[optionLabel] }}</span>
+            <div class="badge badge-primary" tabindex="0" v-for="value in values" @click="toggle(value)">
+                <slot v-bind:tag="value" name="tag">{{ value[optionLabel] }}</slot>
+            </div>
 
             <input :class="['form-control', 'p-0', 'border-0', hasValue ? 'mb-1' : 'd-block']"
                    type="text" v-model="string" id="search" @input="search" placeholder="Cerca">
@@ -12,7 +14,7 @@
                 <li v-if=" ! options.length" class="text-muted bg-light">Nessun elemento trovato...</li>
                 <li :class="[values[option[optionId]] ? 'bg-primary text-white' : '']" tabindex="0"
                     v-for="option in options" @click="toggle(option)">
-                    <slot v-bind:option="option">{{ option[optionLabel] }}</slot>
+                    <slot v-bind:option="option" name="option">{{ option[optionLabel] }}</slot>
                 </li>
             </ul>
         </div>
@@ -34,6 +36,7 @@
             route: String,
             name: String,
             label: String,
+            default: Array,
             multiple: {type: Boolean, default: false},
             searchBy: {type: String, default: 'name'},
             optionId: {type: String, default: 'id'},
@@ -95,6 +98,12 @@
                 element.classList.remove('selector--active');
                 this.string = '';
             },
+        },
+
+        mounted() {
+            this.default.forEach(item => {
+                Vue.set(this.values, item[this.optionId], item);
+            });
         },
     }
 </script>

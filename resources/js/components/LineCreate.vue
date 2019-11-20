@@ -6,12 +6,12 @@
         </div>
         <div class="card-body collapse" id="beers">
             <input-autocomplete ref="autocomplete" :route="'/beers'" :search-by="'name'" :multiple="true"
-                                :description="'Seleziona le birre che vuoi aggiungere.'">
-                <template v-slot="{option}">
-            <span :class="{strike: ! option.in_stock}">
-                {{ option.name }} <span class="ml-1 text-muted">{{ option.brewery.name }}</span> <br>
-                <small>{{ option.packaging.name }} - Disponibili {{ option.stock }}</small>
-            </span>
+                                :default="defaults" :description="'Seleziona le birre che vuoi aggiungere.'">
+                <template v-slot:option="{option}">
+                    <span :class="{strike: ! option.in_stock}">
+                        {{ option.name }} <span class="ml-1 text-muted">{{ option.brewery.name }}</span> <br>
+                        <small>{{ option.packaging.name }} - Disponibili {{ option.stock }}</small>
+                    </span>
                 </template>
             </input-autocomplete>
 
@@ -75,6 +75,7 @@
 
         props: {
             errors: Object,
+            defaults: Array,
         },
 
         data() {
@@ -125,7 +126,7 @@
         },
 
         mounted() {
-            console.log(this.errors);
+            console.log(this.defaults);
         }
     }
 </script>
