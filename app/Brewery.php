@@ -3,10 +3,13 @@
 namespace App;
 
 use App\Scopes\BreweriesScope;
+use App\Traits\HasFilters;
 use Illuminate\Database\Eloquent\Model;
 
 class Brewery extends Model
 {
+    use HasFilters;
+
     protected $fillable = ['name','isactive','logo'];
 
     /**
@@ -32,9 +35,9 @@ class Brewery extends Model
         return $this->hasMany(Purchaseorder::class);
     }
 
-    public function promotion_breweries()
+    public function promotions()
     {
-        return $this->hasMany(PromotionBrewery::class);
+        return $this->belongsToMany(Promotion::class, 'promotion_breweries')->withTimestamps();
     }
 
 

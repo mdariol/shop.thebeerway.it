@@ -29,6 +29,7 @@
                         {{$promotion->priority}}
                     </div>
 
+
                     <div class="col-sm-3 text-center">
                         <a href="/promotions/{{ $promotion->id }}/edit" class="btn btn-primary">Modifica</a>
                         <a href="/promotions/{{ $promotion->id }}/delete" class="btn btn-danger">Elimina</a>

@@ -69,9 +69,9 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function user_promotions()
+    public function promotions()
     {
-        return $this->hasMany(PromotionUser::class);
+        return $this->belongsToMany(Promotion::class, 'promotion_users')->withTimestamps();
     }
 
     /**

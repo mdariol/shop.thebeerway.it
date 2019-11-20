@@ -22,19 +22,19 @@ class Promotion extends Model
         static::addGlobalScope(new PromotionsScope);
     }
 
-    public function promotion_beers()
+    public function beers()
     {
-        return $this->hasMany(PromotionBeer::class);
+        return $this->belongsToMany(Beer::class, 'promotion_beers')->withTimestamps();
     }
 
-    public function promotion_breweries()
+    public function breweries()
     {
-        return $this->hasMany(PromotionBrewery::class);
+        return $this->belongsToMany(Brewery::class, 'promotion_breweries')->withTimestamps();
     }
 
-    public function promotion_users()
+    public function users()
     {
-        return $this->hasMany(PromotionUser::class);
+        return $this->belongsToMany(User::class, 'promotion_users')->withTimestamps();
     }
 
 
