@@ -26,6 +26,7 @@ class EventServiceProvider extends ServiceProvider
         \App\Listeners\BillingProfileEventSubscriber::class,
         \App\Listeners\AuthEventSubscriber::class,
         \App\Listeners\OrderEventSubscriber::class,
+        \App\Listeners\LineEventSubscriber::class,
     ];
 
     /**

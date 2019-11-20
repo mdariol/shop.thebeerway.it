@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Order;
 use App\Policy;
 use App\User;
-use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -14,7 +13,6 @@ class OrderController extends Controller
         'billing_profile_id' => ['required', 'exists:billing_profiles,id'],
         'shipping_address_id' => ['required', 'exists:shipping_addresses,id'],
         'deliverynote' => 'nullable',
-        'state' => 'required',
         'lines' => 'required',
         'lines.*.qty' => ['required', 'min:1'],
         'lines.*.beer_id' => ['required', 'exists:beers,id'],
@@ -62,18 +60,13 @@ class OrderController extends Controller
      */
     public function store()
     {
-        DB::transaction(function () {
-            /** @var Order $order */
-            $order = Order::create(request()->validate(self::RULES) + [
-                    'user_id' => auth()->id(),
-                    'date' => \Carbon\Carbon::now('Europe/Rome')->format('Y-m-d'),
-                    'policy_id' => Policy::getCurrentPolicyName('vendita')->id,
-                ]);
+        $order = Order::createWithLines(request()->validate(self::RULES) + [
+            'user_id' => auth()->id(),
+            'policy_id' => Policy::getCurrentPolicyName('vendita')->id,
+        ]);
 
-            $order->lines()->createMany(request()->lines);
-
-            $order->calcNumber()->calcTotalAmount()->save();
-        });
+        $order->state_machine->apply('send');
+        $order->save();
 
         return redirect()->route('admin.orders.index');
     }
