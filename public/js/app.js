@@ -2256,12 +2256,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "InputAutocomplete",
   props: {
     route: String,
     name: String,
     label: String,
+    "default": Array,
     multiple: {
       type: Boolean,
       "default": false
@@ -2331,6 +2334,13 @@ __webpack_require__.r(__webpack_exports__);
       element.classList.remove('selector--active');
       this.string = '';
     }
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    this["default"].forEach(function (item) {
+      Vue.set(_this2.values, item[_this2.optionId], item);
+    });
   }
 });
 
@@ -2490,7 +2500,8 @@ __webpack_require__.r(__webpack_exports__);
     InputAutocomplete: _InputAutocomplete__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   props: {
-    errors: Object
+    errors: Object,
+    defaults: Array
   },
   data: function data() {
     return {
@@ -2539,7 +2550,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    console.log(this.errors);
+    console.log(this.defaults);
   }
 });
 
@@ -42165,9 +42176,22 @@ var render = function() {
       [
         _vm._l(_vm.values, function(value) {
           return _c(
-            "span",
-            { staticClass: "badge badge-primary", attrs: { tabindex: "0" } },
-            [_vm._v(_vm._s(value[_vm.optionLabel]))]
+            "div",
+            {
+              staticClass: "badge badge-primary",
+              attrs: { tabindex: "0" },
+              on: {
+                click: function($event) {
+                  return _vm.toggle(value)
+                }
+              }
+            },
+            [
+              _vm._t("tag", [_vm._v(_vm._s(value[_vm.optionLabel]))], {
+                tag: value
+              })
+            ],
+            2
           )
         }),
         _vm._v(" "),
@@ -42228,7 +42252,7 @@ var render = function() {
                   }
                 },
                 [
-                  _vm._t("default", [_vm._v(_vm._s(option[_vm.optionLabel]))], {
+                  _vm._t("option", [_vm._v(_vm._s(option[_vm.optionLabel]))], {
                     option: option
                   })
                 ],
@@ -42366,16 +42390,19 @@ var render = function() {
               route: "/beers",
               "search-by": "name",
               multiple: true,
+              default: _vm.defaults,
               description: "Seleziona le birre che vuoi aggiungere."
             },
             scopedSlots: _vm._u([
               {
-                key: "default",
+                key: "option",
                 fn: function(ref) {
                   var option = ref.option
                   return [
                     _c("span", { class: { strike: !option.in_stock } }, [
-                      _vm._v("\n                " + _vm._s(option.name) + " "),
+                      _vm._v(
+                        "\n                        " + _vm._s(option.name) + " "
+                      ),
                       _c("span", { staticClass: "ml-1 text-muted" }, [
                         _vm._v(_vm._s(option.brewery.name))
                       ]),

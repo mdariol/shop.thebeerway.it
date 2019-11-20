@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use SM\Event\SMEvents;
 use SM\Event\TransitionEvent;
@@ -19,6 +20,11 @@ class OrderEventSubscriber
         $events->listen(
             SMEvents::PRE_TRANSITION,
             'App\Listeners\OrderEventSubscriber@updateRequestedStock'
+        );
+
+        $events->listen(
+            SMEvents::POST_TRANSITION,
+            'App\Listeners\OrderEventSubscriber@setOrderAttributes'
         );
 
         $events->listen(
@@ -66,6 +72,24 @@ class OrderEventSubscriber
                 'requested_stock' => $line->beer->requested_stock - $line->qty
             ]);
         }
+    }
+
+    /**
+     * Set order's number and purchased date.
+     *
+     * @param  TransitionEvent  $event
+     */
+    public function setOrderAttributes(TransitionEvent $event)
+    {
+        if ($event->getTransition() !== 'send') return;
+
+        /** @var \App\Order $order */
+        $order = $event->getStateMachine()->getObject();
+
+        $order->update([
+            'number' => $order->number ?: DB::table('orders')->max('number') + 1,
+            'date' => \Carbon\Carbon::now('Europe/Rome')->format('Y-m-d'),
+        ]);
     }
 
     /**

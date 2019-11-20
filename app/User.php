@@ -99,6 +99,10 @@ class User extends Authenticatable implements MustVerifyEmail
             ->exists();
     }
 
+    /**
+     * @deprecated
+     * @see \App\User::cart()
+     */
     public function getDraftOrder(){
         $order = $this->orders()->where('state','draft')->first();
 
@@ -130,5 +134,18 @@ class User extends Authenticatable implements MustVerifyEmail
 
             request()->session()->put('cart', $cart);
         }
+    }
+
+    /**
+     * Get user's cart.
+     *
+     * @return Order
+     */
+    public function cart()
+    {
+        return Order::firstOrCreate([
+            'user_id' => $this->id,
+            'state' => 'draft',
+        ]);
     }
 }

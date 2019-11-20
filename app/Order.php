@@ -21,6 +21,8 @@ class Order extends Model
         'policy_accept', 'total_amount',
     ];
 
+    protected $attributes = ['state' => 'draft'];
+
     protected static function boot()
     {
         parent::boot();
@@ -54,22 +56,6 @@ class Order extends Model
     }
 
     /**
-     * Calculate order's total amount.
-     *
-     * @return $this
-     */
-    public function calcTotalAmount()
-    {
-        $lines = $this->lines()->select(['unit_price', 'qty'])->get();
-
-        $this->total_amount = array_reduce($lines->toArray(), function ($carry, $line) {
-            return $carry + ($line['unit_price'] * $line['qty']);
-        }, 0);
-
-        return $this;
-    }
-
-    /**
      * Calculate order's number.
      *
      * @return $this
@@ -81,5 +67,29 @@ class Order extends Model
         }
 
         return $this;
+    }
+
+    /**
+     * Create a new order with attached lines.
+     *
+     * @param  array  $attributes
+     * @return mixed
+     * @throws \Throwable
+     */
+    public static function createWithLines(array $attributes)
+    {
+        $order = DB::transaction(function () use ($attributes) {
+            $order = self::create($attributes);
+
+            foreach ($attributes['lines'] as $line) {
+                Line::create($line + [
+                    'order_id' => $order->id,
+                ]);
+            }
+
+            return $order;
+        });
+
+        return $order;
     }
 }
