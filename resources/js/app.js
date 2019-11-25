@@ -9,7 +9,8 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import VueI18n from 'vue-i18n';
-import Locale from './vue-i18n-locales.generated'
+import Locale from './vue-i18n-locales.generated';
+import mediumZoom from 'medium-zoom';
 
 Vue.use(VueI18n);
 
@@ -41,3 +42,6 @@ const app = new Vue({
     el: '#app',
     i18n,
 });
+
+mediumZoom('[data-zoomable]');
+

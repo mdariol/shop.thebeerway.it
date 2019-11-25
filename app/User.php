@@ -65,6 +65,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get related User Promotions.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function promotions()
+    {
+        return $this->belongsToMany(Promotion::class, 'promotion_users')->withTimestamps();
+    }
+
+    /**
      * Get related orders.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

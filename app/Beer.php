@@ -92,5 +92,15 @@ class Beer extends Model
         return $this->hasMany(Line::class);
     }
 
+    /**
+     * Get related Beer Promotions.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function promotions()
+    {
+        return $this->belongsToMany(Beer::class, 'promotion_beers')->withTimestamps();
+    }
+
 
 }

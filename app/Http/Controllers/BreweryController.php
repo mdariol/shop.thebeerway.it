@@ -28,6 +28,9 @@ class BreweryController extends Controller
      */
     public function index()
     {
+        if (request()->wantsJson()){
+            return Brewery::queryFilter()->get();
+        }
         return view('brewery.index')->with('breweries', Brewery::all());
     }
 
