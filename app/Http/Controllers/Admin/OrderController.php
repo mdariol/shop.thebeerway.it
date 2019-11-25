@@ -28,7 +28,7 @@ class OrderController extends Controller
     public function index()
     {
         return view('order.admin.index')->with([
-            'orders' => Order::queryFilter()->get()
+            'orders' => Order::queryFilter()->where('state', '!=', 'draft')->get()
         ]);
     }
 

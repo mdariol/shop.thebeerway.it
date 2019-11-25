@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class LineController extends Controller
 {
+    const RULES = [
+        'beer_id' => ['required', 'exists:beers,id'],
+        'qty' => ['required', 'min:1'],
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -69,7 +74,14 @@ class LineController extends Controller
      */
     public function update(Request $request, Line $line)
     {
-        //
+        $line->update(request()->validate(self::RULES) + [
+            'unit_price' => $line->beer->price->distribution,
+            'price' => $request->qty * $line->beer->price->distribution,
+        ]);
+
+        if ($request->wantsJson()) {
+            return $line;
+        }
     }
 
     /**
@@ -80,6 +92,10 @@ class LineController extends Controller
      */
     public function destroy(Line $line)
     {
-        //
+        $bool = $line->delete();
+
+        if (\request()->wantsJson()) {
+            return ['deleted' => $bool];
+        }
     }
 }

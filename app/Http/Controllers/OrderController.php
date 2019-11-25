@@ -60,10 +60,13 @@ class OrderController extends Controller
      *
      * @param  \App\Order  $order
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Order $order)
     {
-        //
+        $this->authorize('view', $order);
+
+        return view('order.show')->with(['order' => $order]);
     }
 
     /**

@@ -19,7 +19,11 @@ class OrderPolicy
      */
     public function view(User $user, Order $order)
     {
-        //
+        if ( ! $order->billing_profile->users()->contains($user)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

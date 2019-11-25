@@ -1,116 +1,93 @@
 <template>
     <div>
-        <div class="form-group">
-            <label for="company-id">Indirizzo di Fatturazione</label>
-            <multiselect @select="onCompanyChange" v-model="company" :options="filtered_options" label="name" :show-labels="false" :closeOnSelect="true" placeholder="Seleziona un indirizzo di fatturazione" >
-
-                <template slot="singleLabel" slot-scope="props">
-                    <div>
-                        <span>{{ props.option.name }}</span> <br>
-                        <span>{{ props.option.postal_code }}</span> -
-                        <span>{{ props.option.route }}</span>
-                    </div>
-                </template>
-                <template slot="option" slot-scope="props">
-                    <div>
-                        <span>{{ props.option.name }}</span> <br>
-                        <span>{{ props.option.postal_code }}</span> -
-                        <span>{{ props.option.route }}</span>
-                    </div>
-                </template>
-
-            </multiselect>
-             <select  name="billing_profile_id" id="company-id" class="d-none" >
-                <option v-if="company" :value="company.id" selected>{{ company.name }}</option>
-                <option v-else value selected></option>
-            </select>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Birra</th>
+                    <th>Packaging</th>
+                    <th>Quantità</th>
+                    <th>Prezzo</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="line in lines">
+                    <td class="align-middle">{{ line.beer.name }}</td>
+                    <td class="align-middle">{{ line.beer.packaging.name }}</td>
+                    <td class="align-middle">
+                        <input v-if="edit" type="number" class="form-control" v-model="line.qty"
+                               @change="update(line)" style="max-width: 5rem">
+                        <span v-else>{{ line.qty }}</span>
+                    </td>
+                    <td class="align-middle">€ {{ line.unit_price }}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
 
-        <div class="form-group">
-            <label for="shipping_address-id">Indirizzo di Spedizione</label>
-            <multiselect  v-model="shipping_address" :options="filtered_shipping_addresses" label="name" :show-labels="false" track-by="name" :closeOnSelect="true" placeholder="Seleziona un indirizzo di spedizione" >
-
-                <template slot="singleLabel" slot-scope="props">
-                    <div>
-                        <span>{{ props.option.name }}</span> <br>
-                        <span>{{ props.option.postal_code }}</span> -
-                        <span>{{ props.option.route }}</span>
-                    </div>
-                </template>
-                <template slot="option" slot-scope="props">
-                    <div>
-                        <span>{{ props.option.name }}</span> <br>
-                        <span>{{ props.option.postal_code }}</span> -
-                        <span>{{ props.option.route }}</span>
-                    </div>
-                </template>
-
-
-            </multiselect>
-            <select name="shipping_address_id" id="shipping_address-id" class="d-none">
-                <option v-if="shipping_address" :value="shipping_address.id" selected>{{ shipping_address.name }}</option>
-                <option v-else value selected></option>
-            </select>
-        </div>
+        <p class="text-right" v-if="Object.keys(lines).length" style="font-size: 1.3rem">
+            <strong>Tot. <br> € {{ tot }}</strong>
+        </p>
+        <p v-else>Nessuna birra nel carrello...</p>
     </div>
 </template>
 
 <script>
-    import Multiselect from 'vue-multiselect';
-
-    Vue.component('multiselect', Multiselect);
-
     export default {
         name: "Cart",
 
-        components: { Multiselect },
-
         props: {
-            options: Array,
-            shipping_addresses: Array,
-            default_company: Object,
+            cart: Object,
+            edit: Boolean,
         },
 
+        computed: {
+            tot() {
+                let tot = Object.values(this.lines).reduce((tot, line) => tot + Number(line.price), 0);
 
-        data () {
+                return tot.toFixed(2);
+            },
+        },
+
+        data() {
             return {
-                company: {},
-                shipping_address: {},
-                filtered_shipping_addresses:  [],
-                filtered_options:  []
+                csfr: document.head.querySelector('meta[name="csrf-token"]').content,
+                lines: {}
             }
         },
 
         methods: {
-            onCompanyChange: function (event) {
-                this.shipping_address = {};
-                this.filtered_shipping_addresses = this.shipping_addresses.filter((address) => {
-                    return address.billing_profile_id  === event.id;
-                });
-
-                // assegna l'unico indirizzo di spedizione presente
-                //
-                if (this.filtered_shipping_addresses.length == 1) {
-                    this.shipping_address = this.filtered_shipping_addresses[0];
-                } else {
-                    // assegna indirizzo di spedizione di default
-                    //
-                    axios.get('/billing-profiles/' + event.id + '/shipping-address').then(response => {
-                        this.shipping_address = response.data;
+            update(line) {
+                if (line.qty < 1) {
+                    axios.post(`/lines/${line.id}`, {_method: 'delete'}).then(response => {
+                        Vue.delete(this.lines, line.id, line);
                     });
                 }
-            }
 
+                if (line.qty > 0) {
+                    let data = {
+                        _method: 'PATCH',
+                        beer_id: line.beer.id,
+                        qty: line.qty,
+                    };
+
+                    axios.post(`/lines/${line.id}`, data).then(response => {
+                        Vue.set(this.lines, line.id, response.data);
+                    })
+                }
+            },
         },
 
         mounted() {
-            this.filtered_options = this.options;
-            if (this.default_company)  {
-                this.company = this.default_company;
-                this.onCompanyChange(this.default_company);
-            }
-        }
+            this.cart.lines.forEach(line => {
+                Vue.set(this.lines, line.id, line);
+            });
+        },
     }
 </script>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style scoped>
+    table tr:last-child td {
+        border-bottom: 1px solid #dee2e6;
+    }
+</style>

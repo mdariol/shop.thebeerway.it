@@ -8,10 +8,12 @@ class Line extends Model
 {
     protected $fillable = ['beer_id', 'qty', 'unit_price', 'price', 'order_id'];
 
-    protected $with = ['beer', 'order'];
+    protected $with = ['beer'];
 
     protected $dispatchesEvents = [
-        'created' => \App\Events\LineCreated::class,
+        'created' => \App\Events\LineChanged::class,
+        'updated' => \App\Events\LineChanged::class,
+        'deleted' => \App\Events\LineChanged::class,
     ];
 
     /**

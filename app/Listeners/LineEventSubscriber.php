@@ -1,10 +1,8 @@
 <?php
 
-
 namespace App\Listeners;
 
-
-use App\Events\LineCreated;
+use App\Events\LineChanged;
 
 class LineEventSubscriber
 {
@@ -16,7 +14,7 @@ class LineEventSubscriber
     public function subscribe($events)
     {
         $events->listen(
-            LineCreated::class,
+            LineChanged::class,
             'App\Listeners\LineEventSubscriber@calculateOrderTotal'
         );
     }
@@ -24,17 +22,25 @@ class LineEventSubscriber
     /**
      * Calculate order's total.
      *
-     * @param LineCreated $event
+     * @param  LineChanged  $event
+     * @return bool
      */
-    public function calculateOrderTotal(LineCreated $event)
+    public function calculateOrderTotal(LineChanged $event)
     {
+        /** @var \App\Order $order */
         $order = $event->line->order;
         $lines = $order->lines()->select(['unit_price', 'qty'])->get();
+
+        if ( ! $lines->count()) {
+            $order->total_amount = null;
+
+            return $order->save();
+        }
 
         $order->total_amount = array_reduce($lines->toArray(), function ($carry, $line) {
             return $carry + ($line['unit_price'] * $line['qty']);
         }, 0);
 
-        $order->save();
+        return $order->save();
     }
 }

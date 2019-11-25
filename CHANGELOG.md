@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+Log of unreleased changes.
+
+## Added
+
+- Adds checkout form.
+- Adds admin's order create form.
+
+### Changed
+
+- Improves cart functionality.
+
 ## v1.0.3
 
 Released on **2019/11/18**.

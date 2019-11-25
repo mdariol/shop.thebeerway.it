@@ -80,14 +80,36 @@ Route::get('/purchaseorders/{purchaseorder}/delete', 'PurchaseorderController@de
 /* ----- Order ----- */
 
 Route::resource('orders', 'OrderController', [
-    'except' => ['show', 'edit', 'update', 'destroy']
+    'except' => ['edit', 'update', 'destroy'],
 ]);
 Route::patch('/orders/{order}/transition', 'OrderController@transition')
     ->name('orders.transition');
 
 /* ----- Line ----- */
 
-Route::resource('lines', 'LineController');
+Route::resource('lines', 'LineController', [
+    'except' => ['index', 'edit', 'create', 'store']
+]);
+
+/* ----- Cart ----- */
+
+Route::group(['namespace' => 'Commerce'], function () {
+    Route::get('/cart', 'CartController@show')
+        ->name('cart.show');
+    Route::patch('/cart', 'CartController@add')
+        ->name('cart.add');
+    Route::delete('/cart', 'CartController@empty')
+        ->name('cart.empty');
+});
+
+/* ----- Checkout ----- */
+
+Route::group(['namespace' => 'Commerce'], function () {
+    Route::get('/checkout', 'CheckoutController@show')
+        ->name('checkout.show');
+    Route::post('/checkout', 'CheckoutController@process')
+        ->name('checkout.process');
+});
 
 /* ----- Auth ----- */
 

@@ -15,6 +15,12 @@
             @endif
         @endauth
 
+        @if(session('added'))
+            <div class="alert alert-success">
+                {{ session('added') }}
+            </div>
+        @endif
+
         <h3 class="text-capitalize">{{ request()->packaging }}  {{ request()->has('stock') ? ' (Disponibili)' : '(Catalogo)' }}</h3>
 
         @hasrole('Admin')
@@ -23,7 +29,6 @@
             </a>
 
             <a class="btn btn-warning mb-2" href="/stocksync">Sincronizza Stock</a>
-
         @endhasrole
 
         <div class="card m-0 p-0 border-0">
@@ -115,9 +120,16 @@
                         <div class="col-sm-auto " >
                             <h6 class="text-body mb-0" >&euro; {{ $beer->price  ? $beer->price->distribution : 'n/d'}} {{ ($beer->price && $beer->packaging->type=='fusti' ) ? '- €/lt '.$beer->price->distributionLiter : ' '}}
                                 {{ ($beer->price && $beer->packaging->type=='bottiglie' ) ? '- €/bt '.$beer->price->distribution_unit : ' '}} (+Iva)
-                                <a  href="{{str_replace('?', '/'.$beer->id.'/addtocart?' , request()->getRequestUri() )}}" >
-                                    <img src="/Carrello-TheBeerWay.png" alt="Carrello" height="30px" class="pl-3">
-                                </a>
+
+                                <form method="POST" action="{{ route('cart.add') }}">
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <button name="beer_id" value="{{ $beer->id }}">
+                                        <img src="/Carrello-TheBeerWay.png" alt="Carrello" height="30px" class="pl-3">
+                                    </button>
+                                </form>
+
                                 <a class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }}  aria-expanded="false" aria-controls={{ "beer".$beer->id }} >
                                     <img src="/Espandi-TheBeerWay.png" alt="Espandi" height="30px" class="pl-3">
                                 </a>

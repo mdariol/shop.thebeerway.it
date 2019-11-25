@@ -34,19 +34,15 @@
                     <img src="/Bottiglia512.png" alt="Bottiglie" height="40px" >
                 </a>
 
-                @hasanyrole('Publican|Admin|Distributor')
-
-                    <a class="navbar-brand" href="{{route('orders.index')}}" data-container="body" data-toggle="popover" data-placement="bottom" data-content="test test">
+                @auth()
+                    <a class="navbar-brand" href="{{route('orders.index')}}">
                         <img src="/Ordini_TBW.png" alt="Ordini" height="40px" >
                     </a>
 
-                    <a class="navbar-brand" href="{{route('beers.shoppingcart')}}" data-container="body" data-toggle="popover" data-placement="bottom" data-content="test test">
+                    <a class="navbar-brand" href="{{route('cart.show')}}" >
                         <img src="/Carrello-TheBeerWay.png" alt="Carrello" height="40px" >
-                        <span class="badge badge-pill btn-warning shadow-sm mt-1 px-2" >
-                            {{Session::has('cart') ? Session::get('cart')->totalQty : ''}}
-                        </span>
                     </a>
-                @endhasanyrole
+                @endauth
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>

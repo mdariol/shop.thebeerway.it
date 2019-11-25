@@ -23,6 +23,8 @@ class Order extends Model
 
     protected $attributes = ['state' => 'draft'];
 
+    protected $with = ['lines'];
+
     protected static function boot()
     {
         parent::boot();
@@ -30,43 +32,135 @@ class Order extends Model
         static::addGlobalScope(new OrdersScope);
     }
 
+    /**
+     * Get related user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get related lines.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function lines()
     {
         return $this->hasMany(Line::class);
     }
 
+    /**
+     * Get related billing profile.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function billing_profile()
     {
         return $this->belongsTo(BillingProfile::class);
     }
 
+    /**
+     * Get related shipping address.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function shipping_address()
     {
         return $this->belongsTo(ShippingAddress::class);
     }
 
+    /**
+     * Get related policy.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function policy()
     {
         return $this->belongsTo(Policy::class);
     }
 
     /**
-     * Calculate order's number.
+     * Increase the line's quantity. If there's no line, add a line.
      *
-     * @return $this
+     * @param  Beer  $beer
+     * @param  int  $quantity
+     * @return bool|int
      */
-    public function calcNumber()
+    public function add(Beer $beer, int $quantity = 1)
     {
-        if ( ! $this->number) {
-            $this->number = DB::table('orders')->max('number') + 1;
+        $line = $this->lines()->where('beer_id', $beer->id)->first();
+
+        if ( ! $line) {
+            return Line::create([
+                'order_id' => $this->id,
+                'beer_id' => $beer->id,
+                'unit_price' => $beer->price->distribution,
+                'price' => $beer->price->distribution * $quantity,
+                'qty' => $quantity,
+            ]);
         }
 
-        return $this;
+        $line->qty += $quantity;
+
+        return $line->update([
+            'price' => $line->unit_price * $line->qty,
+        ]);
+    }
+
+    /**
+     * Decrease the line's quantity. If no quantity is specified, removes the line.
+     *
+     * @param  Beer  $beer
+     * @param  int|null  $quantity
+     * @return bool|int|mixed|null
+     * @throws \Exception
+     */
+    public function remove(Beer $beer, int $quantity = null)
+    {
+        $line = $this->lines()->where('beer_id', $beer->id)->first();
+        $line->qty -= $quantity;
+
+        if ( ! $quantity || $line->qty < 1) {
+            return $line->delete();
+        }
+
+        return $line->update([
+            'price' => $line->unit_price * $line->qty,
+        ]);
+    }
+
+    /**
+     * Remove all lines.
+     */
+    public function empty()
+    {
+        $this->lines()->each(function ($line) {
+            $line->delete();
+        });
+    }
+
+    /**
+     * Whether the order is empty or not.
+     *
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->lines()->doesntExist();
+    }
+
+    /**
+     * Whether the order has given beer or not.
+     *
+     * @param  Beer  $beer
+     * @return bool
+     */
+    public function has(Beer $beer)
+    {
+        return $this->lines()->where('beer_id', $beer->id)->exists();
     }
 
     /**

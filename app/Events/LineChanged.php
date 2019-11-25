@@ -4,7 +4,7 @@ namespace App\Events;
 
 use App\Line;
 
-class LineCreated
+class LineChanged
 {
     public $line;
 
