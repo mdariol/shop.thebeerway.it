@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="container">
-        @if(session('empty'))
+        @if(session('invalid_cart'))
             <div class="alert alert-warning">
-                {{ session('empty') }}
+                {{ session('invalid_cart') }}
             </div>
         @endif
 

@@ -18,7 +18,7 @@
                         <div class="form-group mb-0" v-if="edit">
                             <input type="number" class="form-control" v-model="line.qty"
                                    @change="update(line)" style="max-width: 5rem">
-                            <span v-if="line.errors" class="text-warning">{{ line.errors.qty[0] }}</span>
+                            <span v-if="line.errors" style="color: #857b26">{{ line.errors.qty[0] }}</span>
                         </div>
                         <span v-else>{{ line.qty }}</span>
                     </td>

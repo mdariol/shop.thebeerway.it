@@ -69,15 +69,26 @@ class CheckoutController extends Controller
      */
     protected function validateCart()
     {
-        if ( ! cart()->isEmpty()) {
-            return true;
+        $cart = cart();
+
+        if ($cart->isEmpty()) {
+            throw new ValidationException(
+                null,
+                redirect()->route('cart.show')->with([
+                    'invalid_cart' => 'Non puoi acquistare un carrello vuoto...',
+                ])
+            );
         }
 
-        throw new ValidationException(
-            null,
-            redirect()->route('cart.show')->with([
-                'empty' => 'Non puoi acquistare un carrello vuoto...',
-            ])
-        );
+        if ( ! $cart->checkStock()) {
+            throw new ValidationException(
+                null,
+                redirect()->route('cart.show')->with([
+                    'invalid_cart' => 'Una o più birre non sono disponibili.'
+                ])
+            );
+        }
+
+        return true;
     }
 }

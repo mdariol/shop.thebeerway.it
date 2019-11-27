@@ -42045,7 +42045,7 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       line.errors
-                        ? _c("span", { staticClass: "text-warning" }, [
+                        ? _c("span", { staticStyle: { color: "#857b26" } }, [
                             _vm._v(_vm._s(line.errors.qty[0]))
                           ])
                         : _vm._e()
