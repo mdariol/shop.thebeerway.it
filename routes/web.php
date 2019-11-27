@@ -117,8 +117,11 @@ Route::middleware(\Spatie\Honeypot\ProtectAgainstSpam::class)->group(function ()
     Auth::routes(['verify' => true]);
 });
 
+Route::get('/login-as', 'Auth\LoginController@showLoginAsForm')->name('login-as');
+Route::post('/login-as', 'Auth\LoginController@loginAs');
+
 Route::get('/login/{provider}', 'Auth\LoginController@redirectToProvider');
-Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
+Route::get('/login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
 
 Route::get('/welcome', 'Auth\WelcomeController@welcome')->name('welcome');
 
