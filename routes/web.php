@@ -99,7 +99,7 @@ Route::resource('lines', 'LineController', [
 Route::group(['namespace' => 'Commerce'], function () {
     Route::get('/cart', 'CartController@show')
         ->name('cart.show');
-    Route::patch('/cart', 'CartController@add')
+    Route::post('/cart', 'CartController@add')
         ->name('cart.add');
     Route::delete('/cart', 'CartController@empty')
         ->name('cart.empty');

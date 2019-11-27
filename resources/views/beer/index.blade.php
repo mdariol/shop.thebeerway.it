@@ -116,11 +116,10 @@
                     <div class="col-sm-auto " >
                         <h6 class="text-body mb-0" >&euro; {{ $beer->price  ? $beer->price->distribution : 'n/d'}} {{ ($beer->price && $beer->packaging->type=='fusti' ) ? '- €/lt '.$beer->price->distributionLiter : ' '}}
                             {{ ($beer->price && $beer->packaging->type=='bottiglie' ) ? '- €/bt '.$beer->price->distribution_unit : ' '}} (+Iva)
-                            <form method="POST" action="{{ route('cart.add') }}">
+                            <form method="POST" action="{{ route('cart.add') }}" class="d-inline">
                                 @csrf
-                                @method('PATCH')
 
-                                <button name="beer_id" value="{{ $beer->id }}">
+                                <button name="beer_id" value="{{ $beer->id }}" class="border-0 bg-transparent">
                                     <img src="/Carrello-TheBeerWay.png" alt="Carrello" title="Aggiungi al carrello" height="30px" class="pl-3">
                                 </button>
                             </form>
