@@ -32,7 +32,7 @@
         @endhasrole
 
         <div class="card m-0 p-0 border-0">
-            <div class="card-header m-0 pl-0 pr-0 pt-0 pb-2 border-0">
+            <div class="card-header m-0 pl-0 pr-0 pt-0 pb-2 border-0" title="Seleziona le birre per birrificio, stile, ...">
                 <h1  class="btn btn-dark btn-lg m-0 p-0 w-100 border-0" data-toggle="collapse" role="button" data-target="#filter">
                     <img src="/Imbuto-TheBeerWay.png" alt="Carrello" height="20px" >
                     Filtri
@@ -74,18 +74,18 @@
 
         @foreach($beers as $beer)
             <div class="row align-items-center mb-0 mt-0" >
-                <div class="col-sm mb-0 mt-0" data-toggle="collapse" href={{ "#beer".$beer->id }} aria-expanded="false" aria-controls={{ "beer".$beer->id }}>
+                <div class="col-sm mb-0 mt-0" title="Clicca per espandere tutte le informazioni" data-toggle="collapse" href={{ "#beer".$beer->id }} aria-expanded="false" aria-controls={{ "beer".$beer->id }}>
                     <h5 class="text-primary" >
                         @if ($beer->image)
                             <div class="d-inline-block text-center" style="height: 40px; width: 40px" >
-                                <img src="{{ asset('storage/'.$beer->image) }}" style="height: 40px; " data-zoomable >
+                                <img src="{{ asset('storage/'.$beer->image) }}" style="height: 40px; " title="Clicca per ingrandire l'immagine" data-zoomable >
                             </div>
                         @endif
                         <span>
                             {{ $beer->name }}
                             <small class="text-secondary"> -
                                 @if ($beer->brewery->logo)
-                                    <img src="{{ asset('storage/'.$beer->brewery->logo) }}" style="height: 30px; " data-zoomable>
+                                    <img src="{{ asset('storage/'.$beer->brewery->logo) }}" style="height: 30px; " title="Clicca per ingrandire l'immagine" data-zoomable>
                                 @endif
                                 {{ $beer->brewery ? $beer->brewery->name : ''}}
                                 @if(auth()->user())
@@ -121,11 +121,11 @@
                                 @method('PATCH')
 
                                 <button name="beer_id" value="{{ $beer->id }}">
-                                    <img src="/Carrello-TheBeerWay.png" alt="Carrello" height="30px" class="pl-3">
+                                    <img src="/Carrello-TheBeerWay.png" alt="Carrello" title="Aggiungi al carrello" height="30px" class="pl-3">
                                 </button>
                             </form>
                             <a class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }}  aria-expanded="false" aria-controls={{ "beer".$beer->id }} >
-                                <img src="/Espandi-TheBeerWay.png" alt="Espandi" height="30px" class="pl-3">
+                                <img src="/Espandi-TheBeerWay.png" alt="Espandi" title="Clicca per espandere tutte le informazioni" height="30px" class="pl-3">
                             </a>
                         </h6>
                     </div>
