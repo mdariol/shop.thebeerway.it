@@ -1,6 +1,15 @@
 <template>
     <div>
-        <section v-show="isCurrentStep(1)" data-title="Spedizione">
+        <div class="d-flex breadcrumb justify-content-center mb-4">
+            <div v-for="(step, index) in nodes" class="mx-3 d-flex flex-column pt-1">
+                <div :class="[++index <= current ? 'bg-primary' : 'bg-secondary', { 'active-step': isCurrentStep(index) },'rounded-circle', 'mx-auto', 'd-flex']" style="width: 3rem; height: 3rem">
+                    <span class="align-self-center text-white mx-auto"><strong>{{ index }}</strong></span>
+                </div>
+                <div class="text-center mt-2">{{ step.dataset.title }}</div>
+            </div>
+        </div>
+
+        <section v-show="isCurrentStep(1)" data-title="Fatturazione">
             <h1>Fatturazione & Spedizione</h1>
             <p>Selezione un indirizzo di spedizione e un profilo di fatturazione.</p>
 
@@ -32,7 +41,7 @@
             </div>
         </section>
 
-        <section v-show="isCurrentStep(2)" data-title="Riepilogo ordine">
+        <section v-show="isCurrentStep(2)" data-title="Riepilogo">
             <h1>Riepilogo ordine</h1>
             <p>Controlla gli indirizzi e il contenuto del carrello, quindi conferma l'ordine.</p>
 
@@ -113,6 +122,7 @@
                 billingProfile: null,
                 shippingAddress: null,
                 deliveryNote: '',
+                nodes: null,
             }
         },
 
@@ -133,11 +143,22 @@
         },
 
         mounted() {
+            this.nodes = this.$el.querySelectorAll('section');
             this.steps = this.$el.querySelectorAll('section').length;
         },
     }
 </script>
 
 <style scoped>
+    .active-step {
+        box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.25);
+    }
 
+    .breadcrumb > div:first-child {
+        margin-left: 0 !important;
+    }
+
+    .breadcrumb > div:last-child {
+        margin-right: 0 !important;
+    }
 </style>
