@@ -43,7 +43,9 @@ class Line extends Model
      */
     public function checkStock()
     {
-        if ($this->qty > $this->beer->stock) return false;
+        if ($this->qty > ($this->beer->stock - $this->beer->requested_stock)){
+            return false;
+        }
 
         return true;
     }

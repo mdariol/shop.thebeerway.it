@@ -34,7 +34,7 @@ class InStock implements Rule
      */
     public function passes($attribute, $value)
     {
-        if ($value > $this->beer->stock) return false;
+        if ($value > ($this->beer->stock - $this->beer->requested_stock)) return false;
 
         return true;
     }
