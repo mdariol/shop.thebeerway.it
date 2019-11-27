@@ -13,7 +13,7 @@
         <cart :cart='@json($cart)' :edit='@json(true)'></cart>
 
         @if( ! $cart->isEmpty())
-            <a href="{{ route('checkout.show') }}" class="btn btn-primary">Ordina</a>
+            <a href="{{ route('checkout.show') }}" class="btn btn-primary" id="purchase">Ordina</a>
         @endif
     </div>
 @endsection

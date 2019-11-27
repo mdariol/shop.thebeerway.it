@@ -73,6 +73,7 @@
         </div>
 
         @foreach($beers as $beer)
+            <div>{{ $beer->id }}</div>
             <div class="row align-items-center mb-0 mt-0" >
                 <div class="col-sm mb-0 mt-0" title="Clicca per espandere tutte le informazioni" data-toggle="collapse" href={{ "#beer".$beer->id }} aria-expanded="false" aria-controls={{ "beer".$beer->id }}>
                     <h5 class="text-primary" >
@@ -116,13 +117,17 @@
                     <div class="col-sm-auto " >
                         <h6 class="text-body mb-0" >&euro; {{ $beer->price  ? $beer->price->distribution : 'n/d'}} {{ ($beer->price && $beer->packaging->type=='fusti' ) ? '- €/lt '.$beer->price->distributionLiter : ' '}}
                             {{ ($beer->price && $beer->packaging->type=='bottiglie' ) ? '- €/bt '.$beer->price->distribution_unit : ' '}} (+Iva)
+
                             <form method="POST" action="{{ route('cart.add') }}" class="d-inline">
                                 @csrf
+
+                                <input type="number" name="quantity" value="1" class="d-none">
 
                                 <button name="beer_id" value="{{ $beer->id }}" class="border-0 bg-transparent">
                                     <img src="/Carrello-TheBeerWay.png" alt="Carrello" title="Aggiungi al carrello" height="30px" class="pl-3">
                                 </button>
                             </form>
+
                             <a class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }}  aria-expanded="false" aria-controls={{ "beer".$beer->id }} >
                                 <img src="/Espandi-TheBeerWay.png" alt="Espandi" title="Clicca per espandere tutte le informazioni" height="30px" class="pl-3">
                             </a>

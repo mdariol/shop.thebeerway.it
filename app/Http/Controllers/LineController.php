@@ -3,15 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Line;
+use App\Rules\InStock;
 use Illuminate\Http\Request;
 
 class LineController extends Controller
 {
-    const RULES = [
-        'beer_id' => ['required', 'exists:beers,id'],
-        'qty' => ['required', 'min:1'],
-    ];
-
     /**
      * Display a listing of the resource.
      *
@@ -74,7 +70,7 @@ class LineController extends Controller
      */
     public function update(Request $request, Line $line)
     {
-        $line->update(request()->validate(self::RULES) + [
+        $line->update(request()->validate($this->rules()) + [
             'unit_price' => $line->beer->price->distribution,
             'price' => $request->qty * $line->beer->price->distribution,
         ]);
@@ -97,5 +93,16 @@ class LineController extends Controller
         if (\request()->wantsJson()) {
             return ['deleted' => $bool];
         }
+    }
+
+    /**
+     * Validation rules.
+     */
+    protected function rules()
+    {
+        return [
+            'beer_id' => ['required', 'exists:beers,id'],
+            'qty' => ['required', 'min:1', new InStock(request()->beer_id)],
+        ];
     }
 }

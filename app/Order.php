@@ -164,6 +164,19 @@ class Order extends Model
     }
 
     /**
+     * Whether all beers are in stock or not.
+     *
+     * @return bool
+     */
+    public function checkStock()
+    {
+        return $this->lines->every(function ($line) {
+            /** @var \App\Line $line */
+            return $line->checkStock();
+        });
+    }
+
+    /**
      * Create a new order with attached lines.
      *
      * @param  array  $attributes

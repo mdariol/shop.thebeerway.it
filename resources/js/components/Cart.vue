@@ -11,12 +11,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="line in lines">
+                <tr v-for="line in lines" :class="{'table-warning': line.errors}">
                     <td class="align-middle">{{ line.beer.name }}</td>
                     <td class="align-middle">{{ line.beer.packaging.name }}</td>
                     <td class="align-middle">
-                        <input v-if="edit" type="number" class="form-control" v-model="line.qty"
-                               @change="update(line)" style="max-width: 5rem">
+                        <div class="form-group mb-0" v-if="edit">
+                            <input type="number" class="form-control" v-model="line.qty"
+                                   @change="update(line)" style="max-width: 5rem">
+                            <span v-if="line.errors" class="text-warning">{{ line.errors.qty[0] }}</span>
+                        </div>
                         <span v-else>{{ line.qty }}</span>
                     </td>
                     <td class="align-middle">€ {{ line.unit_price }}</td>
@@ -52,7 +55,8 @@
         data() {
             return {
                 csfr: document.head.querySelector('meta[name="csrf-token"]').content,
-                lines: {}
+                lines: {},
+                purchaseButton: null,
             }
         },
 
@@ -73,7 +77,17 @@
 
                     axios.post(`/lines/${line.id}`, data).then(response => {
                         Vue.set(this.lines, line.id, response.data);
-                    })
+
+                        if (this.purchaseButton) {
+                            this.purchaseButton.classList.remove('disabled')
+                        }
+                    }).catch(error => {
+                        Vue.set(line, 'errors', error.response.data.errors);
+
+                        if (this.purchaseButton) {
+                            this.purchaseButton.classList.add('disabled')
+                        }
+                    });
                 }
             },
         },
@@ -82,6 +96,8 @@
             this.cart.lines.forEach(line => {
                 Vue.set(this.lines, line.id, line);
             });
+
+            this.purchaseButton = document.querySelector('#purchase');
         },
     }
 </script>

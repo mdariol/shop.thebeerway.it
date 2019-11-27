@@ -35,4 +35,16 @@ class Line extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    /**
+     * Whether the beer is in stock or not.
+     *
+     * @return bool
+     */
+    public function checkStock()
+    {
+        if ($this->qty > $this->beer->stock) return false;
+
+        return true;
+    }
 }

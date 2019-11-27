@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Commerce;
 
 use App\Beer;
 use App\Http\Controllers\Controller;
+use App\Rules\InStock;
+use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
@@ -30,13 +32,19 @@ class CartController extends Controller
     /**
      * Add beer to cart.
      *
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function add()
+    public function add(Request $request)
     {
-        $beer = Beer::findOrFail(request()->beer_id);
+        $request->validate([
+            'beer_id' => 'required|exists:beers,id',
+            'quantity' => ['required', 'min:1', new InStock($request->beer_id)],
+        ]);
 
-        cart()->add($beer);
+        $beer = Beer::find($request->beer_id);
+
+        cart()->add($beer, $request->quantity);
 
         return back()->with('added', "$beer->name aggiunta al carrello.");
     }
