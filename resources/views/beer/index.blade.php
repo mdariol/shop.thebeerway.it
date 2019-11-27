@@ -73,7 +73,6 @@
         </div>
 
         @foreach($beers as $beer)
-            <div>{{ $beer->id }}</div>
             <div class="row align-items-center mb-0 mt-0" >
                 <div class="col-sm mb-0 mt-0" title="Clicca per espandere tutte le informazioni" data-toggle="collapse" href={{ "#beer".$beer->id }} aria-expanded="false" aria-controls={{ "beer".$beer->id }}>
                     <h5 class="text-primary" >

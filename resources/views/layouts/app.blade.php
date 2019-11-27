@@ -41,6 +41,7 @@
 
                     <a class="navbar-brand" href="{{route('cart.show')}}" >
                         <img src="/Carrello-TheBeerWay.png" alt="Carrello" height="40px" >
+                        <span class="badge badge-pill badge-warning">{{ cart()->countItems() }}</span>
                     </a>
                 @endauth
 

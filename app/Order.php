@@ -164,6 +164,18 @@ class Order extends Model
     }
 
     /**
+     * Count the number of order's items.
+     *
+     * @return int
+     */
+    public function countItems()
+    {
+        return $this->lines->reduce(function ($carry, $line) {
+            return $carry + $line->qty;
+        }, 0);
+    }
+
+    /**
      * Whether all beers are in stock or not.
      *
      * @return bool
