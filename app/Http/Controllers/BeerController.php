@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Beer;
 use App\Brewery;
 use App\Color;
+use App\Exports\BeersExport;
 use App\Packaging;
 use App\Style;
 use App\Taste;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BeerController extends Controller
 {
@@ -73,6 +75,37 @@ class BeerController extends Controller
             'colors' => Color::all(),
             'tastes' => Taste::all(),
         ]);
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function beerspricelist()
+    {
+
+        $beers = Beer::queryFilter()
+            ->join('breweries', 'beers.brewery_id', '=', 'breweries.id' )
+            ->leftJoin('styles', 'beers.style_id', '=', 'styles.id' )
+            ->select('beers.*', 'breweries.name as brewery_name', 'styles.name as style_name')
+            ->orderBy('brewery_name', 'ASC')
+            ->orderBy('style_name', 'ASC')
+            ->get();
+
+        return view('beer.pricelist')->with([
+            'beers' => $beers,
+            'styles' => Style::all(),
+            'breweries' => Brewery::all(),
+            'colors' => Color::all(),
+            'tastes' => Taste::all(),
+        ]);
+    }
+
+    public function export()
+    {
+        return Excel::download(new BeersExport, 'beers.xlsx');
     }
 
     /**

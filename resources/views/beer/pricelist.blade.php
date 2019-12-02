@@ -2,6 +2,8 @@
 
 @section('content')
     <div class="container">
+        <a class="btn btn-dark mb-2 btn-lg" href="/pricelist/download">Scarica</a>
+
 
         <table class="table table-sm">
             <thead>
@@ -11,12 +13,7 @@
                 <th>{{ 'Formato' }}</th>
                 <th>{{ 'Stile' }}</th>
                 <th>{{ 'Descrizione' }}</th>
-                <th>{{ 'Stock' }}</th>
-                <th>{{ 'Horeca' }}</th>
-                <th>{{ 'Acquisto' }}</th>
-                <th>{{ 'Sconto' }}</th>
-                <th>{{ 'Distribuzione' }}</th>
-                <th>{{ 'Margine' }}</th>
+                <th>{{ 'Prezzo' }}</th>
             </thead>
             <tbody>
                 @foreach($beers as $beer)
@@ -28,13 +25,8 @@
                             <td>{{ $beer->packaging ? $beer->packaging->name : '' }}</td>
                             <td>{{ $beer->style ? $beer->style->name : '' }}</td>
                             <td>{{ str_replace(';', '--', $beer->description) }}</td>
-                            <td>{{ $beer->stock }}</td>
                             @if ($beer->price)
-                                <td>{{$beer->price->horeca ? number_format($beer->price->horeca,2,',','.') : 0}}</td>
-                                <td>{{$beer->price->purchase ? number_format($beer->price->purchase,2,',','.') : 0}}</td>
-                                <td>{{$beer->price->discount ? number_format($beer->price->discount,2,',','.') : 0}}</td>
                                 <td>{{$beer->price->distribution ? number_format($beer->price->distribution,2,',','.') : 0}}</td>
-                                <td>{{$beer->price->margin ? number_format($beer->price->margin,2,',','.') : 0}}</td>
                             @endif
                         </tr>
                     @endif

@@ -22,6 +22,8 @@ Route::get('/beers/{beer}/delete', 'BeerController@delete')
 Route::get('/beers/{beer}/duplicate', 'BeerController@duplicate')
     ->name('beers.duplicate');
 Route::get('/datapricing', 'BeerController@beersdatapricing')->name('beers.datapricing');
+Route::get('/pricelist', 'BeerController@beerspricelist')->name('beers.pricelist');
+Route::get('/pricelist/download', 'BeerController@export')->name('beers.export');
 
 /* ----- Brewery ----- */
 

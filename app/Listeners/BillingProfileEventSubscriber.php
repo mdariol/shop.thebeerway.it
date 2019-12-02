@@ -62,9 +62,9 @@ class BillingProfileEventSubscriber
      */
     public function sendCompanyApprovalEmail(BillingProfileCreated $event)
     {
-        $admins = User::role('Admin')->get();
+        $internalNotifications = User::role('InternalNotifications')->get();
 
-        Mail::to($admins)->send(new \App\Mail\BillingProfileCreated($event->billingProfile));
+        Mail::to($internalNotifications)->send(new \App\Mail\BillingProfileCreated($event->billingProfile));
     }
 
     /**

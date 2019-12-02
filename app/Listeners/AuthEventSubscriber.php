@@ -35,9 +35,9 @@ class AuthEventSubscriber
      */
     public function sendAuthRegisteredEmail(Registered $event)
     {
-        $admins = User::role('Admin')->get();
+        $internalNotifications = User::role('InternalNotifications')->get();
 
-        Mail::to($admins)->send(new AuthRegistered($event->user));
+        Mail::to($internalNotifications)->send(new AuthRegistered($event->user));
     }
 
     /**
