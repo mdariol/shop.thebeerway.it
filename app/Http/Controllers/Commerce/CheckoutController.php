@@ -58,7 +58,9 @@ class CheckoutController extends Controller
         $cart->update(request()->validate(self::RULES));
         $cart->state_machine->apply('send');
 
-        return redirect()->route('orders.show', ['order' => $cart->id]);
+        return redirect()->route('orders.show', ['order' => $cart->id])->with([
+            'placed' => 'Il tuo ordine è stato inserito correttamente!',
+        ]);
     }
 
     /**

@@ -63,7 +63,9 @@
                 <tbody>
                 @foreach($orders as $order)
                     <tr>
-                        <td class="d-none d-md-table-cell align-middle">{{ $order->number }}</td>
+                        <td class="d-none d-md-table-cell align-middle">
+                            <a href="{{ route('orders.show', ['order' => $order->id]) }}">{{ $order->number }}</a>
+                        </td>
                         <td class="d-none d-md-table-cell align-middle">{{ $order->user->name }}</td>
                         <td class="align-middle">{{ $order->billing_profile->name }}</td>
                         <td class="align-middle">€ {{ $order->total_amount }}</td>

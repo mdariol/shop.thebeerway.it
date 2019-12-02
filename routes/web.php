@@ -14,19 +14,16 @@
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', 'HomeController@index');
 
-Route::get('/beers/shoppingcart', 'BeerController@getCart')->name('beers.shoppingcart');
-Route::post('/beers/saveorder', 'BeerController@saveOrder')->name('beers.saveorder');
-Route::post('/beers/savedeliverynote', 'BeerController@savedeliverynote')->name('beers.savedeliverynote');
-Route::get('/beers/savedeliverynote', 'BeerController@savedeliverynote')->name('beers.savedeliverynote');
+/* ----- Beer ----- */
+
 Route::resource('beers', 'BeerController');
 Route::get('/beers/{beer}/delete', 'BeerController@delete')
     ->name('beers.delete');
 Route::get('/beers/{beer}/duplicate', 'BeerController@duplicate')
     ->name('beers.duplicate');
 Route::get('/datapricing', 'BeerController@beersdatapricing')->name('beers.datapricing');
-Route::get('/beers/{beer}/addtocart', 'BeerController@getAddToCart')->name('beers.addtocart');
-Route::get('/beers/{beer}/fixupcart', 'BeerController@fixupCart')->name('beers.fixupshoppingcart');
-Route::get('/beers/{beer}/fixdowncart', 'BeerController@fixdownCart')->name('beers.fixdownshoppingcart');
+
+/* ----- Brewery ----- */
 
 Route::resource('breweries', 'BreweryController');
 Route::get('/breweries/{brewery}/delete', 'BreweryController@delete')
@@ -120,8 +117,11 @@ Route::middleware(\Spatie\Honeypot\ProtectAgainstSpam::class)->group(function ()
     Auth::routes(['verify' => true]);
 });
 
+Route::get('/login-as', 'Auth\LoginController@showLoginAsForm')->name('login-as');
+Route::post('/login-as', 'Auth\LoginController@loginAs');
+
 Route::get('/login/{provider}', 'Auth\LoginController@redirectToProvider');
-Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
+Route::get('/login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
 
 Route::get('/welcome', 'Auth\WelcomeController@welcome')->name('welcome');
 

@@ -48,7 +48,35 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('admin')->only(['showLoginAsForm', 'loginAs']);
+        $this->middleware('guest')->except(['logout', 'showLoginAsForm', 'loginAs']);
+    }
+
+    /**
+     * Show the application's login-as form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showLoginAsForm()
+    {
+        return view('auth.login-as');
+    }
+
+    /**
+     * Handle a login-as request to the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function loginAs(Request $request)
+    {
+        $request->validate(['user_id' => 'required|exists:users,id']);
+
+        auth()->loginUsingId($request->user_id);
+
+        return redirect($this->redirectPath());
     }
 
     /**

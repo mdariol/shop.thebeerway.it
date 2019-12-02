@@ -110,43 +110,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * @deprecated
-     * @see \App\User::cart()
-     */
-    public function getDraftOrder(){
-        $order = $this->orders()->where('state','draft')->first();
-
-        if ($order) {
-            $oldCart = new Cart(null);
-            $oldCart->order_id = $order->id;
-            $oldCart->totalPrice = $order->total_amount;
-            $oldCart->deliverynote = $order->deliverynote;
-            $oldCart->billing_profile_id = $order->billing_profile_id;
-            $oldCart->shipping_address_id = $order->shipping_address_id;
-
-            $storedItem = null;
-
-            $oldCart->totalQty = 0;
-
-            foreach ($order->lines as $line){
-                $storedItem['item'] = Beer::find($line->beer_id);
-                $storedItem['qty'] = $line->qty;
-                $storedItem['unit_price'] = $line->unit_price;
-                $storedItem['price'] = $line->price;
-                $storedItem['beer'] = $storedItem['item']->name;
-                $storedItem['brewery'] = $line->beer->getRelation('brewery')->getAttribute('name');
-                $storedItem['packaging'] = $line->beer->getRelation('packaging')->getAttribute('name');
-                $oldCart->items[$line->beer_id] = $storedItem;
-                $oldCart->totalQty += $line->qty;
-            }
-
-            $cart = new Cart($oldCart);
-
-            request()->session()->put('cart', $cart);
-        }
-    }
-
-    /**
      * Get user's cart.
      *
      * @return Order

@@ -15,6 +15,10 @@ Log of unreleased changes.
 
 - Improves cart functionality.
 
+### Removed
+
+- Removes `Cart` model.
+
 ## v1.0.3
 
 Released on **2019/11/18**.

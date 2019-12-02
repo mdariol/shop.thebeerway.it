@@ -24,11 +24,6 @@ class AuthEventSubscriber
 
         $events->listen(
             Login::class,
-            'App\Listeners\AuthEventSubscriber@loadCartFromDraftOrder'
-        );
-
-        $events->listen(
-            Login::class,
             'App\Listeners\AuthEventSubscriber@notifyMissingBillingProfile'
         );
     }
@@ -43,16 +38,6 @@ class AuthEventSubscriber
         $admins = User::role('Admin')->get();
 
         Mail::to($admins)->send(new AuthRegistered($event->user));
-    }
-
-    /**
-     * Load Cart from Draft Order if exist.
-     *
-     * @param \Illuminate\Auth\Events\Login $event
-     */
-    public function loadCartFromDraftOrder(Login $event)
-    {
-       $event->user->getDraftOrder();
     }
 
     /**
