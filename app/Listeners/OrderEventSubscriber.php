@@ -104,7 +104,7 @@ class OrderEventSubscriber
         /** @var \App\Order $order */
         $order = $event->getStateMachine()->getObject();
 
-        $internalNotifications = User::role('InternalNotification')->get();
+        $internalNotifications = User::role('InternalNotifications')->get();
         Mail::to($internalNotifications)->send(new \App\Mail\RequestedOrderSent($order));
         Mail::to($order->billing_profile->users)->send(new \App\Mail\RequestedOrderSent($order));
     }
@@ -121,7 +121,7 @@ class OrderEventSubscriber
         /** @var \App\Order $order */
         $order = $event->getStateMachine()->getObject();
 
-        $internalNotifications = User::role('InternalNotification')->get();
+        $internalNotifications = User::role('InternalNotifications')->get();
         Mail::to($internalNotifications)->send(new \App\Mail\CanceledOrderSent($order));
         Mail::to($order->billing_profile->users)->send(new \App\Mail\CanceledOrderSent($order));
     }
@@ -138,7 +138,7 @@ class OrderEventSubscriber
         /** @var \App\Order $order */
         $order = $event->getStateMachine()->getObject();
 
-        $internalNotifications = User::role('InternalNotification')->get();
+        $internalNotifications = User::role('InternalNotifications')->get();
         Mail::to($internalNotifications)->send(new \App\Mail\ResetOrderSent($order));
         Mail::to($order->billing_profile->users)->send(new \App\Mail\ResetOrderSent($order));
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Line;
+use App\Promotion;
 use App\Rules\InStock;
 use Illuminate\Http\Request;
 
@@ -70,9 +71,18 @@ class LineController extends Controller
      */
     public function update(Request $request, Line $line)
     {
+
+        $promotion = Promotion::applicable($line->beer);
+
+        $net_price = $promotion->discount ? $line->beer->price->distribution - ($line->beer->price->distribution * $promotion->discount /100) : $line->beer->price->distribution;
+
+
         $line->update(request()->validate($this->rules()) + [
-            'unit_price' => $line->beer->price->distribution,
-            'price' => $request->qty * $line->beer->price->distribution,
+            'gross_price' => $line->beer->price->distribution,
+            'discount' => $promotion ? $promotion->discount : null,
+            'promotion_id' => $promotion ? $promotion->promotion_id : null,
+            'unit_price' => $net_price,
+            'price' => $request->qty * $net_price,
         ]);
 
         if ($request->wantsJson()) {

@@ -21,7 +21,7 @@ class Beer extends Model
         'packaging', 'style', 'brewery', 'price', 'color','taste',
     ];
 
-    protected $appends = ['in_stock'];
+    protected $appends = ['in_stock','in_promotion'];
 
     /**
      * The "booting" method of the model.
@@ -85,6 +85,21 @@ class Beer extends Model
     public function getInStockAttribute()
     {
         return $this->stock > 0;
+    }
+
+    public static function getUserPrice(Beer $beer)
+    {
+        $promotion = Promotion::applicable($beer);
+
+        if ($promotion) {
+            return $promotion->discount ? $beer->price->distribution - ($beer->price->distribution * $promotion->discount /100) : $beer->price->distribution;
+        }
+
+        return $beer->price->distribution;
+    }
+
+    public function getInPromotionAttribute() {
+        return true;
     }
 
     public function lines()

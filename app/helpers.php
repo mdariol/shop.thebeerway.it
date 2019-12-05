@@ -15,7 +15,7 @@ if (! function_exists('cart')) {
         }
 
         if (is_numeric($user)) {
-            $user = User::find($user)->cart();
+            $user = User::find($user);
         }
 
         if (is_a($user, User::class)) {

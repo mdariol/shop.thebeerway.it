@@ -116,9 +116,18 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function cart()
     {
-        return Order::firstOrCreate([
-            'user_id' => $this->id,
-            'state' => 'draft',
-        ]);
+        $cart = Order::where([
+            ['user_id', $this->id],
+            ['state', 'draft'],
+        ])->orderBy('created_at', 'asc')->first();
+
+        if ( ! $cart) {
+            return Order::create([
+                'user_id' => $this->id,
+                'state' => 'draft',
+            ]);
+        }
+
+        return $cart;
     }
 }

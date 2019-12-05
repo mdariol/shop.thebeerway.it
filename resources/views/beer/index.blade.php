@@ -114,8 +114,38 @@
 
                 @hasanyrole('Publican|Admin|Distributor')
                     <div class="col-sm-auto " >
-                        <h6 class="text-body mb-0" >&euro; {{ $beer->price  ? $beer->price->distribution : 'n/d'}} {{ ($beer->price && $beer->packaging->type=='fusti' ) ? '- €/lt '.$beer->price->distributionLiter : ' '}}
-                            {{ ($beer->price && $beer->packaging->type=='bottiglie' ) ? '- €/bt '.$beer->price->distribution_unit : ' '}} (+Iva)
+                        <h6 class="text-body mb-0" >
+                        @if($beer->price)
+                                @if($beer->price->net_price <> $beer->price->distribution)
+                                    <s style="color:red">
+                                        <small>
+                                            €
+                                            {{ $beer->price->distribution }}
+                                            {{ $beer->packaging->type=='fusti'  ? '- €/lt '.number_format($beer->price->distributionLiter,2) : ' '}}
+                                            {{ $beer->packaging->type=='bottiglie' ? '- €/bt '.number_format($beer->price->distribution_unit,2) : ' '}} (+Iva)
+                                        </small>
+                                    </s>
+                                    <span style="color:dodgerblue">
+                                        <b>
+                                            {{ number_format($beer->price->net_price - $beer->price->distribution,2) }}
+                                        </b>
+                                    </span>
+                                    <br>
+                                    €
+                                    {{ $beer->getUserPrice($beer) }}
+                                    {{ $beer->packaging->type=='fusti'  ? '- €/lt '.$beer->price_net_liter_price : ' '}}
+                                    {{ $beer->packaging->type=='bottiglie' ? '- €/bt '.$beer->price->net_unit_price : ' '}}
+                                    (+Iva)
+                                @else
+                                    €
+                                    {{ $beer->price->distribution }}
+                                    {{ $beer->packaging->type=='fusti'  ? '- €/lt '.number_format($beer->price->distributionLiter,2) : ' '}}
+                                    {{ $beer->packaging->type=='bottiglie' ? '- €/bt '.number_format($beer->price->distribution_unit,2) : ' '}} (+Iva)
+                                @endif
+                            @else
+                                {{ 'n/d' }}
+                            @endif
+
 
                             <form method="POST" action="{{ route('cart.add') }}" class="d-inline">
                                 @csrf

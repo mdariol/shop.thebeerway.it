@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Line extends Model
 {
-    protected $fillable = ['beer_id', 'qty', 'unit_price', 'price', 'order_id'];
+    protected $fillable = ['beer_id', 'qty', 'unit_price', 'price', 'order_id', 'gross_price', 'discount', 'promotion_id'];
 
     protected $with = ['beer'];
 

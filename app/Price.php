@@ -16,6 +16,9 @@ class Price extends Model
 //        'purchase_liter', 'distribution_liter', 'horeca_liter',
 //    ];
 
+    protected $appends = ['net_price','net_liter_price','net_unit_price'];
+
+
     public function beer()
     {
         return $this->belongsTo(Beer::class);
@@ -54,6 +57,44 @@ class Price extends Model
     {
         return $this->getLiterPrice($this->horeca);
     }
+
+    public function getNetPriceAttribute() : float
+    {
+        $this->setUserPrice();
+        return $this->attributes['net_price'];
+    }
+
+    public function getNetLiterPriceAttribute() : float
+    {
+        $this->setUserPrice();
+        return $this->attributes['net_liter_price'];
+    }
+
+    public function getNetUnitPriceAttribute() : float
+    {
+        $this->setUserPrice();
+        return $this->attributes['net_unit_price'];
+    }
+
+    protected function setUserPrice() : bool
+    {
+        if (! array_key_exists('net_price', $this->attributes)){
+            $promotion = Promotion::applicable( $this->beer );
+            if ($promotion) {
+                $netprice = $promotion->discount ? number_format($this->distribution - ($this->distribution * $promotion->discount /100),2) : $this->distribution;
+            } else
+            {
+                $netprice = $this->distribution;
+            }
+            $this->attributes['net_price'] = $netprice;
+            $this->attributes['net_liter_price'] = number_format($netprice/$this->beer->packaging->capacity,2);
+            $this->attributes['net_unit_price'] = number_format($netprice/$this->beer->packaging->quantity,2);
+
+            return true;
+        }
+        return false;
+    }
+
 
     /* ----- Helpers ----- */
 

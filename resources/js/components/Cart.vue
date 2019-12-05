@@ -29,7 +29,7 @@
         </div>
 
         <p class="text-right" v-if="Object.keys(lines).length" style="font-size: 1.3rem">
-            <strong>Tot. <br> € {{ tot }}</strong>
+            <strong>Totale (iva e spese escluse) <br> € {{ tot }}</strong>
         </p>
         <p v-else>Nessuna birra nel carrello...</p>
     </div>
