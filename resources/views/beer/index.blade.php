@@ -47,6 +47,12 @@
                         <label for="stock" class="form-check-label mb-2" >Solo Disponibili</label>
                     </div>
 
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input mb-2" name="onsale" id="onsale"
+                                {{ request()->has('onsale') ? 'checked' : '' }}>
+                        <label for="onsale" class="form-check-label mb-2" >Solo Scontate</label>
+                    </div>
+
                     <autocomplete :options='@json($breweries)' name='brewery' label='Birrificio'></autocomplete>
                     <autocomplete :options='@json($styles)' name='style' label='Stile'></autocomplete>
                     <autocomplete :options='@json($colors)' name='color' label='Colore'></autocomplete>

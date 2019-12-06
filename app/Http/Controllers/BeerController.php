@@ -9,6 +9,8 @@ use App\Exports\BeersExport;
 use App\Packaging;
 use App\Style;
 use App\Taste;
+use App\Price;
+use http\Client\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class BeerController extends Controller
@@ -33,6 +35,15 @@ class BeerController extends Controller
             ->orderBy('brewery_name', 'ASC')
             ->orderBy('style_name', 'ASC')
             ->get();
+
+        if (request()->has('onsale')) {
+            $filtered = $beers->filter(function ($beer) {
+                if ($beer->price->net_price <> $beer->price->distribution){
+                    return $beer;
+                }
+            });
+            $beers = $filtered;
+        }
 
         if (request()->wantsJson()) {
             return $beers;
