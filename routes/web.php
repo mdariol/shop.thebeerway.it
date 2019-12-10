@@ -79,40 +79,6 @@ Route::resource('purchaseorders', 'PurchaseorderController');
 Route::get('/purchaseorders/{purchaseorder}/delete', 'PurchaseorderController@delete')
     ->name('purchaseorders.delete');
 
-/* ----- Order ----- */
-
-Route::resource('orders', 'OrderController', [
-    'except' => ['edit', 'update', 'destroy'],
-]);
-Route::patch('/orders/{order}/transition', 'OrderController@transition')
-    ->name('orders.transition');
-
-/* ----- Line ----- */
-
-Route::resource('lines', 'LineController', [
-    'except' => ['index', 'edit', 'create', 'store']
-]);
-
-/* ----- Cart ----- */
-
-Route::group(['namespace' => 'Commerce'], function () {
-    Route::get('/cart', 'CartController@show')
-        ->name('cart.show');
-    Route::post('/cart', 'CartController@add')
-        ->name('cart.add');
-    Route::delete('/cart', 'CartController@empty')
-        ->name('cart.empty');
-});
-
-/* ----- Checkout ----- */
-
-Route::group(['namespace' => 'Commerce'], function () {
-    Route::get('/checkout', 'CheckoutController@show')
-        ->name('checkout.show');
-    Route::post('/checkout', 'CheckoutController@process')
-        ->name('checkout.process');
-});
-
 /* ----- Auth ----- */
 
 Route::middleware(\Spatie\Honeypot\ProtectAgainstSpam::class)->group(function () {
@@ -163,6 +129,46 @@ Route::patch('/billing-profiles/{billing_profile}/shipping-addresses/{shipping_a
 
 Route::get('/download', 'DownloadController@download')
     ->name('download');
+
+/* --------------------------------------------------------------------------
+    Commerce
+   -------------------------------------------------------------------------- */
+
+Route::group([
+    'middleware' => 'verified',
+    'namespace' => 'Commerce',
+], function () {
+
+    /* ----- Order ----- */
+
+    Route::resource('orders', 'OrderController', [
+        'except' => ['edit', 'update', 'destroy'],
+    ]);
+    Route::patch('/orders/{order}/transition', 'OrderController@transition')
+        ->name('orders.transition');
+
+    /* ----- Line ----- */
+
+    Route::resource('lines', 'LineController', [
+        'except' => ['index', 'edit', 'create', 'store']
+    ]);
+
+    /* ----- Cart ----- */
+
+    Route::get('/cart', 'CartController@show')
+        ->name('cart.show');
+    Route::post('/cart', 'CartController@add')
+        ->name('cart.add');
+    Route::delete('/cart', 'CartController@empty')
+        ->name('cart.empty');
+
+    /* ----- Checkout ----- */
+
+    Route::get('/checkout', 'CheckoutController@show')
+        ->name('checkout.show');
+    Route::post('/checkout', 'CheckoutController@process')
+        ->name('checkout.process');
+});
 
 /* --------------------------------------------------------------------------
     Admin
