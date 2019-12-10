@@ -93,20 +93,20 @@ class Order extends Model
     {
         $line = $this->lines()->where('beer_id', $beer->id)->first();
 
-        if ( ! $line) {
-            return Line::create([
-                'order_id' => $this->id,
-                'beer_id' => $beer->id,
-                'unit_price' => $beer->price->distribution,
-                'price' => $beer->price->distribution * $quantity,
-                'qty' => $quantity,
+        if ($line) {
+            $line->qty += $quantity;
+
+            return $line->update([
+                'price' => $line->unit_price * $line->qty,
             ]);
         }
 
-        $line->qty += $quantity;
-
-        return $line->update([
-            'price' => $line->unit_price * $line->qty,
+        return Line::create([
+            'order_id' => $this->id,
+            'beer_id' => $beer->id,
+            'unit_price' => $beer->price->distribution,
+            'price' => $beer->price->distribution * $quantity,
+            'qty' => $quantity,
         ]);
     }
 

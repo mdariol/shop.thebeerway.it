@@ -10,14 +10,6 @@ use Illuminate\Http\Request;
 class CartController extends Controller
 {
     /**
-     * CartController constructor.
-     */
-    public function __construct()
-    {
-        $this->middleware('verified');
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -37,8 +29,7 @@ class CartController extends Controller
      */
     public function add(Request $request)
     {
-        $request->validate([
-            'beer_id' => 'required|exists:beers,id',
+        $request->validate($this->rules() + [
             'quantity' => ['required', 'min:1', new InStock($request->beer_id)],
         ]);
 
@@ -59,5 +50,17 @@ class CartController extends Controller
         cart()->empty();
 
         return back();
+    }
+
+    /**
+     * Validation rules.
+     *
+     * @return array
+     */
+    protected function rules()
+    {
+        return [
+            'beer_id' => 'required|exists:beers,id',
+        ];
     }
 }

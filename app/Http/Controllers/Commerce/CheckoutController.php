@@ -18,14 +18,6 @@ class CheckoutController extends Controller
     ];
 
     /**
-     * CheckoutController constructor.
-     */
-    public function __construct()
-    {
-        $this->middleware('verified');
-    }
-
-    /**
      * Display checkout form.
      *
      * @return \Illuminate\Http\Response
