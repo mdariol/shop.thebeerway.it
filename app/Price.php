@@ -16,7 +16,7 @@ class Price extends Model
 //        'purchase_liter', 'distribution_liter', 'horeca_liter',
 //    ];
 
-    protected $appends = ['net_price','net_liter_price','net_unit_price'];
+//    protected $appends = ['net_price','net_liter_price','net_unit_price'];
 
 
     public function beer()
