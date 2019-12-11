@@ -28,12 +28,29 @@
                    <div class="col-sm-3 text-center">
                         {{$promotion->priority}}
                     </div>
-
-
                     <div class="col-sm-3 text-center">
                         <a href="/promotions/{{ $promotion->id }}/edit" class="btn btn-primary">Modifica</a>
                         <a href="/promotions/{{ $promotion->id }}/delete" class="btn btn-danger">Elimina</a>
                     </div>
+
+                </div>
+                <div>
+                    <span class="btn-dark mr-3">Birrifici </span>
+                    @foreach($promotion->breweries as $brewery)
+                        <a>{{$brewery->name}}</a>
+                    @endforeach
+                </div>
+                <div>
+                    <span class="btn-dark mr-3">Birre </span>
+                    @foreach($promotion->beers as $beers)
+                        <a>{{$beers->name}}</a>
+                    @endforeach
+                </div>
+                <div>
+                    <span class="btn-dark mr-3">Utenti </span>
+                    @foreach($promotion->users as $user)
+                        <a>{{$user->email}}</a>
+                    @endforeach
                 </div>
             </div>
         @endforeach

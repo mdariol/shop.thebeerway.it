@@ -95,7 +95,12 @@ class Order extends Model
 
         if ( ! $line) {
             $promotion = Promotion::applicable($beer);
-            $net_price = $promotion->discount ? $beer->price->distribution - ($beer->price->distribution * $promotion->discount /100) : $beer->price->distribution;
+
+            $net_price = $beer->price->distribution;
+
+            if ($promotion) {
+                $net_price = $promotion->discount ? $beer->price->distribution - ($beer->price->distribution * $promotion->discount /100) : $beer->price->distribution;
+            }
 
             return Line::create([
                 'order_id' => $this->id,

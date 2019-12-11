@@ -45,13 +45,11 @@
                         <input type="checkbox" class="form-check-input mb-2" name="stock" id="stock"
                                 {{ request()->has('stock') ? 'checked' : '' }}>
                         <label for="stock" class="form-check-label mb-2" >Solo Disponibili</label>
+                        <input type="checkbox" class="form-check-input mb-2 ml-2" name="onsale" id="onsale"
+                                {{ request()->has('onsale') ? 'checked' : '' }} >
+                        <label for="onsale" class="form-check-label mb-2 ml-4" >Solo Scontate</label>
                     </div>
 
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input mb-2" name="onsale" id="onsale"
-                                {{ request()->has('onsale') ? 'checked' : '' }}>
-                        <label for="onsale" class="form-check-label mb-2" >Solo Scontate</label>
-                    </div>
 
                     <autocomplete :options='@json($breweries)' name='brewery' label='Birrificio'></autocomplete>
                     <autocomplete :options='@json($styles)' name='style' label='Stile'></autocomplete>

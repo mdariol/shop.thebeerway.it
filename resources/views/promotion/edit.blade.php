@@ -2,10 +2,7 @@
 
 @section('content')
 
-
-
     <div class="container">
-
 
         <h1>Modifica Promozione <em>{{ $promotion->name }} - {{ $promotion->from_date }} - {{ $promotion->to_date }} </em> </h1>
 
