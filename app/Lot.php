@@ -8,6 +8,8 @@ class Lot extends Model
 {
     public $timestamps = false;
 
+    protected $fillable = ['stock', 'reserved', 'bottled_at', 'expires_at'];
+
     protected $dates = ['bottled_at', 'expires_at'];
 
     /**
@@ -26,7 +28,7 @@ class Lot extends Model
      * @param int $quantity
      * @return bool
      */
-    public function isAvailable(int $quantity)
+    public function isAvailable(int $quantity = 1)
     {
         return $this->available > $quantity;
     }
