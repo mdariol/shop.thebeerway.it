@@ -11,16 +11,12 @@ $factory->define(Price::class, function (Faker $faker) {
             return factory(App\Beer::class)->create();
         },
 
-        'horeca' => $faker->numberBetween(100, 10000),
-        'purchase' => $faker->numberBetween(100, 10000),
-        'distribution' => $faker->numberBetween(100, 10000),
-
-        'horeca_unit' => $faker->numberBetween(100, 10000),
-        'purchase_unit' => $faker->numberBetween(100, 10000),
-        'distribution_unit' => $faker->numberBetween(100, 10000),
+        'horeca' => $faker->numberBetween(80, 140),
+        'purchase' => $faker->numberBetween(80, 140),
+        'distribution' => $faker->numberBetween(80, 140),
 
         'discount' => $faker->numberBetween(0, 99),
         'margin' => $faker->numberBetween(5, 95),
-        'fixed_margin' => $faker->boolean
+        'fixed_margin' => $faker->boolean,
     ];
 });

@@ -5,7 +5,7 @@ namespace App\Rules;
 use App\Beer;
 use Illuminate\Contracts\Validation\Rule;
 
-class InStock implements Rule
+class Available implements Rule
 {
     /**
      * @var \App\Beer|int
@@ -34,9 +34,7 @@ class InStock implements Rule
      */
     public function passes($attribute, $value)
     {
-        if ($value > ($this->beer->stock - $this->beer->requested_stock)) return false;
-
-        return true;
+        return $this->beer->isAvailable($value);
     }
 
     /**

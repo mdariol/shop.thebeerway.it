@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Commerce;
 
 use App\Http\Controllers\Controller;
 use App\Line;
-use App\Rules\InStock;
+use App\Rules\Available;
 use Illuminate\Http\Request;
 
 class LineController extends Controller
@@ -53,7 +53,7 @@ class LineController extends Controller
     {
         return [
             'beer_id' => ['required', 'exists:beers,id'],
-            'qty' => ['required', 'min:1', new InStock(request()->beer_id)],
+            'qty' => ['required', 'min:1', new Available(request()->beer_id)],
         ];
     }
 }

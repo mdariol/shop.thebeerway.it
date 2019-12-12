@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Commerce;
 
 use App\Beer;
 use App\Http\Controllers\Controller;
-use App\Rules\InStock;
+use App\Rules\Available;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -30,7 +30,7 @@ class CartController extends Controller
     public function add(Request $request)
     {
         $request->validate($this->rules() + [
-            'quantity' => ['required', 'min:1', new InStock($request->beer_id)],
+            'quantity' => ['required', 'min:1', new Available($request->beer_id)],
         ]);
 
         $beer = Beer::find($request->beer_id);

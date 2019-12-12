@@ -18,3 +18,13 @@ $factory->define(Lot::class, function (Faker $faker) {
         'expires_at' => $bottled_at->copy()->addMonths(rand(4, 8)),
     ];
 });
+
+$factory->state(Lot::class, 'available', [
+    'stock' => 7,
+    'reserved' => 0,
+]);
+
+$factory->state(Lot::class, 'unavailable', [
+    'stock' => 5,
+    'reserved' => 5,
+]);

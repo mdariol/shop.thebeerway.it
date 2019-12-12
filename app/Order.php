@@ -33,7 +33,7 @@ class Order extends Model
     }
 
     /**
-     * Get related user.
+     * Related user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -43,7 +43,7 @@ class Order extends Model
     }
 
     /**
-     * Get related lines.
+     * Related lines.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -53,7 +53,7 @@ class Order extends Model
     }
 
     /**
-     * Get related billing profile.
+     * Related billing profile.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -63,7 +63,7 @@ class Order extends Model
     }
 
     /**
-     * Get related shipping address.
+     * Related shipping address.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -73,7 +73,7 @@ class Order extends Model
     }
 
     /**
-     * Get related policy.
+     * Related policy.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -164,7 +164,7 @@ class Order extends Model
     }
 
     /**
-     * Count the number of order's items.
+     * Count of order's items.
      *
      * @return int
      */

@@ -85,12 +85,14 @@
                             {{ $beer->name }}
                             <small class="text-secondary"> -
                                 @if ($beer->brewery->logo)
-                                    <img src="{{ asset('storage/'.$beer->brewery->logo) }}" style="height: 30px; " title="Clicca per ingrandire l'immagine" data-zoomable>
+                                    <img src="{{ asset('storage/' . $beer->brewery->logo) }}" style="height: 30px; " title="Clicca per ingrandire l'immagine" data-zoomable>
                                 @endif
-                                {{ $beer->brewery ? $beer->brewery->name : ''}}
-                                @if(auth()->user())
-                                [{{$beer->stock - $beer->requested_stock}}]
-                                @endif
+
+                                {{ $beer->brewery->name }}
+
+                                @role('Publican')
+                                    [{{ $beer->available }}]
+                                @endrole
                             </small>
                         </span>
                     </h5>
