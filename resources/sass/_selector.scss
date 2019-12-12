@@ -6,6 +6,10 @@
     padding: .375rem .75rem 0;
     min-height: calc(1.6em + 0.75rem + 2px);
 
+    &.is-invalid {
+        border-color: #e3342f;
+    }
+
     input:focus {
         box-shadow: unset;
     }
@@ -49,6 +53,11 @@
 .selector--active {
     border-color: #80bdff;
     box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
+
+    &.is-invalid {
+        border-color: #e3342f;
+        box-shadow: 0 0 0 0.2rem rgba(227, 52, 47, 0.25);
+    }
 
     input,
     ul {

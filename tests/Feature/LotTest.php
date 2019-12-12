@@ -19,18 +19,14 @@ class LotTest extends TestCase
         parent::setUp();
 
         $this->lot = factory(Lot::class)->create([
-            'stock' => 7,
-            'reserved' => 5,
+            'stock' => 5,
+            'reserved' => 7,
         ]);
     }
 
     /** @test */
     public function a_lot_can_be_unavailable()
     {
-        $this->assertTrue($this->lot->isAvailable());
-
-        $this->lot->update(['stock' => 5, 'reserved' => 7]);
-
         $this->assertFalse($this->lot->isAvailable());
     }
 }

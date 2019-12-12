@@ -2,7 +2,7 @@
     <div class="form-group">
         <label v-if="label" for="search">{{ label }}</label>
 
-        <div class="selector" tabindex="0" @focusout="disable" @focusin="enable">
+        <div :class="['selector', {'is-invalid': error}]" tabindex="0" @focusout="disable" @focusin="enable">
             <div class="badge badge-primary" tabindex="0" v-for="value in values" @click="toggle(value)">
                 <slot v-bind:tag="value" name="tag">{{ value[optionLabel] }}</slot>
             </div>
@@ -19,7 +19,7 @@
             </ul>
         </div>
 
-        <span v-if="error" class="invalid-feedback d-block"><strong>{{ error }}</strong></span>
+        <div v-if="error" class="invalid-feedback d-block">{{ error }}</div>
         <small v-else="description" class="form-text text-muted">{{ description }}</small>
 
         <select :name="multiple ? `${name}[]` : name" :multiple="multiple" class="d-none">

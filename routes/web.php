@@ -173,6 +173,7 @@ Route::group([
    -------------------------------------------------------------------------- */
 
 Route::group([
+    'as' => 'admin.',
     'prefix' => 'admin',
     'middleware' => 'admin',
     'namespace' => 'Admin',
@@ -181,14 +182,20 @@ Route::group([
     /* ----- BillingProfile ----- */
 
     Route::get('/billing-profiles', 'BillingProfileController@index')
-        ->name('admin.billing-profiles.index');
+        ->name('billing-profiles.index');
 
     /* ----- Order ----- */
 
     Route::get('/orders', 'OrderController@index')
-        ->name('admin.orders.index');
+        ->name('orders.index');
     Route::get('/orders/create', 'OrderController@create')
-        ->name('admin.orders.create');
+        ->name('orders.create');
     Route::post('/orders', 'OrderController@store')
-        ->name('admin.orders.store');
+        ->name('orders.store');
+
+    /* ----- Lot ----- */
+
+    Route::resource('lots', 'LotController');
+    Route::get('lots/{lot}/delete', 'LotController@delete')
+        ->name('lots.delete');
 });

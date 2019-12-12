@@ -8,7 +8,7 @@ class Lot extends Model
 {
     public $timestamps = false;
 
-    protected $fillable = ['stock', 'reserved', 'bottled_at', 'expires_at'];
+    protected $fillable = ['number', 'beer_id', 'stock', 'reserved', 'bottled_at', 'expires_at'];
 
     protected $dates = ['bottled_at', 'expires_at'];
 
