@@ -72,4 +72,17 @@ class OrderTest extends TestCase
 
         $this->assertEquals(4, $beer->available);
     }
+
+    /** @test */
+    public function canceling_an_order_should_increase_available_beers()
+    {
+        $order = factory(Order::class)->create();
+        // We're using unavailable beer to simulate order's sent state.
+        $beer = factory(Beer::class)->state('unavailable')->create();
+
+        $order->add($beer);
+        $order->state_machine->apply('cancel');
+
+        $this->assertEquals(1, $beer->available);
+    }
 }

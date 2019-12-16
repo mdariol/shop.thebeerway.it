@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\FattureInCloud;
+use App\Services\Warehouse;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
@@ -33,6 +34,12 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(Factory::class, function () {
             return new Factory(config('workflow'));
+        });
+
+        /* ----- Warehouse ----- */
+
+        $this->app->singleton(Warehouse::class, function () {
+            return new Warehouse();
         });
     }
 

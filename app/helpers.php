@@ -25,3 +25,14 @@ if (! function_exists('cart')) {
         return null;
     }
 }
+
+if ( ! function_exists('warehouse')) {
+    /**
+     * Get warehouse service.
+     *
+     * @return \App\Services\Warehouse
+     */
+    function warehouse() {
+        return resolve(\App\Services\Warehouse::class);
+    }
+}

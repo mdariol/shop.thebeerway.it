@@ -23,6 +23,11 @@ class OrderEventSubscriber
         );
 
         $events->listen(
+            SMEvents::PRE_TRANSITION,
+            'App\Listeners\OrderEventSubscriber@increaseAvailableQuantity'
+        );
+
+        $events->listen(
             SMEvents::POST_TRANSITION,
             'App\Listeners\OrderEventSubscriber@setOrderAttributes'
         );
@@ -51,6 +56,17 @@ class OrderEventSubscriber
 
         $order->lines->each(function ($line) {
             \App\Lot::reserve($line->beer, $line->qty);
+        });
+    }
+
+    public function increaseAvailableQuantity(TransitionEvent $event)
+    {
+        if ($event->getTransition() !== 'cancel') return;
+
+        $order = $event->getStateMachine()->getObject();
+
+        $order->lines->each(function ($line) {
+            warehouse()->unbind($line->beer, $line->qty);
         });
     }
 
