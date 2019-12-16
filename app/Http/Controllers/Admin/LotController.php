@@ -15,7 +15,9 @@ class LotController extends Controller
      */
     public function index()
     {
-        return view('lot.index')->with(['lots' => Lot::all()]);
+        $lots = Lot::queryFilter()->orderBy('expires_at')->get();
+
+        return view('lot.index')->with(['lots' => $lots]);
     }
 
     /**

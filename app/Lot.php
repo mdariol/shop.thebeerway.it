@@ -2,11 +2,14 @@
 
 namespace App;
 
+use App\Traits\HasFilters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Lot extends Model
 {
+    use HasFilters;
+
     public $timestamps = false;
 
     protected $fillable = ['number', 'beer_id', 'stock', 'reserved', 'bottled_at', 'expires_at'];

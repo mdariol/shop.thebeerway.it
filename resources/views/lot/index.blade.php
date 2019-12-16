@@ -6,6 +6,8 @@
         <p>Elenco dei lotti.</p>
         <a href="{{ route('admin.lots.create') }}" class="btn btn-primary mb-4">Aggiungi</a>
 
+        @include('lot.partials.filters')
+
         <div class="table-responsive">
             <table class="table">
                 <thead>
