@@ -94,7 +94,7 @@ class Warehouse
      */
     public function isAvailable(Beer $beer, int $quantity = 1)
     {
-        //
+        return $this->available($beer) > $quantity;
     }
 
     /**
@@ -104,7 +104,7 @@ class Warehouse
      */
     public function inStock(Beer $beer, int $quantity = 1)
     {
-        //
+        return $this->stock($beer) > $quantity;
     }
 
     /**
@@ -113,7 +113,9 @@ class Warehouse
      */
     public function available(Beer $beer)
     {
-        //
+        return $beer->lots->reduce(function($available, $lot) {
+            return $available + $lot->available;
+        }, 0);
     }
 
     /**
@@ -122,7 +124,9 @@ class Warehouse
      */
     public function stock(Beer $beer)
     {
-        //
+        return $beer->lots->reduce(function($stock, $lot) {
+            return $stock + $lot->stock;
+        }, 0);
     }
 
     /**
@@ -131,6 +135,8 @@ class Warehouse
      */
     public function reserved(Beer $beer)
     {
-        //
+        return $beer->lots->reduce(function ($reserved, $lot) {
+            return $reserved + $lot->reserved;
+        }, 0);
     }
 }

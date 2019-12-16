@@ -128,9 +128,7 @@ class Beer extends Model
      */
     public function getAvailableAttribute()
     {
-        return $this->lots->reduce(function($available, $lot) {
-            return $available + $lot->available;
-        }, 0);
+        return warehouse()->available($this);
     }
 
     /**
@@ -140,9 +138,7 @@ class Beer extends Model
      */
     public function getStockAttribute()
     {
-        return $this->lots->reduce(function($stock, $lot) {
-            return $stock + $lot->stock;
-        }, 0);
+        return warehouse()->stock($this);
     }
 
     /**
@@ -152,9 +148,7 @@ class Beer extends Model
      */
     public function getReservedAttribute()
     {
-        return $this->lots->reduce(function ($reserved, $lot) {
-            return $reserved + $lot->reserved;
-        }, 0);
+        return warehouse()->reserved($this);
     }
 
     /**
@@ -165,7 +159,7 @@ class Beer extends Model
      */
     public function isAvailable(int $quantity = 1)
     {
-        return $this->available > $quantity;
+        return warehouse()->isAvailable($this, $quantity);
     }
 
     /**
@@ -176,6 +170,6 @@ class Beer extends Model
      */
     public function inStock(int $quantity = 1)
     {
-        return $this->stock > $quantity;
+        return warehouse()->inStock($this, $quantity);
     }
 }
