@@ -9,8 +9,13 @@
 
             <div class="form-group">
                 <label for="number">Num. Lotto</label>
-                <input type="text" name="number" id="number" value="{{ old('number') }}"
-                       class="form-control @error('number') is-invalid @enderror">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">#</div>
+                    </div>
+                    <input type="text" name="number" id="number" value="{{ old('number') }}"
+                           class="form-control @error('number') is-invalid @enderror">
+                </div>
                 @error('number')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else

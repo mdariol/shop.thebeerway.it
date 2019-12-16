@@ -15,7 +15,7 @@
                     <th>#</th>
                     <th>Birra</th>
                     <th>Magazzino</th>
-                    <th>Richiesto</th>
+                    <th>Ordinato</th>
                     <th>Disponibile</th>
                     <th>Imbottigliato</th>
                     <th>Scadenza</th>

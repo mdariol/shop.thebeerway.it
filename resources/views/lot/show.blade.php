@@ -11,7 +11,7 @@
                 <thead>
                 <tr>
                     <th>Magazzino</th>
-                    <th>Richiesto</th>
+                    <th>Ordinato</th>
                     <th>Disponibile</th>
                     <th>Imbottigliato</th>
                     <th>Scadenza</th>

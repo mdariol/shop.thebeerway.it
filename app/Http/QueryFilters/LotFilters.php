@@ -59,8 +59,19 @@ class LotFilters extends QueryFilter
      * @param  string  $search
      * @return Builder
      */
-    public function expiring_at(string $search): Builder
+    public function expires_at(string $search): Builder
     {
         return $this->builder->whereDate('expires_at', '<=', $search);
+    }
+
+    /**
+     * Filter by available.
+     *
+     * @param  int  $search
+     * @return Builder
+     */
+    public function available(int $search): Builder
+    {
+        return $this->builder->whereRaw("stock - reserved <= $search");
     }
 }
