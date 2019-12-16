@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Lot extends Model
@@ -17,7 +18,7 @@ class Lot extends Model
      *
      * @return int
      */
-    public function getAvailableAttribute()
+    public function getAvailableAttribute(): int
     {
         return $this->stock - $this->reserved;
     }
@@ -28,7 +29,7 @@ class Lot extends Model
      * @param int $quantity
      * @return bool
      */
-    public function isAvailable(int $quantity = 1)
+    public function isAvailable(int $quantity = 1): bool
     {
         return $this->available > $quantity;
     }
@@ -39,7 +40,41 @@ class Lot extends Model
      * @param int $quantity
      * @return bool
      */
-    public function inStock(int $quantity = 1) {
+    public function inStock(int $quantity = 1): bool
+    {
         return $this->stock > $quantity;
+    }
+
+    /**
+     * Scope a query to only include lots with available items.
+     *
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public function scopeAvailable(Builder $query): Builder
+    {
+        return $query->whereRaw('stock - reserved > 0');
+    }
+
+    /**
+     * Scope a query to only include lots with items in stock.
+     *
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public function scopeInStock(Builder $query): Builder
+    {
+        return $query->where('stock', '>', 0);
+    }
+
+    /**
+     * Scope a query to only include lots with reserved items.
+     *
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public function scopeReserved(Builder $query): Builder
+    {
+        return $query->where('reserved', '>', 0);
     }
 }

@@ -8,6 +8,8 @@ use Illuminate\Support\Collection;
 class Warehouse
 {
     /**
+     * Decrease quantity from stock.
+     *
      * @param Beer $beer
      * @param int $quantity
      * @param Collection|null $lots
@@ -16,7 +18,7 @@ class Warehouse
      */
     public function decrease(Beer $beer, int $quantity = 1, Collection $lots = null, bool $reserved = true)
     {
-        if (is_null($lots)) $lots = $beer->lots;
+        if (is_null($lots)) $lots = $beer->lots()->inStock()->get();
 
         $lots->each(function ($lot) use (&$quantity, $reserved) {
             if ($quantity <= $lot->stock) {
@@ -24,6 +26,8 @@ class Warehouse
                     'stock' => $lot->stock - $quantity,
                     'reserved' => $reserved ? $lot->reserved - $quantity : $lot->reserved,
                 ]);
+
+                $quantity = 0;
 
                 return false;
             }
@@ -37,6 +41,8 @@ class Warehouse
     }
 
     /**
+     * Increase reserved quantity.
+     *
      * @param Beer $beer
      * @param int $quantity
      * @param Collection|null $lots
@@ -44,11 +50,13 @@ class Warehouse
      */
     public function bind(Beer $beer, int $quantity = 1, Collection $lots = null)
     {
-        if (is_null($lots)) $lots = $beer->lots;
+        if (is_null($lots)) $lots = $beer->lots()->available()->get();
 
         $lots->each(function ($lot) use (&$quantity) {
             if ($quantity <= $lot->available) {
                 $lot->update(['reserved' => $lot->reserved + $quantity]);
+
+                $quantity = 0;
 
                 return false;
             }
@@ -62,6 +70,8 @@ class Warehouse
     }
 
     /**
+     * Decrease reserved quantity.
+     *
      * @param  Beer  $beer
      * @param  int  $quantity
      * @param  Collection|null  $lots
@@ -69,11 +79,12 @@ class Warehouse
      */
     public function unbind(Beer $beer, int $quantity = 1, Collection $lots = null)
     {
-        if (is_null($lots)) $lots = $beer->lots;
+        if (is_null($lots)) $lots = $beer->lots()->reserved()->get();
 
         $lots->each(function ($lot) use (&$quantity) {
             if ($quantity <= $lot->reserved) {
                 $lot->update(['reserved' => $lot->reserved - $quantity]);
+
                 $quantity = 0;
 
                 return false;
@@ -94,7 +105,7 @@ class Warehouse
      */
     public function isAvailable(Beer $beer, int $quantity = 1)
     {
-        return $this->available($beer) > $quantity;
+        return $this->available($beer) >= $quantity;
     }
 
     /**
@@ -104,7 +115,7 @@ class Warehouse
      */
     public function inStock(Beer $beer, int $quantity = 1)
     {
-        return $this->stock($beer) > $quantity;
+        return $this->stock($beer) >= $quantity;
     }
 
     /**
@@ -113,7 +124,9 @@ class Warehouse
      */
     public function available(Beer $beer)
     {
-        return $beer->lots->reduce(function($available, $lot) {
+        $lots = $beer->lots()->available()->get();
+
+        return $lots->reduce(function($available, $lot) {
             return $available + $lot->available;
         }, 0);
     }
@@ -124,7 +137,9 @@ class Warehouse
      */
     public function stock(Beer $beer)
     {
-        return $beer->lots->reduce(function($stock, $lot) {
+        $lots = $beer->lots()->inStock()->get();
+
+        return $lots->reduce(function($stock, $lot) {
             return $stock + $lot->stock;
         }, 0);
     }
@@ -135,7 +150,9 @@ class Warehouse
      */
     public function reserved(Beer $beer)
     {
-        return $beer->lots->reduce(function ($reserved, $lot) {
+        $lots = $beer->lots()->reserved()->get();
+
+        return $lots->reduce(function ($reserved, $lot) {
             return $reserved + $lot->reserved;
         }, 0);
     }
