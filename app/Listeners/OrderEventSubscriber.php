@@ -28,6 +28,11 @@ class OrderEventSubscriber
         );
 
         $events->listen(
+            SMEvents::PRE_TRANSITION,
+            'App\Listeners\OrderEventSubscriber@decreaseStockQuantity'
+        );
+
+        $events->listen(
             SMEvents::POST_TRANSITION,
             'App\Listeners\OrderEventSubscriber@setOrderAttributes'
         );
@@ -55,7 +60,18 @@ class OrderEventSubscriber
         $order = $event->getStateMachine()->getObject();
 
         $order->lines->each(function ($line) {
-            \App\Lot::reserve($line->beer, $line->qty);
+            warehouse()->bind($line->beer, $line->qty);
+        });
+    }
+
+    public function decreaseStockQuantity(TransitionEvent $event)
+    {
+        if ($event->getTransition() !== 'ship') return;
+
+        $order = $event->getStateMachine()->getObject();
+
+        $order->lines->each(function ($line) {
+            warehouse()->decrease($line->beer, $line->qty);
         });
     }
 

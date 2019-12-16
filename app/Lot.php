@@ -42,29 +42,4 @@ class Lot extends Model
     public function inStock(int $quantity = 1) {
         return $this->stock > $quantity;
     }
-
-    /**
-     * @param Beer $beer
-     * @param int $quantity
-     */
-    public static function reserve(Beer $beer, int $quantity = 1)
-    {
-        $lots = self::where('beer_id', $beer->id)->orderBy('expires_at')->get();
-
-        $lots->each(function ($lot) use (&$quantity) {
-            if ($quantity <= $lot->available) {
-                $lot->update([
-                    'reserved' => $lot->reserved + $quantity,
-                ]);
-
-                return false;
-            }
-
-            $quantity -= $lot->available;
-
-            $lot->update([
-                'reserved' => $lot->reserved + $lot->available,
-            ]);
-        });
-    }
 }
