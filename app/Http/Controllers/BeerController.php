@@ -13,7 +13,12 @@ class BeerController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('admin', ['except' => ['index', 'show','getAddToCart','getCart','fixupCart','fixdownCart', 'savedeliverynote','saveOrder']]);
+        $this->middleware('admin', [
+            'except' => [
+                'index',
+                'show',
+            ],
+        ]);
     }
 
     /**
@@ -23,14 +28,7 @@ class BeerController extends Controller
      */
     public function index()
     {
-        $beers = Beer::queryFilter()
-            ->leftJoin('breweries', 'beers.brewery_id', '=', 'breweries.id' )
-            ->leftJoin('styles', 'beers.style_id', '=', 'styles.id' )
-            ->leftJoin('packagings', 'beers.packaging_id', '=', 'packagings.id' )
-            ->select('beers.*', 'breweries.name as brewery_name', 'styles.name as style_name')
-            ->orderBy('brewery_name', 'ASC')
-            ->orderBy('style_name', 'ASC')
-            ->get();
+        $beers = Beer::queryFilter()->get();
 
         if (request()->wantsJson()) {
             return $beers;
@@ -139,7 +137,6 @@ class BeerController extends Controller
         ]);
 
         return redirect(request()->getRequestUri());
-
     }
 
     /**
