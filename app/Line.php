@@ -17,7 +17,7 @@ class Line extends Model
     ];
 
     /**
-     * Get related beer.
+     * Related beer.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -27,7 +27,7 @@ class Line extends Model
     }
 
     /**
-     * Get related order.
+     * Related order.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -40,6 +40,7 @@ class Line extends Model
      * Whether the beer is in stock or not.
      *
      * @return bool
+     * @deprecated
      */
     public function checkStock()
     {
