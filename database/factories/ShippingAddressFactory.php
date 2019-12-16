@@ -25,8 +25,6 @@ $factory->define(ShippingAddress::class, function (Faker $faker) {
         ]),
         'country' => 'Italia',
         'phone' => $faker->phoneNumber,
-        'company_id' => function () {
-            return factory(App\BillingProfile::class)->create();
-        }
+        'billing_profile_id' => factory(App\BillingProfile::class)->create()->id,
     ];
 });

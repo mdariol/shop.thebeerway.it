@@ -7,7 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(BillingProfile::class, function (Faker $faker) {
     return [
-        'business_name' => $faker->company,
+        'name' => $faker->company,
         'route' => $faker->streetName . ', ' . $faker->buildingNumber,
         'postal_code' => $faker->postcode,
         'city' => $faker->city,
@@ -26,6 +26,7 @@ $factory->define(BillingProfile::class, function (Faker $faker) {
         'country' => 'Italia',
         'vat_number' => $faker->regexify('[0-9]{11}'),
         'pec' => $faker->companyEmail,
-        'sdi' => $faker->regexify('[a-zA-Z0-9]{6}')
+        'sdi' => $faker->regexify('[a-zA-Z0-9]{6}'),
+        'owner_id' => factory(\App\User::class)->create()->id,
     ];
 });

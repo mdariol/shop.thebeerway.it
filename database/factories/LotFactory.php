@@ -20,7 +20,7 @@ $factory->define(Lot::class, function (Faker $faker) {
 });
 
 $factory->state(Lot::class, 'available', [
-    'stock' => 7,
+    'stock' => 5,
     'reserved' => 0,
 ]);
 

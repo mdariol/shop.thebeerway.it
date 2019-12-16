@@ -21,6 +21,8 @@ class OrderTest extends TestCase
     {
         parent::setUp();
 
+        $this->seed();
+
         $this->beer = factory(Beer::class)->create();
         $this->publican = factory(User::class)->create();
 
@@ -63,5 +65,20 @@ class OrderTest extends TestCase
             'order_id' => cart()->id,
             'beer_id' => $this->beer->id,
         ]);
+    }
+
+    /** @test */
+    public function sending_an_order_should_decrease_available_beers()
+    {
+        // Create lot with available 5 items.
+        factory(\App\Lot::class)->state('available')
+            ->create(['beer_id' => $this->beer->id]);
+
+        $cart = factory(\App\Order::class)->state('cart')->create();
+
+        $cart->add($this->beer);
+        $cart->state_machine->apply('send');
+
+        $this->assertEquals(4, $this->beer->available);
     }
 }

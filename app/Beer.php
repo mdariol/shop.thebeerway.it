@@ -31,7 +31,6 @@ class Beer extends Model
         static::addGlobalScope(new BeersScope);
     }
 
-
     /**
      * Related brewery.
      *

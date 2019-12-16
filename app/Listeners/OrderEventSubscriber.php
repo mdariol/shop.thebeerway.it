@@ -19,7 +19,7 @@ class OrderEventSubscriber
     {
         $events->listen(
             SMEvents::PRE_TRANSITION,
-            'App\Listeners\OrderEventSubscriber@updateRequestedStock'
+            'App\Listeners\OrderEventSubscriber@decreaseAvailableQuantity'
         );
 
         $events->listen(
@@ -41,7 +41,17 @@ class OrderEventSubscriber
             SMEvents::POST_TRANSITION,
             'App\Listeners\OrderEventSubscriber@sendResetOrderEmail'
         );
+    }
 
+    public function decreaseAvailableQuantity(TransitionEvent $event)
+    {
+        if ($event->getTransition() !== 'send') return;
+
+        $order = $event->getStateMachine()->getObject();
+
+        $order->lines->each(function ($line) {
+            \App\Lot::reserve($line->beer, $line->qty);
+        });
     }
 
     /**

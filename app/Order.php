@@ -85,29 +85,29 @@ class Order extends Model
     /**
      * Increase the line's quantity. If there's no line, add a line.
      *
-     * @param  Beer  $beer
-     * @param  int  $quantity
-     * @return bool|int
+     * @param Beer $beer
+     * @param int $quantity
+     * @return Line
      */
     public function add(Beer $beer, int $quantity = 1)
     {
         $line = $this->lines()->where('beer_id', $beer->id)->first();
 
-        if ($line) {
-            $line->qty += $quantity;
-
-            return $line->update([
-                'price' => $line->unit_price * $line->qty,
+        if ( ! $line) {
+            return $this->lines()->create([
+                'beer_id' => $beer->id, 'qty' => $quantity,
+                'unit_price' => $beer->price->distribution,
+                'price' => $beer->price->distribution * $quantity,
             ]);
         }
 
-        return Line::create([
-            'order_id' => $this->id,
-            'beer_id' => $beer->id,
+        $line->update([
+            'qty' => $line->qty + $quantity,
             'unit_price' => $beer->price->distribution,
             'price' => $beer->price->distribution * $quantity,
-            'qty' => $quantity,
         ]);
+
+        return $line;
     }
 
     /**
@@ -121,6 +121,7 @@ class Order extends Model
     public function remove(Beer $beer, int $quantity = null)
     {
         $line = $this->lines()->where('beer_id', $beer->id)->first();
+
         $line->qty -= $quantity;
 
         if ( ! $quantity || $line->qty < 1) {
