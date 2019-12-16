@@ -14,6 +14,16 @@ class Lot extends Model
     protected $dates = ['bottled_at', 'expires_at'];
 
     /**
+     * Related beer.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function beer()
+    {
+        return $this->belongsTo(Beer::class);
+    }
+
+    /**
      * Count of items available to purchase.
      *
      * @return int

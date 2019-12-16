@@ -51,7 +51,7 @@ class LotController extends Controller
      */
     public function show(Lot $lot)
     {
-        //
+        return view('lot.show')->with(['lot' => $lot]);
     }
 
     /**
