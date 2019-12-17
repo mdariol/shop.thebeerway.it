@@ -60,50 +60,39 @@ class Price extends Model
 
     public function getNetPriceAttribute() : float
     {
-        $this->setUserPrice();
-        return $this->attributes['net_price'];
+        if (array_key_exists('net_price', $this->attributes)){
+            return $this->attributes['net_price'];
+        }
+        return number_format($this->distribution - ($this->distribution * $this->price_discount /100),2) ;
     }
 
     public function getNetLiterPriceAttribute() : float
     {
-        $this->setUserPrice();
-        return $this->attributes['net_liter_price'];
+        if (array_key_exists('net_liter_price', $this->attributes)){
+            return $this->attributes['net_liter_price'];
+        }
+        return number_format($this->net_price/$this->beer->packaging->capacity,2);
     }
 
     public function getNetUnitPriceAttribute() : float
     {
-        $this->setUserPrice();
-        return $this->attributes['net_unit_price'];
-    }
-
-    public function getDiscountAttribute() : float
-    {
-        $this->setUserPrice();
-        return $this->attributes['discount'];
-    }
-
-    protected function setUserPrice() : bool
-    {
-        if (! array_key_exists('net_price', $this->attributes)){
-            $promotion = Promotion::applicable( $this->beer );
-            if ($promotion) {
-                $discount = $promotion->discount ? $promotion->discount : 0;
-                $netprice = number_format($this->distribution - ($this->distribution * $promotion->discount /100),2) ;
-            } else
-            {
-                $discount = 0;
-                $netprice = $this->distribution;
-            }
-            $this->attributes['discount'] = $discount;
-            $this->attributes['net_price'] = $netprice;
-            $this->attributes['net_liter_price'] = number_format($netprice/$this->beer->packaging->capacity,2);
-            $this->attributes['net_unit_price'] = number_format($netprice/$this->beer->packaging->quantity,2);
-
-            return true;
+        if (array_key_exists('net_unit_price', $this->attributes)){
+            return $this->attributes['net_unit_price'];
         }
-        return false;
+        return number_format($this->net_price/$this->beer->packaging->quantity,2);
     }
 
+    public function getPriceDiscountAttribute()
+    {
+        if (array_key_exists('price_discount', $this->attributes)){
+            return $this->attributes['price_discount'];
+        }
+        $promotion = Promotion::applicable( $this->beer );
+        if (!$promotion) {
+            return $this->attributes['price_discount'] = 0;
+        }
+        return $this->attributes['price_discount'] = $promotion->discount ? $promotion->discount : 0;
+    }
 
     /* ----- Helpers ----- */
 

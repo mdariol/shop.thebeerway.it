@@ -82,7 +82,7 @@
             </div>
         </div>
 
-        @foreach($beers->sortByDesc('price.discount') as $beer)
+        @foreach($beers->sortByDesc('price.price_discount') as $beer)
             <div class="row align-items-center mb-0 mt-0" >
                 <div class="col-sm mb-0 mt-0" title="Clicca per espandere tutte le informazioni" data-toggle="collapse" href={{ "#beer".$beer->id }} aria-expanded="false" aria-controls={{ "beer".$beer->id }}>
                     <h5 class="text-primary" >
@@ -144,7 +144,7 @@
                                             <!--
                                             {{ number_format($beer->price->net_price - $beer->price->distribution,2) }} (-{{$beer->price->discount}}%)
                                             -->
-                                            -{{$beer->price->discount}}%
+                                            -{{$beer->price->price_discount}}%
 
                                         </b>
                                     </span>
