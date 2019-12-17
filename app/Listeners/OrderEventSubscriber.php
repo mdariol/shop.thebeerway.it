@@ -87,36 +87,6 @@ class OrderEventSubscriber
     }
 
     /**
-     * Add qty to requested stock field on beers.
-     *
-     * @param \SM\Event\TransitionEvent $event
-     */
-    public function updateRequestedStock(TransitionEvent $event)
-    {
-        $transition = $event->getTransition();
-
-        if ($transition !== 'send'
-            && $transition !== 'cancel'
-            && $transition !== 'ship') return;
-
-        $order = $event->getStateMachine()->getObject();
-
-        foreach ($order->lines as $line) {
-            if ($transition == 'send') {
-                $line->beer->update([
-                    'requested_stock' => $line->beer->requested_stock + $line->qty
-                ]);
-
-                continue;
-            }
-
-            $line->beer->update([
-                'requested_stock' => $line->beer->requested_stock - $line->qty
-            ]);
-        }
-    }
-
-    /**
      * Set order's number and purchased date.
      *
      * @param  TransitionEvent  $event

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Lot;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class LotController extends Controller
 {
@@ -109,12 +110,14 @@ class LotController extends Controller
     protected function rules()
     {
         return [
-            'number' => 'required',
+            'number' => ['required', Rule::unique('lots')->where(function ($query) {
+                return $query->where('beer_id', request()->beer_id);
+            })],
             'beer_id' => 'required|exists:beers,id',
             'stock' => 'required|min:0',
             'reserved' => 'required|min:0',
             'bottled_at' => 'nullable|date|before:expires_at',
-            'expires_at' => 'required|date',
+            'expires_at' => 'nullable|date',
         ];
     }
 }

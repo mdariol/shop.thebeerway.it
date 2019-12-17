@@ -15,12 +15,12 @@
                     </div>
                     <input type="text" name="number" id="number" value="{{ old('number') }}"
                            class="form-control @error('number') is-invalid @enderror">
+                    @error('number')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @else
+                        <small class="form-text text-muted">Identificativo univoco del lotto.</small>
+                    @enderror
                 </div>
-                @error('number')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @else
-                    <small class="form-text text-muted">Identificativo univoco del lotto.</small>
-                @enderror
             </div>
 
             <input-autocomplete :route='@json(route('beers.index'))' :label='@json('Birra')' :name='@json('beer_id')'
@@ -60,7 +60,7 @@
                 <div class="form-group col-md">
                     <label for="bottled-at">Imbottigliata</label>
                     <input class="form-control @error('bottled_at') is-invalid @enderror"
-                           type="date" name="bottled_at" id="bottled-at" >
+                           type="date" name="bottled_at" id="bottled-at" value="{{ old('bottled_at') }}">
                     @error('bottled_at')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @else
@@ -71,7 +71,7 @@
                 <div class="form-group col-md">
                     <label for="expires-at">Scadenza</label>
                     <input class="form-control @error('expires_at') is-invalid @enderror"
-                           type="date" name="expires_at" id="expires-at">
+                           type="date" name="expires_at" id="expires-at" value="{{ old('expires_at') }}">
                     @error('expires_at')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @else

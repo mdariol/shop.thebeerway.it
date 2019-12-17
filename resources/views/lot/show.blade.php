@@ -22,8 +22,12 @@
                     <td>{{ $lot->stock }}</td>
                     <td>{{ $lot->reserved }}</td>
                     <td>{{ $lot->available }}</td>
-                    <td>{{ $lot->bottled_at->format('Y-m-d') }}</td>
-                    <td>{{ $lot->expires_at->format('Y-m-d') }}</td>
+                    <td>
+                        @if($lot->bottled_at) {{ $lot->bottled_at->format('Y-m-d') }} @endif
+                    </td>
+                    <td>
+                        @if($lot->expires_at) {{ $lot->expires_at->format('Y-m-d') }} @endif
+                    </td>
                 </tr>
                 </tbody>
             </table>

@@ -35,12 +35,20 @@
                         <td class="align-middle">{{ $lot->stock }}</td>
                         <td class="align-middle">{{ $lot->reserved }}</td>
                         <td class="align-middle">{{ $lot->available }}</td>
-                        <td class="align-middle">{{ $lot->bottled_at->format('Y-m-d') }}</td>
-                        <td class="align-middle">{{ $lot->expires_at->format('Y-m-d') }}</td>
+                        <td class="align-middle">
+                            @if($lot->bottled_at) {{ $lot->bottled_at->format('d-m-Y') }} @endif
+                        </td>
+                        <td class="align-middle">
+                            @if($lot->expires_at) {{ $lot->expires_at->format('d-m-Y') }} @endif
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
+
+            @if($lots->isEmpty())
+                <p class="ml-2">Nessun lotto a magazzino...</p>
+            @endif
         </div>
     </div>
 @endsection

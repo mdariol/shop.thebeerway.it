@@ -27,6 +27,8 @@ class CreateLotsTable extends Migration
 
             $table->foreign('beer_id')->references('id')->on('beers')
                 ->onDelete('cascade');
+
+            $table->unique(['number', 'beer_id']);
         });
     }
 
