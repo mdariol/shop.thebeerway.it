@@ -3,10 +3,46 @@
 namespace App\Services;
 
 use App\Beer;
+use App\Lot;
+use App\Movement;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class Warehouse
 {
+    /**
+     * Increase stock quantity.
+     *
+     * @param  array  $attributes
+     * @return Collection
+     * @throws \Throwable
+     */
+    public function load(array $attributes)
+    {
+        /** @var Lot $lot */
+        $lot = new Lot($attributes);
+        $movements = [];
+
+        array_push($movements, new Movement([
+            'action' => __FUNCTION__,
+            'quantity' => $lot->stock,
+        ]));
+
+        if ($lot->reserved) {
+            array_push($movements, new Movement([
+                'action' => 'bind',
+                'quantity' => $lot->reserved,
+            ]));
+        }
+
+        DB::transaction(function () use ($lot, $movements) {
+            $lot->save();
+            $lot->movements()->saveMany($movements);
+        });
+
+        return collect($movements);
+    }
+
     /**
      * Decrease quantity from stock.
      *
@@ -18,6 +54,8 @@ class Warehouse
      */
     public function decrease(Beer $beer, int $quantity = 1, Collection $lots = null, bool $reserved = true)
     {
+        // TODO: Remane method unload().
+
         if (is_null($lots)) $lots = $beer->lots()->inStock()->get();
 
         $lots->each(function ($lot) use (&$quantity, $reserved) {

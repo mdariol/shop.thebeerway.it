@@ -34,6 +34,17 @@
         </div>
 
         <h2>Movimenti</h2>
-        <p>Nessun movimento registrato...</p>
+
+        @if($lot->movements->isEmpty())
+            <p>Nessun movimento registrato...</p>
+        @endif
+
+        <ul class="list-group list-group-flush">
+            @foreach($lot->movements as $movement)
+                <li class="p-2 list-group-item bg-transparent">WareBot ha {{ $movement->action }} {{ $movement->quantity }} unità di
+                    {{ $lot->beer->name }} il {{ $movement->created_at->format('d-m-Y') }} alle
+                    {{ $movement->created_at->format('H:m:s') }}.</li>
+            @endforeach
+        </ul>
     </div>
 @endsection

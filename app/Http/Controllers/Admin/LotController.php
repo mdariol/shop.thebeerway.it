@@ -36,12 +36,13 @@ class LotController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     * @throws \Throwable
      */
     public function store(Request $request)
     {
         $attributes = $request->validate($this->rules());
 
-        Lot::create($attributes);
+        warehouse()->load($attributes);
 
         return redirect()->route('admin.lots.index');
     }

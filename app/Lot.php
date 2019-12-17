@@ -90,4 +90,14 @@ class Lot extends Model
     {
         return $query->where('reserved', '>', 0);
     }
+
+    /**
+     * Related movements, ordered by creation date.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function movements()
+    {
+        return $this->hasMany(Movement::class)->orderByDesc('created_at');
+    }
 }

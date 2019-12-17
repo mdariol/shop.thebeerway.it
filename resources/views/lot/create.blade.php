@@ -9,18 +9,18 @@
 
             <div class="form-group">
                 <label for="number">Num. Lotto</label>
-                <div class="input-group">
+                <div class="input-group @error('number') is-invalid @enderror">
                     <div class="input-group-prepend">
                         <div class="input-group-text">#</div>
                     </div>
                     <input type="text" name="number" id="number" value="{{ old('number') }}"
                            class="form-control @error('number') is-invalid @enderror">
-                    @error('number')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @else
-                        <small class="form-text text-muted">Identificativo univoco del lotto.</small>
-                    @enderror
                 </div>
+                @error('number')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @else
+                    <small class="form-text text-muted">Identificativo univoco del lotto.</small>
+                @enderror
             </div>
 
             <input-autocomplete :route='@json(route('beers.index'))' :label='@json('Birra')' :name='@json('beer_id')'
