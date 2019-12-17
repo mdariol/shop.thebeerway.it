@@ -7,7 +7,8 @@
         @foreach($breweries as $brewery)
             <div class="card mb-2">
                 <div class="card-body">
-                    <p class="float-left">{{ $brewery->name }}</p>
+                    <a class="float-left" href="{{$brewery->website}}" target="_blank">{{ $brewery->name }}</a>
+
                     <p class="float-left"> - {{ $brewery->isactive }}</p>
                     <div class="float-right">
                         <a href="/breweries/{{ $brewery->id }}/edit" class="btn btn-primary">Modifica</a>

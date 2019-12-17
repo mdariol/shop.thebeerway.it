@@ -76,16 +76,25 @@ class Price extends Model
         return $this->attributes['net_unit_price'];
     }
 
+    public function getDiscountAttribute() : float
+    {
+        $this->setUserPrice();
+        return $this->attributes['discount'];
+    }
+
     protected function setUserPrice() : bool
     {
         if (! array_key_exists('net_price', $this->attributes)){
             $promotion = Promotion::applicable( $this->beer );
             if ($promotion) {
-                $netprice = $promotion->discount ? number_format($this->distribution - ($this->distribution * $promotion->discount /100),2) : $this->distribution;
+                $discount = $promotion->discount ? $promotion->discount : 0;
+                $netprice = number_format($this->distribution - ($this->distribution * $promotion->discount /100),2) ;
             } else
             {
+                $discount = 0;
                 $netprice = $this->distribution;
             }
+            $this->attributes['discount'] = $discount;
             $this->attributes['net_price'] = $netprice;
             $this->attributes['net_liter_price'] = number_format($netprice/$this->beer->packaging->capacity,2);
             $this->attributes['net_unit_price'] = number_format($netprice/$this->beer->packaging->quantity,2);

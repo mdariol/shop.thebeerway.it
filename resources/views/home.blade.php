@@ -42,12 +42,14 @@
                     @else
                         <div class="carousel-item">
                     @endif
-                    <h2 class="text-center text-black-50 mt-3 mb-3">
-                        Birrificio {{$brewery->name}}
-                    </h2>
-                    @if ($brewery->logo)
-                        <img class="d-block" src="{{ asset('storage/'.$brewery->logo) }}"  style="height: 200px; ">
-                    @endif
+                    <a href="{{$brewery->website}}" target="_blank">
+                        <h2 class="text-center text-black-50 mt-3 mb-3">
+                            Birrificio {{$brewery->name}}
+                        </h2>
+                        @if ($brewery->logo)
+                            <img class="d-block" src="{{ asset('storage/'.$brewery->logo) }}"  style="height: 200px; ">
+                        @endif
+                    </a>
                     </div>
                 @endforeach
 

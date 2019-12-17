@@ -12,6 +12,11 @@
                 <input type="text" name="name" id="name">
             </div>
 
+            <div class="form-group">
+                <label for="name">Sito Web</label>
+                <input type="text" name="website" id="website">
+            </div>
+
             <button class="btn btn-primary">Memorizza</button>
         </form>
     </div>

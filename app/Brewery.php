@@ -10,7 +10,7 @@ class Brewery extends Model
 {
     use HasFilters;
 
-    protected $fillable = ['name','isactive','logo'];
+    protected $fillable = ['name','isactive','logo','website'];
 
     /**
      * The "booting" method of the model.

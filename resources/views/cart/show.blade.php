@@ -13,7 +13,13 @@
         <cart :cart='@json($cart)' :edit='@json(true)'></cart>
 
         @if( ! $cart->isEmpty())
-            <a href="{{ route('checkout.show') }}" class="btn btn-primary" id="purchase">Ordina</a>
+            <form method="POST" action="{{route('cart.empty')}}">
+                @csrf
+                @method('DELETE')
+
+                <a href="{{ route('checkout.show') }}" class="btn btn-primary" id="purchase">Ordina</a>
+                <button class="btn btn-danger" id="empty">Svuota Carrello</button>
+            </form>
         @endif
     </div>
 @endsection

@@ -22,8 +22,12 @@ class LineController extends Controller
 
         $promotion = Promotion::applicable($line->beer);
 
-        $net_price = $promotion->discount ? $line->beer->price->distribution - ($line->beer->price->distribution * $promotion->discount /100) : $line->beer->price->distribution;
-
+        if ($promotion) {
+            $net_price = $promotion->discount ? $line->beer->price->distribution - ($line->beer->price->distribution * $promotion->discount /100) : $line->beer->price->distribution;
+        } else
+        {
+            $net_price = $line->beer->price->distribution;
+        }
 
         $line->update(request()->validate($this->rules()) + [
             'gross_price' => $line->beer->price->distribution,

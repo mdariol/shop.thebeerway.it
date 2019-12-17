@@ -19,6 +19,10 @@
                          @if($brewery->logo) :default='@json(asset("storage/$brewery->logo"))' @endif
                          @error('logo') :error='@json($message)' @enderror></input-image>
 
+            <div class="form-group">
+                <label for="website">Sito Internet</label>
+                <input type="text" name="website" id="website" value="{{ $brewery->website }}">
+            </div>
 
             <button class="btn btn-primary">Aggiorna</button>
         </form>

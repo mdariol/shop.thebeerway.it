@@ -2006,12 +2006,14 @@ __webpack_require__.r(__webpack_exports__);
           qty: line.qty
         };
         axios.post("/lines/".concat(line.id), data).then(function (response) {
+          console.log(response.data);
           Vue.set(_this.lines, line.id, response.data);
 
           if (_this.purchaseButton) {
             _this.purchaseButton.classList.remove('disabled');
           }
         })["catch"](function (error) {
+          console.log(error.response.data);
           Vue.set(line, 'errors', error.response.data.errors);
 
           if (_this.purchaseButton) {

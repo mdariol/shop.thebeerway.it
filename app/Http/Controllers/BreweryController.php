@@ -52,7 +52,7 @@ class BreweryController extends Controller
      */
     public function store(Request $request)
     {
-        $brewery = Brewery::create(['name' => $request->name]);
+        $brewery = Brewery::create(['name' => $request->name, 'website' => $request->website]);
 
         if (request()->has('logo')) {
             $this->upload('logo', $brewery);
@@ -92,7 +92,7 @@ class BreweryController extends Controller
      */
     public function update(Request $request, Brewery $brewery)
     {
-        $brewery->update(request(['name']) + [
+        $brewery->update(request(['name','website']) + [
                 'isactive' => $request->has('isactive')
             ]);
         if (request()->has('logo')) {

@@ -87,23 +87,27 @@
                         @endif
                         <span>
                             {{ $beer->name }}
-                            <small class="text-secondary"> -
-                                @if ($beer->brewery->logo)
-                                    <img src="{{ asset('storage/'.$beer->brewery->logo) }}" style="height: 30px; " title="Clicca per ingrandire l'immagine" data-zoomable>
-                                @endif
+                            @if ($beer->brewery->logo)
+                                <img src="{{ asset('storage/'.$beer->brewery->logo) }}" style="height: 40px; " title="Clicca per ingrandire l'immagine" data-zoomable>
+                            @endif
+                            <small class="text-secondary">
                                 {{ $beer->brewery ? $beer->brewery->name : ''}}
-                                @if(auth()->user())
-                                [{{$beer->stock - $beer->requested_stock}}]
-                                @endif
                             </small>
+                            @if(auth()->user())
+                                <span class="badge badge-pill {{($beer->stock - $beer->requested_stock) > 2 ? 'badge-success' : 'badge-warning'  }}">
+                                    {{$beer->stock - $beer->requested_stock}}
+                                </span>
+                            @endif
                         </span>
                     </h5>
                     <h6 class="text-body"  >
+                        <i class="text-primary fas fa-angle-double-down" data-toggle="collapse" href={{ "#beer".$beer->id }}  aria-expanded="false" aria-controls={{ "beer".$beer->id }}></i>
                         {{ $beer->style ? $beer->style->name.', ' : '' }}
                         {{ $beer->color ? $beer->color->name.', ' : ''}}
                         {{ $beer->taste ? $beer->taste->name.', ' : ''}}
                         {{ $beer->abv ? 'da '.$beer->abv.'%, ' : ''}}
                         {{ $beer->packaging ? $beer->packaging->name : '' }}.
+
                         @hasanyrole('Publican|Admin|Distributor')
 
                         @else
@@ -129,9 +133,13 @@
                                             {{ $beer->packaging->type=='bottiglie' ? '- €/bt '.number_format($beer->price->distribution_unit,2) : ' '}} (+Iva)
                                         </small>
                                     </s>
-                                    <span style="color:dodgerblue">
+                                    <span class="badge badge-pill badge-success">
                                         <b>
-                                            {{ number_format($beer->price->net_price - $beer->price->distribution,2) }}
+                                            <!--
+                                            {{ number_format($beer->price->net_price - $beer->price->distribution,2) }} (-{{$beer->price->discount}}%)
+                                            -->
+                                            -{{$beer->price->discount}}%
+
                                         </b>
                                     </span>
                                     <br>
@@ -161,9 +169,6 @@
                                 </button>
                             </form>
 
-                            <a class="text-primary" data-toggle="collapse" href={{ "#beer".$beer->id }}  aria-expanded="false" aria-controls={{ "beer".$beer->id }} >
-                                <img src="/Espandi-TheBeerWay.png" alt="Espandi" title="Clicca per espandere tutte le informazioni" height="30px" class="pl-3">
-                            </a>
                         </h6>
                     </div>
                 @endhasanyrole
