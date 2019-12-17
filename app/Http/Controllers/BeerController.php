@@ -42,8 +42,6 @@ class BeerController extends Controller
             }
         });
 
-        $count = $filtered->count();
-
         if (request()->has('onsale')) {
             $beers = $filtered;
         }
@@ -63,7 +61,8 @@ class BeerController extends Controller
             'breweries' => Brewery::all(),
             'colors' => Color::all(),
             'tastes' => Taste::all(),
-            'offers' => $count,
+            'offers' => $filtered->count(),
+            'count' => $beers->count(),
         ]);
     }
 

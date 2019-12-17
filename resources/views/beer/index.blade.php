@@ -24,9 +24,11 @@
         <h3 class="text-capitalize">
             {{ request()->packaging }}
             {{ request()->has('stock') ? ' (Disponibili)' : '(Catalogo)' }}
-            <span class="badge badge-pill badge-success text-lowercase">
-                {{$offers}} scontate
-            </span>
+            <small>
+                <span class="badge badge-pill badge-success text-lowercase">
+                    {{$offers}} in sconto
+                </span>
+            </small>
         </h3>
 
         @hasrole('Admin')
@@ -139,7 +141,7 @@
                                             {{ $beer->packaging->type=='bottiglie' ? '- €/bt '.number_format($beer->price->distribution_unit,2) : ' '}} (+Iva)
                                         </small>
                                     </s>
-                                    <span class="badge badge-pill badge-success">
+                                    <span class="badge badge-pill badge-success mb-1 ml-1">
                                         <b>
                                             <!--
                                             {{ number_format($beer->price->net_price - $beer->price->distribution,2) }} (-{{$beer->price->discount}}%)
