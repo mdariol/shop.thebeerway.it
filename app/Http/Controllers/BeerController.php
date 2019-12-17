@@ -36,12 +36,15 @@ class BeerController extends Controller
             ->orderBy('style_name', 'ASC')
             ->get();
 
+        $filtered = $beers->filter(function ($beer) {
+            if ($beer->price->net_price <> $beer->price->distribution){
+                return $beer;
+            }
+        });
+
+        $count = $filtered->count();
+
         if (request()->has('onsale')) {
-            $filtered = $beers->filter(function ($beer) {
-                if ($beer->price->net_price <> $beer->price->distribution){
-                    return $beer;
-                }
-            });
             $beers = $filtered;
         }
 
@@ -60,6 +63,7 @@ class BeerController extends Controller
             'breweries' => Brewery::all(),
             'colors' => Color::all(),
             'tastes' => Taste::all(),
+            'offers' => $count,
         ]);
     }
 
