@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Lot;
 use App\Movement;
+use App\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -13,11 +14,12 @@ class Warehouse
      * Create lot.
      *
      * @param  array  $attributes
+     * @param User $agent
      * @param  bool  $log
      * @return Collection
      * @throws \Throwable
      */
-    public function create(array $attributes, bool $log = true)
+    public function create(array $attributes, User $agent = null, bool $log = true)
     {
         $reserved = $attributes['reserved'] ?? null;
 
@@ -28,6 +30,7 @@ class Warehouse
         if ($log) $movement = new Movement([
             'action' => __FUNCTION__,
             'quantity' => $lot->stock,
+            'agent_id' => $agent ? $agent->id : null,
         ]);
 
         DB::transaction(function () use ($lot, $movement) {
@@ -38,7 +41,7 @@ class Warehouse
         $movements = collect($movement);
 
         if ($reserved) {
-            $movements->merge($this->bind(collect([$lot]), $reserved));
+            $movements->merge($this->bind(collect([$lot]), $reserved, $agent));
         };
 
         return $movements;
@@ -58,18 +61,20 @@ class Warehouse
      * Increase stock quantity.
      *
      * @param Lot $lot
+     * @param User $agent
      * @param  int  $quantity
      * @param  bool  $log
      * @return Collection
      * @throws \Throwable
      */
-    public function load(Lot $lot, int $quantity = 1, bool $log = true)
+    public function load(Lot $lot, int $quantity = 1, User $agent = null, bool $log = true)
     {
         $lot->stock += $quantity;
 
         if ($log) $movement = new Movement([
             'action' => __FUNCTION__,
             'quantity' => $quantity,
+            'agent_id' => $agent ? $agent->id : null,
         ]);
 
         DB::transaction(function () use ($lot, $movement) {
@@ -84,12 +89,13 @@ class Warehouse
      * Decrease quantity from stock.
      *
      * @param  Collection  $lots
+     * @param User $agent
      * @param  int  $quantity
      * @param  bool  $log
      * @return Collection
      * @throws \Throwable
      */
-    public function unload(Collection $lots, int $quantity = 1, bool $log = true)
+    public function unload(Collection $lots, int $quantity = 1, User $agent = null, bool $log = true)
     {
         $movements = [];
 
@@ -101,6 +107,7 @@ class Warehouse
                     'action' => __FUNCTION__,
                     'quantity' => $quantity,
                     'lot_id' => $lot->id,
+                    'agent_id' => $agent ? $agent->id : null,
                 ]));
 
                 break;
@@ -110,6 +117,7 @@ class Warehouse
                 'action' => __FUNCTION__,
                 'quantity' => $lot->stock,
                 'lot_id' => $lot->id,
+                'agent_id' => $agent ? $agent->id : null,
             ]));
 
             $quantity -= $lot->stock;
@@ -128,12 +136,13 @@ class Warehouse
      * Increase reserved quantity.
      *
      * @param  int  $quantity
+     * @param  User  $agent
      * @param  Collection  $lots
      * @param  bool  $log
      * @return Collection
      * @throws \Throwable
      */
-    public function bind(Collection $lots, int $quantity = 1, bool $log = true)
+    public function bind(Collection $lots, int $quantity = 1, User $agent = null, bool $log = true)
     {
         $movements = [];
 
@@ -145,6 +154,7 @@ class Warehouse
                     'action' => __FUNCTION__,
                     'quantity' => $quantity,
                     'lot_id' => $lot->id,
+                    'agent_id' => $agent ? $agent->id : null,
                 ]));
 
                 break;
@@ -154,6 +164,7 @@ class Warehouse
                 'action' => __FUNCTION__,
                 'quantity' => $lot->available,
                 'lot_id' => $lot->id,
+                'agent_id' => $agent ? $agent->id : null,
             ]));
 
             $quantity -= $lot->available;
@@ -173,11 +184,12 @@ class Warehouse
      *
      * @param  Collection  $lots
      * @param  int  $quantity
+     * @param  User  $agent
      * @param  bool  $log
      * @return Collection
      * @throws \Throwable
      */
-    public function unbind(Collection $lots, int $quantity = 1, bool $log = true)
+    public function unbind(Collection $lots, int $quantity = 1, User $agent = null, bool $log = true)
     {
         $movements = [];
 
@@ -189,6 +201,7 @@ class Warehouse
                     'action' => __FUNCTION__,
                     'quantity' => $quantity,
                     'lot_id' => $lot->id,
+                    'agent_id' => $agent ? $agent->id : null,
                 ]));
 
                 break;
@@ -198,6 +211,7 @@ class Warehouse
                 'action' => __FUNCTION__,
                 'quantity' => $lot->reserved,
                 'lot_id' => $lot->id,
+                'agent_id' => $agent ? $agent->id : null,
             ]));
 
             $quantity -= $lot->reserved;

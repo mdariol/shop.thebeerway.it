@@ -25,7 +25,7 @@
                     <small class="text-muted text-form">Scadono prima della data...</small>
                 </div>
 
-                <input-autocomplete class="col-md-6" :route='@json(route('beers.index'))' :name='@json('name')'
+                <input-autocomplete class="col-md-6" :route='@json(route('beers.index'))' :name='@json('beer')'
                                     :label='@json('Birra')' :multiple='@json(true)'>
                     <template v-slot:option="{option}">
                         @{{ option.name }} <span class="ml-1 text-muted">@{{ option.brewery.name }}</span> <br>

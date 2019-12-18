@@ -92,12 +92,12 @@ class Lot extends Model
     }
 
     /**
-     * Related movements, ordered by creation date.
+     * Related movements, ordered by id.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function movements()
     {
-        return $this->hasMany(Movement::class)->orderByDesc('created_at');
+        return $this->hasMany(Movement::class)->orderByDesc('id');
     }
 }

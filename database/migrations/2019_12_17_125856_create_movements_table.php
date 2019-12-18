@@ -19,11 +19,14 @@ class CreateMovementsTable extends Migration
             $table->string('action');
             $table->integer('quantity');
             $table->bigInteger('lot_id');
+            $table->bigInteger('agent_id')->nullable();
 
             $table->timestamps();
 
             $table->foreign('lot_id')->references('id')->on('lots')
                 ->onDelete('cascade');
+            $table->foreign('agent_id')->references('id')->on('users')
+                ->onDelete('set null');
         });
     }
 
