@@ -46,11 +46,12 @@ class Warehouse
     /**
      * Decrease quantity from stock.
      *
-     * @param Beer $beer
-     * @param int $quantity
-     * @param Collection|null $lots
-     * @param bool $reserved
-     * @return int
+     * @param  Beer  $beer
+     * @param  int  $quantity
+     * @param  Collection|null  $lots
+     * @param  bool  $reserved
+     * @return Collection
+     * @throws \Throwable
      */
     public function decrease(Beer $beer, int $quantity = 1, Collection $lots = null, bool $reserved = true)
     {
@@ -58,53 +59,97 @@ class Warehouse
 
         if (is_null($lots)) $lots = $beer->lots()->inStock()->get();
 
-        $lots->each(function ($lot) use (&$quantity, $reserved) {
-            if ($quantity <= $lot->stock) {
-                $lot->update([
-                    'stock' => $lot->stock - $quantity,
-                    'reserved' => $reserved ? $lot->reserved - $quantity : $lot->reserved,
-                ]);
+        $updatedLots = [];
+        $movements = [];
 
-                $quantity = 0;
+        $lots->each(function ($lot) use (&$quantity, $reserved, &$movements, &$updatedLots) {
+            if ($quantity <= $lot->stock) {
+                $lot->stock -= $quantity;
+                if ($reserved) $lot->reserved -= $quantity;
+
+                array_push($updatedLots, $lot);
+
+                array_push($movements, new Movement([
+                    'action' => __FUNCTION__,
+                    'quantity' => $quantity,
+                    'lot_id' => $lot->id,
+                ]));
 
                 return false;
             }
 
-            $quantity -= $lot->stock;
+            $lot->stock = 0;
+            $lot->reserved = 0;
 
-            $lot->update(['stock' => 0, 'reserved' => 0]);
+            array_push($updatedLots, $lot);
+
+            array_push($movements, new Movement([
+                'action' => __FUNCTION__,
+                'quantity' => $quantity,
+                'lot_id' => $lot->id,
+            ]));
+
+            $quantity -= $lot->stock;
         });
 
-        return $quantity;
+        DB::transaction(function () use ($lots, $movements) {
+            foreach ($lots as $lot) { $lot->save(); }
+            foreach ($movements as $movement) { $movement->save(); }
+        });
+
+        return collect($movements);
     }
 
     /**
      * Increase reserved quantity.
      *
-     * @param Beer $beer
-     * @param int $quantity
-     * @param Collection|null $lots
-     * @return int
+     * @param  Beer  $beer
+     * @param  int  $quantity
+     * @param  Collection|null  $lots
+     * @return Collection
+     * @throws \Throwable
      */
     public function bind(Beer $beer, int $quantity = 1, Collection $lots = null)
     {
         if (is_null($lots)) $lots = $beer->lots()->available()->get();
 
-        $lots->each(function ($lot) use (&$quantity) {
-            if ($quantity <= $lot->available) {
-                $lot->update(['reserved' => $lot->reserved + $quantity]);
+        $movements = [];
+        $updatedLots= [];
 
-                $quantity = 0;
+        $lots->each(function ($lot) use (&$quantity, &$movements, &$updatedLots) {
+            if ($quantity <= $lot->available) {
+                $lot->reserved += $quantity;
+
+                array_push($movements, new Movement([
+                    'action' => __FUNCTION__,
+                    'quantity' => $quantity,
+                    'lot_id' => $lot->id,
+                ]));
+
+                array_push($updatedLots, $lot);
 
                 return false;
             }
 
             $quantity -= $lot->available;
 
-            $lot->update(['reserved' => $lot->reserved + $lot->available]);
+            array_push($movements, new Movement([
+                'action' => __FUNCTION__,
+                'quantity' => $lot->available,
+                'lot_id' => $lot->id,
+            ]));
+
+            $lot->reserved += $lot->available;
+
+            array_push($updatedLots, $lot);
         });
 
-        return $quantity;
+        DB::transaction(function () use ($movements, $updatedLots) {
+            foreach ($updatedLots as $lot) { $lot->save(); }
+            foreach ($movements as $movement) { $movement->save(); }
+        });
+
+        return collect($movements);
     }
 
     /**
@@ -119,21 +164,47 @@ class Warehouse
     {
         if (is_null($lots)) $lots = $beer->lots()->reserved()->get();
 
-        $lots->each(function ($lot) use (&$quantity) {
-            if ($quantity <= $lot->reserved) {
-                $lot->update(['reserved' => $lot->reserved - $quantity]);
+        $updatedLots = [];
+        $movements = [];
 
-                $quantity = 0;
+        $lots->each(function ($lot) use (&$quantity, &$updatedLots, &$movements) {
+            if ($quantity <= $lot->reserved) {
+//                $lot->update(['reserved' => $lot->reserved - $quantity]);
+
+                $lot->reserved -= $quantity;
+
+                array_push($updatedLots, $lot);
+
+                array_push($movements, new Movement([
+                    'action' => __FUNCTION__,
+                    'quantity' => $quantity,
+                    'lot_id' => $lot->id,
+                ]));
 
                 return false;
             }
 
             $quantity -= $lot->reserved;
 
-            $lot->update([$lot->reserved => 0]);
+            array_push($movements, new Movement([
+                'action' => __FUNCTION__,
+                'quantity' => $lot->reserved,
+                'lot_id' => $lot->id,
+            ]));
+
+            $lot->reserved = 0;
+
+            array_push($updatedLots, $lot);
+
+//            $lot->update([$lot->reserved => 0]);
         });
 
-        return $quantity;
+        DB::transaction(function () use ($movements, $updatedLots) {
+            foreach ($movements as $movement) { $movement->save(); }
+            foreach ($updatedLots as $lot) { $lot->save(); }
+        });
+
+        return collect($movements);
     }
 
     /**
