@@ -74,7 +74,7 @@ class OrderEventSubscriber
         $order = $event->getStateMachine()->getObject();
 
         $order->lines->each(function ($line) {
-            warehouse()->decrease(
+            warehouse()->unload(
                 $line->beer->lots()->inStock()->get(),
                 $line->qty
             );

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Beer;
 use App\Lot;
 use App\Movement;
 use Illuminate\Support\Collection;
@@ -70,7 +69,7 @@ class Warehouse
 
         if ($log) $movement = new Movement([
             'action' => __FUNCTION__,
-            'quantity' => $lot->stock,
+            'quantity' => $quantity,
         ]);
 
         DB::transaction(function () use ($lot, $movement) {
@@ -78,7 +77,7 @@ class Warehouse
             $lot->movements()->save($movement);
         });
 
-        return collect($movement);
+        return collect([$movement]);
     }
 
     /**
@@ -90,10 +89,8 @@ class Warehouse
      * @return Collection
      * @throws \Throwable
      */
-    public function decrease(Collection $lots, int $quantity = 1, bool $log = true)
+    public function unload(Collection $lots, int $quantity = 1, bool $log = true)
     {
-        // TODO: Remane method unload().
-
         $movements = [];
 
         foreach ($lots as $lot) {
