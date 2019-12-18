@@ -216,59 +216,63 @@ class Warehouse
     }
 
     /**
-     * @param Beer $beer
+     * Whether the quantity is available on given lots.
+     *
+     * @param Collection $lots
      * @param int $quantity
      * @return bool
      */
-    public function isAvailable(Beer $beer, int $quantity = 1)
+    public function isAvailable(Collection $lots, int $quantity = 1): bool
     {
-        return $this->available($beer) >= $quantity;
+        return $this->available($lots) >= $quantity;
     }
 
     /**
-     * @param Beer $beer
+     * Whether the quantity is in stock on given lots.
+     *
+     * @param Collection $lots
      * @param int $quantity
      * @return bool
      */
-    public function inStock(Beer $beer, int $quantity = 1)
+    public function inStock(Collection $lots, int $quantity = 1): bool
     {
-        return $this->stock($beer) >= $quantity;
+        return $this->stock($lots) >= $quantity;
     }
 
     /**
-     * @param Beer $beer
+     * Count available items on given lots.
+     *
+     * @param Collection $lots
      * @return int
      */
-    public function available(Beer $beer)
+    public function available(Collection $lots): int
     {
-        $lots = $beer->lots()->available()->get();
-
         return $lots->reduce(function($available, $lot) {
             return $available + $lot->available;
         }, 0);
     }
 
     /**
-     * @param Beer $beer
+     * Count in stock items on given lots.
+     *
+     * @param Collection $lots
      * @return int
      */
-    public function stock(Beer $beer)
+    public function stock(Collection $lots): int
     {
-        $lots = $beer->lots()->inStock()->get();
-
         return $lots->reduce(function($stock, $lot) {
             return $stock + $lot->stock;
         }, 0);
     }
 
     /**
-     * @param Beer $beer
+     * Count reserved items on given lots.
+     *
+     * @param Collection $lots
      * @return int
      */
-    public function reserved(Beer $beer)
+    public function reserved(Collection $lots): int
     {
-        $lots = $beer->lots()->reserved()->get();
-
         return $lots->reduce(function ($reserved, $lot) {
             return $reserved + $lot->reserved;
         }, 0);

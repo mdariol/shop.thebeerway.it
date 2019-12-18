@@ -19,7 +19,6 @@ class CreateMovementsTable extends Migration
             $table->string('action');
             $table->integer('quantity');
             $table->bigInteger('lot_id');
-            // $table->bigInteger('line_id');
 
             $table->timestamps();
 

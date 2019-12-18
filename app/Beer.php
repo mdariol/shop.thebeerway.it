@@ -4,11 +4,13 @@ namespace App;
 
 use App\Scopes\BeersScope;
 use App\Traits\HasFilters;
+use App\Traits\HasLots;
 use Illuminate\Database\Eloquent\Model;
 
 class Beer extends Model
 {
     use HasFilters;
+    use HasLots;
 
     protected $fillable = [
         'code', 'name', 'description', 'isactive',
@@ -109,67 +111,5 @@ class Beer extends Model
     public function promotions()
     {
         return $this->belongsToMany(Beer::class, 'promotion_beers')->withTimestamps();
-    }
-
-    /**
-     * Related lots, ordered by expiration date.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function lots()
-    {
-        return $this->hasMany(Lot::class)->orderBy('expires_at');
-    }
-
-    /**
-     * Count of items available to purchase.
-     *
-     * @return int
-     */
-    public function getAvailableAttribute()
-    {
-        return warehouse()->available($this);
-    }
-
-    /**
-     * Count of items in stock.
-     *
-     * @return int
-     */
-    public function getStockAttribute()
-    {
-        return warehouse()->stock($this);
-    }
-
-    /**
-     * Count of reserved items.
-     *
-     * @return int
-     */
-    public function getReservedAttribute()
-    {
-        return warehouse()->reserved($this);
-    }
-
-    /**
-     * Whether the quantity is available to purchase or not.
-     *
-     * @param int $quantity
-     * @return bool
-     */
-    public function isAvailable(int $quantity = 1)
-    {
-        return warehouse()->isAvailable($this, $quantity);
-    }
-
-    /**
-     * Whether the quantity is in stock or not.
-     *
-     * @param int $quantity
-     * @return bool
-     */
-    public function inStock(int $quantity = 1)
-    {
-        return warehouse()->inStock($this, $quantity);
     }
 }
