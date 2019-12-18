@@ -60,7 +60,10 @@ class OrderEventSubscriber
         $order = $event->getStateMachine()->getObject();
 
         $order->lines->each(function ($line) {
-            warehouse()->bind($line->beer, $line->qty);
+            warehouse()->bind(
+                $line->beer->lots()->available()->get(),
+                $line->qty
+            );
         });
     }
 
@@ -71,7 +74,10 @@ class OrderEventSubscriber
         $order = $event->getStateMachine()->getObject();
 
         $order->lines->each(function ($line) {
-            warehouse()->decrease($line->beer, $line->qty);
+            warehouse()->decrease(
+                $line->beer->lots()->inStock()->get(),
+                $line->qty
+            );
         });
     }
 
@@ -82,7 +88,10 @@ class OrderEventSubscriber
         $order = $event->getStateMachine()->getObject();
 
         $order->lines->each(function ($line) {
-            warehouse()->unbind($line->beer, $line->qty);
+            warehouse()->unbind(
+                $line->beer->lots()->reserved()->get(),
+                $line->qty
+            );
         });
     }
 

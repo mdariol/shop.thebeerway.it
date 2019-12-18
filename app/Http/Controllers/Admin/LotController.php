@@ -42,7 +42,7 @@ class LotController extends Controller
     {
         $attributes = $request->validate($this->rules());
 
-        warehouse()->load($attributes);
+        warehouse()->create($attributes);
 
         return redirect()->route('admin.lots.index');
     }

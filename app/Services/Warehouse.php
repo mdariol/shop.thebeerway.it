@@ -11,90 +11,117 @@ use Illuminate\Support\Facades\DB;
 class Warehouse
 {
     /**
-     * Increase stock quantity.
+     * Create lot.
      *
      * @param  array  $attributes
+     * @param  bool  $log
      * @return Collection
      * @throws \Throwable
      */
-    public function load(array $attributes)
+    public function create(array $attributes, bool $log = true)
     {
-        /** @var Lot $lot */
-        $lot = new Lot($attributes);
-        $movements = [];
+        $reserved = $attributes['reserved'] ?? null;
 
-        array_push($movements, new Movement([
+        if ($reserved) unset($attributes['reserved']);
+
+        $lot = Lot::create($attributes);
+
+        if ($log) $movement = new Movement([
             'action' => __FUNCTION__,
             'quantity' => $lot->stock,
-        ]));
+        ]);
 
-        if ($lot->reserved) {
-            array_push($movements, new Movement([
-                'action' => 'bind',
-                'quantity' => $lot->reserved,
-            ]));
-        }
-
-        DB::transaction(function () use ($lot, $movements) {
+        DB::transaction(function () use ($lot, $movement) {
             $lot->save();
-            $lot->movements()->saveMany($movements);
+            $lot->movements()->save($movement);
         });
 
-        return collect($movements);
+        $movements = collect($movement);
+
+        if ($reserved) {
+            $movements->merge($this->bind(collect([$lot]), $reserved));
+        };
+
+        return $movements;
+    }
+
+    /**
+     * Delete lot.
+     *
+     * @param  Lot  $lot
+     */
+    public function delete(Lot $lot)
+    {
+        // TODO: Implement delete() method.
+    }
+
+    /**
+     * Increase stock quantity.
+     *
+     * @param Lot $lot
+     * @param  int  $quantity
+     * @param  bool  $log
+     * @return Collection
+     * @throws \Throwable
+     */
+    public function load(Lot $lot, int $quantity = 1, bool $log = true)
+    {
+        $lot->stock += $quantity;
+
+        if ($log) $movement = new Movement([
+            'action' => __FUNCTION__,
+            'quantity' => $lot->stock,
+        ]);
+
+        DB::transaction(function () use ($lot, $movement) {
+            $lot->save();
+            $lot->movements()->save($movement);
+        });
+
+        return collect($movement);
     }
 
     /**
      * Decrease quantity from stock.
      *
-     * @param  Beer  $beer
+     * @param  Collection  $lots
      * @param  int  $quantity
-     * @param  Collection|null  $lots
-     * @param  bool  $reserved
+     * @param  bool  $log
      * @return Collection
      * @throws \Throwable
      */
-    public function decrease(Beer $beer, int $quantity = 1, Collection $lots = null, bool $reserved = true)
+    public function decrease(Collection $lots, int $quantity = 1, bool $log = true)
     {
         // TODO: Remane method unload().
 
-        if (is_null($lots)) $lots = $beer->lots()->inStock()->get();
-
-        $updatedLots = [];
         $movements = [];
 
-        $lots->each(function ($lot) use (&$quantity, $reserved, &$movements, &$updatedLots) {
+        foreach ($lots as $lot) {
             if ($quantity <= $lot->stock) {
                 $lot->stock -= $quantity;
-                if ($reserved) $lot->reserved -= $quantity;
 
-                array_push($updatedLots, $lot);
-
-                array_push($movements, new Movement([
+                if ($log) array_push($movements, new Movement([
                     'action' => __FUNCTION__,
                     'quantity' => $quantity,
                     'lot_id' => $lot->id,
                 ]));
 
-                return false;
+                break;
             }
 
-            $lot->stock = 0;
-            $lot->reserved = 0;
-
-            array_push($updatedLots, $lot);
-
-            array_push($movements, new Movement([
+            if ($log) array_push($movements, new Movement([
                 'action' => __FUNCTION__,
-                'quantity' => $quantity,
+                'quantity' => $lot->stock,
                 'lot_id' => $lot->id,
             ]));
 
             $quantity -= $lot->stock;
-        });
+            $lot->stock = 0;
+        }
 
         DB::transaction(function () use ($lots, $movements) {
-            foreach ($lots as $lot) { $lot->save(); }
-            foreach ($movements as $movement) { $movement->save(); }
+            foreach ($lots as $lot) $lot->save();
+            foreach ($movements as $movement) $movement->save();
         });
 
         return collect($movements);
@@ -103,50 +130,42 @@ class Warehouse
     /**
      * Increase reserved quantity.
      *
-     * @param  Beer  $beer
      * @param  int  $quantity
-     * @param  Collection|null  $lots
+     * @param  Collection  $lots
+     * @param  bool  $log
      * @return Collection
      * @throws \Throwable
      */
-    public function bind(Beer $beer, int $quantity = 1, Collection $lots = null)
+    public function bind(Collection $lots, int $quantity = 1, bool $log = true)
     {
-        if (is_null($lots)) $lots = $beer->lots()->available()->get();
-
         $movements = [];
-        $updatedLots= [];
 
-        $lots->each(function ($lot) use (&$quantity, &$movements, &$updatedLots) {
+        foreach ($lots as $lot) {
             if ($quantity <= $lot->available) {
                 $lot->reserved += $quantity;
 
-                array_push($movements, new Movement([
+                if ($log) array_push($movements, new Movement([
                     'action' => __FUNCTION__,
                     'quantity' => $quantity,
                     'lot_id' => $lot->id,
                 ]));
 
-                array_push($updatedLots, $lot);
-
-                return false;
+                break;
             }
 
-            $quantity -= $lot->available;
-
-            array_push($movements, new Movement([
+            if ($log) array_push($movements, new Movement([
                 'action' => __FUNCTION__,
                 'quantity' => $lot->available,
                 'lot_id' => $lot->id,
             ]));
 
+            $quantity -= $lot->available;
             $lot->reserved += $lot->available;
+        }
 
-            array_push($updatedLots, $lot);
-        });
-
-        DB::transaction(function () use ($movements, $updatedLots) {
-            foreach ($updatedLots as $lot) { $lot->save(); }
-            foreach ($movements as $movement) { $movement->save(); }
+        DB::transaction(function () use ($lots, $movements) {
+            foreach ($lots as $lot) $lot->save();
+            foreach ($movements as $movement) $movement->save();
         });
 
         return collect($movements);
@@ -155,53 +174,42 @@ class Warehouse
     /**
      * Decrease reserved quantity.
      *
-     * @param  Beer  $beer
+     * @param  Collection  $lots
      * @param  int  $quantity
-     * @param  Collection|null  $lots
-     * @return int
+     * @param  bool  $log
+     * @return Collection
+     * @throws \Throwable
      */
-    public function unbind(Beer $beer, int $quantity = 1, Collection $lots = null)
+    public function unbind(Collection $lots, int $quantity = 1, bool $log = true)
     {
-        if (is_null($lots)) $lots = $beer->lots()->reserved()->get();
-
-        $updatedLots = [];
         $movements = [];
 
-        $lots->each(function ($lot) use (&$quantity, &$updatedLots, &$movements) {
+        foreach ($lots as $lot) {
             if ($quantity <= $lot->reserved) {
-//                $lot->update(['reserved' => $lot->reserved - $quantity]);
-
                 $lot->reserved -= $quantity;
 
-                array_push($updatedLots, $lot);
-
-                array_push($movements, new Movement([
+                if ($log) array_push($movements, new Movement([
                     'action' => __FUNCTION__,
                     'quantity' => $quantity,
                     'lot_id' => $lot->id,
                 ]));
 
-                return false;
+                break;
             }
 
-            $quantity -= $lot->reserved;
-
-            array_push($movements, new Movement([
+            if ($log) array_push($movements, new Movement([
                 'action' => __FUNCTION__,
                 'quantity' => $lot->reserved,
                 'lot_id' => $lot->id,
             ]));
 
+            $quantity -= $lot->reserved;
             $lot->reserved = 0;
+        }
 
-            array_push($updatedLots, $lot);
-
-//            $lot->update([$lot->reserved => 0]);
-        });
-
-        DB::transaction(function () use ($movements, $updatedLots) {
-            foreach ($movements as $movement) { $movement->save(); }
-            foreach ($updatedLots as $lot) { $lot->save(); }
+        DB::transaction(function () use ($lots, $movements) {
+            foreach ($lots as $lot) $lot->save();
+            foreach ($movements as $movement) $movement->save();
         });
 
         return collect($movements);
