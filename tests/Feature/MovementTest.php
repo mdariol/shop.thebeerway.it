@@ -8,21 +8,24 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class MovementTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @var \App\Lot  */
     protected $lot;
+    /** @var \Illuminate\Support\Collection */
+    protected $lots;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->lot = factory(\App\Lot::class)->state('available')->create();
+        $this->lots = collect([$this->lot]);
     }
 
     public function binding_lot_should_create_a_movement()
     {
-        $lots = collect([$this->lot]);
-
-        warehouse()->bind($lots);
+        warehouse()->bind($this->lots);
 
         $this->assertDatabaseHas('movements', [
             'lot_id' => $this->lot->id,
@@ -30,7 +33,7 @@ class MovementTest extends TestCase
             'quantity' => 1,
         ]);
 
-        warehouse()->unbind($lots);
+        warehouse()->unbind($this->lots);
 
         $this->assertDatabaseHas('movements', [
             'lot_id' => $this->lot->id,
@@ -42,9 +45,7 @@ class MovementTest extends TestCase
     /** @test */
     public function loading_lot_should_create_a_movement()
     {
-        $lots = collect([$this->lot]);
-
-        warehouse()->unload($lots);
+        warehouse()->unload($this->lots);
 
         $this->assertDatabaseHas('movements', [
             'lot_id' => $this->lot->id,
@@ -58,6 +59,24 @@ class MovementTest extends TestCase
             'lot_id' => $this->lot->id,
             'action' => 'load',
             'quantity' => 1,
+        ]);
+    }
+
+    /** @test */
+    public function reverting_movement_should_revert_lot_state()
+    {
+        $movements = warehouse()->bind($this->lots);
+
+        warehouse()->revert($movements->first());
+
+        $this->assertDatabaseHas('movements', [
+            'lot_id' => $this->lot->id,
+            'reverted_at' => $movements->first()->reverted_at,
+        ]);
+
+        $this->assertDatabaseHas('lots', [
+            'id' => $this->lot->id,
+            'reserved' => 0,
         ]);
     }
 }

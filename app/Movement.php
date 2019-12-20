@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Movement extends Model
 {
-    protected $fillable = ['action', 'quantity', 'lot_id', 'agent_id'];
+    protected $fillable = ['action', 'quantity', 'lot_id', 'agent_id', 'reverted_at'];
+
+    protected $dates = ['reverted_at'];
 
     /**
      * Related lot.
@@ -26,5 +28,15 @@ class Movement extends Model
     public function agent()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Whether the movement has been reverted or not.
+     *
+     * @return bool
+     */
+    public function reverted()
+    {
+        return ! is_null($this->reverted_at);
     }
 }

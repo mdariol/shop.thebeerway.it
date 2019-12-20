@@ -20,6 +20,7 @@ class CreateMovementsTable extends Migration
             $table->integer('quantity');
             $table->bigInteger('lot_id');
             $table->bigInteger('agent_id')->nullable();
+            $table->timestamp('reverted_at')->nullable();
 
             $table->timestamps();
 

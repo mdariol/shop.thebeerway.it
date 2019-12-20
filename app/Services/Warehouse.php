@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Lot;
 use App\Movement;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -55,6 +56,23 @@ class Warehouse
     public function delete(Lot $lot)
     {
         // TODO: Implement delete() method.
+    }
+
+    /**
+     * Revert movement.
+     *
+     * @param  Movement  $movement
+     * @return bool
+     */
+    public function revert(Movement $movement)
+    {
+       $action = $this->getOpposite($movement->action);
+
+       if ( ! $action) return false;
+
+       $this->$action(collect([$movement->lot]), $movement->quantity, null, false);
+
+       return $movement->update(['reverted_at' => Carbon::now()]);
     }
 
     /**
@@ -287,5 +305,23 @@ class Warehouse
         return $lots->reduce(function ($reserved, $lot) {
             return $reserved + $lot->reserved;
         }, 0);
+    }
+
+    /**
+     * Get opposite action.
+     *
+     * @param  string  $action
+     * @return string
+     */
+    protected function getOpposite(string $action)
+    {
+        switch ($action) {
+            case 'bind': return 'unbind';
+            case 'unbind': return 'bind';
+            case 'load': return 'unload';
+            case 'unload': return 'load';
+        }
+
+        return '';
     }
 }
