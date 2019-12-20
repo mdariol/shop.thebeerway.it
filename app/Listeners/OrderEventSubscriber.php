@@ -60,10 +60,12 @@ class OrderEventSubscriber
         $order = $event->getStateMachine()->getObject();
 
         $order->lines->each(function ($line) {
-            warehouse()->bind(
+            $movements = warehouse()->bind(
                 $line->beer->lots()->available()->get(),
                 $line->qty
             );
+
+            $line->movements()->saveMany($movements);
         });
     }
 
@@ -87,12 +89,16 @@ class OrderEventSubscriber
 
         $order = $event->getStateMachine()->getObject();
 
-        $order->lines->each(function ($line) {
-            warehouse()->unbind(
-                $line->beer->lots()->reserved()->get(),
-                $line->qty
-            );
+        $order->movements->each(function ($movement) {
+            warehouse()->revert($movement);
         });
+
+//        $order->lines->each(function ($line) {
+//            warehouse()->unbind(
+//                $line->beer->lots()->reserved()->get(),
+//                $line->qty
+//            );
+//        });
     }
 
     /**

@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Movement extends Model
 {
-    protected $fillable = ['action', 'quantity', 'lot_id', 'agent_id', 'reverted_at'];
+    protected $fillable = [
+        'action', 'quantity', 'lot_id',
+        'agent_id', 'line_id', 'reverted_at'
+    ];
 
     protected $dates = ['reverted_at'];
 
@@ -28,6 +31,16 @@ class Movement extends Model
     public function agent()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Related line.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function line()
+    {
+        return $this->belongsTo(Line::class);
     }
 
     /**

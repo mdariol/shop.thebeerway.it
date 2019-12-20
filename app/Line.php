@@ -37,6 +37,16 @@ class Line extends Model
     }
 
     /**
+     * Related movements.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function movements()
+    {
+        return $this->hasMany(Movement::class);
+    }
+
+    /**
      * Whether the beer is in stock or not.
      *
      * @return bool

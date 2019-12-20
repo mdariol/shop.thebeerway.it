@@ -20,6 +20,7 @@ class CreateMovementsTable extends Migration
             $table->integer('quantity');
             $table->bigInteger('lot_id');
             $table->bigInteger('agent_id')->nullable();
+            $table->bigInteger('line_id')->nullable();
             $table->timestamp('reverted_at')->nullable();
 
             $table->timestamps();
@@ -28,6 +29,12 @@ class CreateMovementsTable extends Migration
                 ->onDelete('cascade');
             $table->foreign('agent_id')->references('id')->on('users')
                 ->onDelete('set null');
+
+            // Deleting a line should revert the movement. I have to handle this
+            // with model events.
+
+            // $table->foreign('line_id')->references('id')->on('lines')
+            //     ->onDelete('cascade');
         });
     }
 

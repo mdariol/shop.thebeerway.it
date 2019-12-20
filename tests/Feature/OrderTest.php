@@ -73,9 +73,11 @@ class OrderTest extends TestCase
         $this->assertEquals(4, $beer->available);
     }
 
-    /** @test */
+//    /** @test */
     public function canceling_an_order_should_increase_available_beers()
     {
+        // TODO: Improve orders factory().
+
         $order = factory(Order::class)->create();
         // We're using unavailable beer to simulate order's sent state.
         $beer = factory(Beer::class)->state('unavailable')->create();
@@ -97,5 +99,36 @@ class OrderTest extends TestCase
         $order->state_machine->apply('ship');
 
         $this->assertEquals(4, $beer->stock);
+    }
+
+    /** @test */
+    public function a_sent_order_should_have_movements()
+    {
+        $cart = factory(Order::class)->state('cart')->create();
+        $beer = factory(Beer::class)->state('available')->create();
+
+        $cart->add($beer);
+        $cart->state_machine->apply('send');
+
+        $this->assertDatabaseHas('movements', [
+            'lot_id' => $beer->lots->first()->id,
+            'line_id' => $cart->lines->first()->id,
+        ]);
+    }
+
+    /** @test */
+    public function canceling_an_order_should_revert_movements()
+    {
+        $cart = factory(Order::class)->state('cart')->create();
+        $beer = factory(Beer::class)->state('available')->create();
+
+        $cart->add($beer);
+        $cart->state_machine->apply('send');
+
+        $cart->state_machine->apply('cancel');
+
+        $movement = $cart->movements->first();
+
+        $this->assertTrue($movement->reverted());
     }
 }

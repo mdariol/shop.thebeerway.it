@@ -83,6 +83,16 @@ class Order extends Model
     }
 
     /**
+     * Related movements through lines.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function movements()
+    {
+        return $this->hasManyThrough(Movement::class, Line::class);
+    }
+
+    /**
      * Increase the line's quantity. If there's no line, add a line.
      *
      * @param Beer $beer
